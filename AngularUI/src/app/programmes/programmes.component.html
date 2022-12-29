@@ -1,0 +1,84 @@
+<div class="main-content">
+    <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-primary">
+                          <h4 class="card-title ">Vote Programme</h4>
+                          <p class="card-category">Create Vote Programme</p>
+                      </div>
+                      <div class="card-body">
+                            <input type="text" [(ngModel)]="selectedProgramme.nameSinhala" placeholder="Type programme name in Sinhala" class="form-control"required/>
+                            <br>
+                              <input type="text" [(ngModel)]="selectedProgramme.nameTamil" placeholder="Type programme name in Tamil" class="form-control" required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedProgramme.nameEnglish" placeholder="Type programme name in English" class="form-control"required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedProgramme.code" placeholder="Type programme Code" class="form-control" required/>
+                              <br>
+                              <br>
+                              <div class="form-group">
+                                <button class="btn btn-success" (click)="updateProgramme()">{{(selectedProgramme.id!==undefined)?'Update':'Create'}}</button>
+                                <button class="btn btn-danger" (click)="clearProgramme()">Clear</button>
+                                <div class="loading" *ngIf="loading">
+                                <mat-spinner></mat-spinner>
+                            </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-tabs card-header-primary">
+                          <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title"></span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                  <li class="nav-item">
+                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
+                                          <i class="material-icons"></i> Vote Programmes List 
+                                          <div class="ripple-container"></div>
+                                      </a>
+                                  </li>
+                                </ul>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <div class="tab-content">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Programme</th>
+                                            <th>Code</th>
+                                            <th>Options</th>
+                                        </tr>
+                                        <tr *ngFor="let programme of APIProgrammesList; index as i">
+                                            <td>{{ i+1 }}</td>
+                                            <td ><span *ngIf="isSinhala">{{programme.nameSinhala}}</span> <span *ngIf="isEnglish">{{programme.nameEnglish}}</span> <span *ngIf="isTamil">{{programme.nameTamil}}</span> </td> 
+                                            <td>{{ programme.code }}</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button (click)="editProgramme(programme)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button (click)="deleteProgramme(programme)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          
+        </div>
+    </div>
+  </div>
+  

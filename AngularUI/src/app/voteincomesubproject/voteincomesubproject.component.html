@@ -1,0 +1,134 @@
+<div class="main-content">
+    <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-primary">
+                          <h4 class="card-title ">Vote Income Sub Projects</h4>
+                          <p class="card-category">Create Vote Income Sub Project</p>
+                      </div>
+                      <div class="card-body">
+                            <div *ngIf="isSinhala;">
+                                <label>Select Vote Programme</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.programmeID" (ngModelChange)="getAlldataforProgrammeId($event);">
+                                    <option value="0"> --Select a Programme--</option>
+                                    <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameSinhala)}} </option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="isEnglish;">
+                                <label>Select Vote Programme</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.programmeID" (ngModelChange)="getAlldataforProgrammeId($event);">
+                                    <option value="0"> --Select a Programme--</option>
+                                    <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameEnglish)}} </option>
+                                </select>
+                            </div>
+                            <div *ngIf="isTamil;">
+                                <label>Select Vote Programme</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.programmeID" (ngModelChange)="getAlldataforProgrammeId($event);">
+                                    <option value="0"> --Select a Programme--</option>
+                                    <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameTamil)}} </option>
+                                </select>
+                            </div>
+                            
+
+                            <div *ngIf="isSinhala;">
+                                <label>Select Vote Income Project</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.projectID">
+                                    <option value="0"> --Select Vote Income Project-</option>
+                                    <option *ngFor=" let project of APIProjectsListByProgramme" [value]="project.id"> {{(project.code +" :: " + project.nameSinhala)}} </option>
+                                </select>
+                            </div>
+    
+                            <div *ngIf="isEnglish;">
+                                <label>Select Vote Income Project</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.projectID">
+                                    <option value="0"> --Select Vote Income Project-</option>
+                                    <option *ngFor=" let project of APIProjectsListByProgramme" [value]="project.id"> {{(project.code +" :: " + project.nameEnglish)}} </option>
+                                </select>
+                            </div>
+                            <div *ngIf="isTamil;">
+                                <label>Select Vote Income Project</label>
+                                <select class="form-control" [(ngModel)]="selectedSubProject.projectID">
+                                    <option value="0"> --Select Vote Income Project-</option>
+                                    <option *ngFor=" let project of APIProjectsListByProgramme" [value]="project.id"> {{(project.code +" :: " + project.nameTamil)}} </option>
+                                </select>
+                            </div>
+                              <br>
+                              
+                              <input type="text" [(ngModel)]="selectedSubProject.nameSinhala" placeholder="Type Income Sub Project Name in Sinhala" class="form-control"required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedSubProject.nameTamil" placeholder="Type Income Sub Project Name in Tamil" class="form-control" required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedSubProject.nameEnglish" placeholder="Type Income Sub Project Name in English" class="form-control"required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedSubProject.code" placeholder="Type Income Sub Project Code" class="form-control" required/>
+                              <br>
+                              <br>
+                              <div class="form-group">
+                                <button class="btn btn-success" (click)="updateRecord()">{{(selectedSubProject.id!==undefined)?'Update':'Create'}}</button>
+                                <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
+                                <div class="loading" *ngIf="loading">
+                                <mat-spinner></mat-spinner>
+                            </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-tabs card-header-primary">
+                          <div class="nav-tabs-navigation">
+                              <div class="nav-tabs-wrapper">
+                                  <span class="nav-tabs-title"></span>
+                                  <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="nav-item">
+                                        <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
+                                            <i class="material-icons"></i> Vote Income Sub Projects List 
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <div class="tab-content">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>#</th>
+                                            <!-- <th>Project</th> -->
+                                            <th>Sub Project</th>
+                                            <th>Code</th>
+                                            <th>Options</th>
+                                        </tr>
+                                        <tr *ngFor="let subProjects of APISubProjectsListForProgrammeId; index as i">
+                                            <td>{{ i+1 }}</td>
+                                            <!-- <td>Project</td> -->
+                                              <td ><span *ngIf="isSinhala">{{subProjects.nameSinhala}}</span> <span *ngIf="isEnglish">{{subProjects.nameEnglish}}</span> <span *ngIf="isTamil">{{subProjects.nameTamil}}</span> </td> 
+                                              <td>{{ subProjects.code }}</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button (click)="editSubProject(subProjects)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button (click)="deleteSubProject(subProjects)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          
+        </div>
+    </div>
+  </div>
+  

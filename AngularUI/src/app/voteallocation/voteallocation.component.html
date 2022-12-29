@@ -1,0 +1,119 @@
+<div class="main-content">
+    <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-primary">
+                          <h4 class="card-title ">Vote Allocation </h4>
+                          <p class="card-category">Create Vote Allocation</p>
+                      </div>
+                      <div class="card-body">
+                            <div >
+                                <label>Select Vote</label>
+                                <select class="form-control" [(ngModel)]="selectedVoteallocation.voteDetailID" >
+                                    <option *ngFor=" let votedetail of APIVoteDetailsList" [value]="votedetail.id"> {{(votedetail.accountNo)}} </option>
+                                </select>
+                            </div>
+
+                            
+                            <div *ngIf="isSinhala;">
+                                <label>Select Vote Balancesheet Title</label>
+                                <select class="form-control" [(ngModel)]="balsheetTitleID" >
+                                    <option *ngFor=" let balancesheettitle of APIBalancesheettitlesList" [value]="balancesheettitle.id"> {{(balancesheettitle.code +" :: " + balancesheettitle.nameSinhala)}} </option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="isEnglish;">
+                                <label>Select Vote Balancesheet Title</label>
+                                <select class="form-control" [(ngModel)]="balsheetTitleID" >
+                                    <option *ngFor=" let balancesheettitle of APIBalancesheettitlesList" [value]="balancesheettitle.id"> {{(balancesheettitle.code +" :: " + balancesheettitle.nameEnglish)}} </option>
+                                </select>
+                            </div>
+                            <div *ngIf="isTamil;">
+                                <label>Select Vote Balancesheet Title</label>
+                                <select class="form-control" [(ngModel)]="balsheetTitleID" >
+                                    <option *ngFor=" let balancesheettitle of APIBalancesheettitlesList" [value]="balancesheettitle.id"> {{(balancesheettitle.code +" :: " + balancesheettitle.nameTamil)}} </option>
+                                </select>
+                            </div>
+
+                            <div >
+                                <label>Select Year</label>
+                                <select class="form-control" [(ngModel)]="selectedVoteallocation.year">
+                                    <option *ngFor=" let yeardetail of APIYearsList" [value]="yeardetail.description">  {{(yeardetail.description)}}  </option>
+                                </select>
+                            </div>
+
+                              <!-- <input type="text" [(ngModel)]="selectedVoteallocation.votedetailID" placeholder="Select Accountdetail" class="form-control"required/> -->
+                              <br>
+                              <input type="text" [(ngModel)]="selectedVoteallocation.allocationAmount" placeholder="Type Vote Allocation Amount" class="form-control"required/>
+                              <br>
+                              <input type="text" [(ngModel)]="selectedVoteallocation.incomeAmount" placeholder="Type Vote Income Amount" class="form-control"required/>
+                              <br>
+                              <div class="form-group">
+                                <button class="btn btn-success" (click)="updateRecord()">{{(selectedVoteallocation.id!==undefined)?'Update':'Create'}}</button>
+                                <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
+                                <div class="loading" *ngIf="loading">
+                                <mat-spinner></mat-spinner>
+                            </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-tabs card-header-primary">
+                          <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title"></span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                  <li class="nav-item">
+                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
+                                          <i class="material-icons"></i> Vote Allocations List 
+                                          <div class="ripple-container"></div>
+                                      </a>
+                                  </li>
+                                </ul>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <div class="tab-content">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>#</th>
+                                              <!-- <th>Vote Name</th> -->
+                                              <th>Year</th>
+                                              <th>Allocation</th>
+                                              <th>Total Income</th>
+                                              <th>Options</th>
+                                          </tr>
+                                          <tr *ngFor="let voteallocation of APIVoteallocationsList; index as i">
+                                              <td>{{ i+1 }}</td>
+                                              <!-- <td>Vote Name</td> -->
+                                              <td>{{ voteallocation.year }}</td>
+                                              <td>{{ voteallocation.balanceAmount }}</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button (click)="editVotedetail(voteallocation)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button (click)="deleteVotedetail(voteallocation)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                              </div>
+                             
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          
+        </div>
+    </div>
+  </div>
+  
