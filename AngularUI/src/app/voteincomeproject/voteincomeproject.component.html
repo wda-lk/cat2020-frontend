@@ -1,0 +1,109 @@
+<div class="main-content">
+    <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-primary">
+                          <h4 class="card-title ">Vote Income Projects</h4>
+                          <p class="card-category">Create Vote Income Project</p>
+                      </div>
+                      <div class="card-body">
+                        <div *ngIf="isSinhala;">
+                            <label>Select Vote Programme</label>
+                            <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
+                                <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameSinhala)}} </option>
+                            </select>
+                        </div>
+
+                        <div *ngIf="isEnglish;">
+                            <label>Select Vote Programme</label>
+                            <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
+                                <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameEnglish)}} </option>
+                            </select>
+                        </div>
+                        <div *ngIf="isTamil;">
+                            <label>Select Vote Programme</label>
+                            <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
+                                <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameTamil)}} </option>
+                            </select>
+                        </div>
+                            <br>
+                            <input type="text" [(ngModel)]="selectedProject.nameSinhala" placeholder="Type Vote Income Titile Name in Sinhala" class="form-control"required/>
+                            <br>
+                              <input type="text" [(ngModel)]="selectedProject.nameTamil" placeholder="Type Vote Income Titile Name in Tamil" class="form-control" required/>
+                            <br>
+                              <input type="text" [(ngModel)]="selectedProject.nameEnglish" placeholder="Type Vote Income Titile Name in English" class="form-control"required/>
+                              
+                              <br>
+                              <input type="text" [(ngModel)]="selectedProject.code" placeholder="Type Vote Income Titile Code" class="form-control" required/>
+                              <br>
+                              <br>
+                              <div class="form-group">
+                                <button class="btn btn-success" (click)="updateRecord()">{{(selectedProject.id!==undefined)?'Update':'Create'}}</button>
+                                <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
+                                <div class="loading" *ngIf="loading">
+                                <mat-spinner></mat-spinner>
+                            </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+              <div class="col-lg-6 col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-tabs card-header-primary">
+                          <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title"></span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                  <li class="nav-item">
+                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
+                                          <i class="material-icons"></i> Vote Income Project List 
+                                          <div class="ripple-container"></div>
+                                      </a>
+                                  </li>
+                                 
+                                </ul>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <div class="tab-content">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>#</th>
+                                              <!-- <th>Programme</th> -->
+                                              <th>Project</th>
+                                              <th>Code</th>
+                                              <th>Options</th>
+                                          </tr>
+                                          <tr *ngFor="let incomeProject of APIProjectsFroProgrammeList; index as i">
+                                              <td>{{ i+1 }}</td>
+                                              <!-- <td>Programme</td> -->
+                                              <td ><span *ngIf="isSinhala">{{incomeProject.nameSinhala}}</span> <span *ngIf="isEnglish">{{incomeProject.nameEnglish}}</span> <span *ngIf="isTamil">{{incomeProject.nameTamil}}</span> </td> 
+
+                                              <td>{{ incomeProject.code }}</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button (click)="editProject(incomeProject)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button (click)="deleteProject(incomeProject)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                              </div>
+                             
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          
+        </div>
+    </div>
+  </div>
+  

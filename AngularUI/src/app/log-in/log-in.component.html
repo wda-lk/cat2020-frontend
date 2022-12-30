@@ -1,0 +1,304 @@
+<!-- <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>CAT20 - Vote Management System</title>
+<link href='https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css' rel='stylesheet'>
+<link href='' rel='stylesheet'>
+<script type='text/javascript' src=''></script>
+<script type='text/javascript' src="../../assets/js/popper.min.js"></script>
+<script type='text/javascript' src="../../assets/js/bootstrap.min.js"></script>
+
+<style src="../../assets/css/loginpage.css"></style>
+
+<div style="text-align: center;">
+                            <section class="body">
+    <div class="container">
+        <div class="login-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="logo">
+                      
+						<br>
+						
+                    </div>
+                    <div style="text-align: center;"><img src="../../assets/img/govlogo.jpg" alt="" width="25%"></div>
+                </div>
+				
+            </div>
+			
+            <div class="row">
+                <div class="col-sm-6">
+                    <br>
+                    <h3 class="header-title">CAT20 LOGIN</h3>
+                    <form [formGroup]="loginForm">
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Email or UserName" type="email" formControlName="username"  id="field_email">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <input type="Password" class="form-control" placeholder="Password" formControlName="password" id="field_password">
+                            <br>
+                            <a href="#!" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" (click)="submit()">LOGIN</button>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <div class="text-center">New Member? <a href="#!">Sign up Now</a></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6 hide-on-mobile">
+                    <div id="demo" class="carousel slide" data-ride="carousel">
+                        <ul class="carousel-indicators">
+                            <li data-target="#demo" data-slide-to="0" class="active"></li>
+                            <li data-target="#demo" data-slide-to="1"></li>
+                        </ul>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="slider-feature-card">
+                                    <img src="../../assets/img/cat2020logo.jpg" alt="">
+                                    <h3 class="slider-title">Vote Management System</h3>
+                                    <p class="slider-description">You Are Welcome..!</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="slider-feature-card">
+                                    <img src="../../assets/img/govlogo.jpg" alt="">
+                                    <h3 class="slider-title">CAT20</h3>
+                                    <p class="slider-description">Ministry of Public Administration, Home Affairs, Provincials and Local Government</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#demo" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+							
+                        </a>
+                    </div>
+                </div>
+				
+            </div>
+			<br>
+			<br><br><br><br>
+			<div class="text-left">Ministry of Public Administration, Home Affairs, Provincials and Local Government</div>
+        </div>
+		
+    </div>
+	
+</section>
+                            <script type='text/javascript'></script>
+                          </div>                -->
+
+<!-- <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../app/log-in/log-in.component.css">
+</head>
+
+<body>
+<form [formGroup]="loginForm">
+    <div id="form_wrapper">
+        <div id="form_left">
+            <img src="../../assets/img/icon.png" alt="computer icon">
+        </div>
+        <div id="form_right">
+            <h1>System User Login</h1>
+            <div class="input_container">
+                <i class="fas fa-envelope"></i>
+                <input placeholder="Email" type="email" formControlName="username"  id="field_email" class='input_field'>
+            </div>
+
+            <div class="input_container">
+                <i class="fas fa-lock"></i>
+                <input  placeholder="Password" type="password" formControlName="password" id="field_password" class='input_field'>
+            </div>
+
+            <input type="submit" value="Login" id='input_submit' class='input_field' (click)="submit()">
+            <div *ngIf="_valid == false" class="alert alert-danger" role="alert">
+              Invalid credentials...
+            </div>
+            <span> Forgot <a href='#'> Username / Password ? </a> </span>
+            <span id='create_account'>
+                <a href="#">Create your account &#x27A1; </a>
+            </span>
+        </div>
+    </div>
+</form>
+</body>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="login-box">
+   
+    <div class="card card-outline card-primary">
+
+
+
+
+      <div class="card-header text-center">
+        <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+  
+        <form action="../../index3.html" method="post">
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Email">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <div class="icheck-primary">
+                <input type="checkbox" id="remember">
+                <label for="remember">
+                  Remember Me
+                </label>
+              </div>
+            </div>
+            
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </div>
+            
+          </div>
+        </form>
+  
+        <div class="social-auth-links text-center mt-2 mb-3">
+          <a href="#" class="btn btn-block btn-primary">
+            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+          </a>
+          <a href="#" class="btn btn-block btn-danger">
+            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+          </a>
+        </div>
+        
+  
+        <p class="mb-1">
+          <a href="forgot-password.html">I forgot my password</a>
+        </p>
+        <p class="mb-0">
+          <a href="register.html" class="text-center">Register a new membership</a>
+        </p>
+      </div>
+      
+    </div>
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="card">
+
+</div> -->
+
+<!-- <div class="container">
+    <div class="row">
+        <div class="col-md-12 jobs_index_middle_panels">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    
+                    
+    
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<!-- <div class="text-center">
+        <div class="card" style="width: 18rem; text-align: center;">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button [disabled]="loading" class="btn btn-primary">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Login
+                    </button>
+                    <a routerLink="/register" class="btn btn-link">Register</a>
+                </div>
+            </form>
+          </div>
+    </div> -->

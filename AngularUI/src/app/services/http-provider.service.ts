@@ -1,0 +1,423 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { WebApiService } from './web-api.service';
+import { environment } from '../../environments/environment';
+
+ var apiUrl = environment.apiUrl;
+ localStorage.setItem('apiUrl', apiUrl);
+var sabhaID :any;
+sabhaID = localStorage.getItem('sabhaId');
+
+var httpLink = {
+
+//programme
+  getAllProgramme: apiUrl + "/api/vote/programmes/getAllProgrammesForSabhaId", 
+  deleteProgrammeById: apiUrl + "/api/vote/programmes/deleteProgramme",
+  getProgrammeDetailById: apiUrl + "/api/vote/programmes/getProgrammeById",
+  saveProgramme: apiUrl + "/api/vote/programmes/saveProgramme",
+  updateProgramme: apiUrl + "/api/vote/programmes/updateProgramme",
+  // updateProgrammewithid: apiUrl + "/api/vote/programmes/updateProgrammewithid",
+
+//project
+getAllProject: apiUrl + "/api/vote/projects/getAllProjectsForSabhaId",
+deleteProjectById: apiUrl + "/api/vote/projects/deleteProject",
+getProjectDetailById: apiUrl + "/api/vote/projects/getProjectById",
+saveProject: apiUrl + "/api/vote/projects/saveProject",
+updateProject: apiUrl + "/api/vote/projects/updateProject",
+getAllProjectsForProgramme: apiUrl + "/api/vote/projects/GetAllProjectsForProgrammeId",  //OK
+
+
+
+//subproject
+getAllsubproject: apiUrl + "/api/vote/subProject/getAllSubProjectsForSabhaId", 
+deletesubprojectById: apiUrl + "/api/vote/subProject/deletesubproject",
+getsubprojectDetailById: apiUrl + "/api/vote/subProject/getsubprojectById",
+savesubproject: apiUrl + "/api/vote/subProject/savesubproject",
+updatesubproject: apiUrl + "/api/vote/subProject/updatesubproject",
+getAllsubprojectforprojectID: apiUrl + "/api/vote/subProject/getAllSubProjectsForProjectId", 
+getAllsubprojectforProgrammeID: apiUrl + "/api/vote/subProject/getAllSubProjectsForProgrammeId", 
+
+
+//incometitle 
+getAllIncometitle: apiUrl + "/api/vote/incomeTitle/getAllIncomeTitlesForSabhaId",//OK
+getAllIncometitleByProgrammeId: apiUrl + "/api/vote/incomeTitle/getAllWithIncomeTitleByProgrammeId",   //OK
+deleteIncometitleById: apiUrl + "/api/vote/incometitle/deleteIncometitle",
+getIncometitleDetailById: apiUrl + "/api/vote/incomeTitle/getIncomeTitleById",
+saveIncometitle: apiUrl + "/api/vote/incomeTitle/saveIncomeTitle",
+updateIncometitle: apiUrl + "/api/vote/incometitle/updateIncomeTitle"
+
+//accountbalancedetail
+,getAllAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/getAllAccountBalanceDetailsForSabhaId",
+deleteAccountBalanceDetailById: apiUrl + "/api/vote/accountBalance/deleteAccountBalanceDetail",
+getAccountBalanceDetailDetailById: apiUrl + "/api/vote/accountBalance/getAccountBalanceDetailById",
+saveAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/saveAccountBalanceDetail",
+updateAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/updateAccountBalanceDetail"
+
+//balancesheetbalance
+,getAllBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/getAllBalancesheetBalancesForSabhaId",
+deleteBalancesheetBalanceById: apiUrl + "/api/vote/balancesheetbalances/deleteBalancesheetBalance",
+getBalancesheetBalanceDetailById: apiUrl + "/api/vote/balancesheetbalances/getBalancesheetBalanceById",
+saveBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/saveBalancesheetBalance",
+updateBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/updateBalancesheetBalance"
+
+//accountdetail
+,getAllAccountDetail: apiUrl + "/api/vote/AccountDetails/getAllAccountDetailsForOfficeId",
+deleteAccountDetailById: apiUrl + "/api/vote/accountdetails/deleteAccountDetail",
+getAccountDetailDetailById: apiUrl + "/api/vote/accountdetails/getAccountDetailById",
+saveAccountDetail: apiUrl + "/api/vote/accountdetails/saveAccountDetail",
+updateAccountDetail: apiUrl + "/api/vote/accountdetails/updateAccountDetail"
+
+//balancesheetsubtitle
+,getAllBalancesheetSubtitle: apiUrl + "/api/vote/balancesheetSubtitles/getAllBalancesheetSubtitlesForSabhaId",
+deleteBalancesheetSubtitleById: apiUrl + "/api/vote/balancesheetSubtitles/deleteBalancesheetSubtitle",
+getBalancesheetSubtitleDetailById: apiUrl + "/api/vote/balancesheetsubtitles/getBalancesheetSubtitleById",
+saveBalancesheetSubtitle: apiUrl + "/api/vote/balancesheetSubtitles/saveBalancesheetSubtitle",
+updateBalancesheetSubtitle: apiUrl + "/api/vote/balancesheetSubtitles/updateBalancesheetSubtitle",
+getAllBalancesheetSubtitleByTitleID: apiUrl + "/api/vote/balancesheetSubtitles/getAllBalancesheetSubtitlesForTitleID"
+
+//balancesheettitle
+,getAllBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/getAllBalancesheetTitlesForSabhaId",
+deleteBalancesheetTitleById: apiUrl + "/api/vote/balancesheettitles/deleteBalancesheetTitle",
+getBalancesheetTitleDetailById: apiUrl + "/api/vote/balancesheettitles/getBalancesheetTitleById",
+saveBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/saveBalancesheetTitle",
+updateBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/updateBalancesheetTitle"
+
+//incomesubtitle
+,getAllIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForSabhaId",  //OK
+deleteIncomeSubtitleById: apiUrl + "/api/vote/incomeSubtitle/deleteIncomeSubtitle",
+getIncomeSubtitleDetailById: apiUrl + "/api/vote/incomeSubtitle/getIncomeSubtitleById",     
+saveIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/saveIncomeSubtitle",    
+updateIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/updateIncomeSubtitle"
+,getAllIncomeSubtitlebyTitleID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForTitleId"  //OK
+,getAllIncomeSubtitlebyProgrammeID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForProgrammeId"  //OK
+
+//voteallocation
+,getAllVoteAllocation: apiUrl + "/api/vote/voteAllocations/getAllWithVoteAllocationBySabhaId",
+deleteVoteAllocationById: apiUrl + "/api/vote/voteallocations/deleteVoteAllocation",
+getVoteAllocationDetailById: apiUrl + "/api/vote/voteallocations/getVoteAllocationById",
+saveVoteAllocation: apiUrl + "/api/vote/voteallocations/saveVoteAllocation",
+updateVoteAllocation: apiUrl + "/api/vote/voteallocations/updateVoteAllocation"
+
+//votedetails
+,getAllVoteDetails: apiUrl + "/api/vote/voteDetail/getAllVoteDetailBySabhaId",
+deleteVoteDetailsById: apiUrl + "/api/vote/voteDetail/deleteVoteDetails",
+getVoteDetailsDetailById: apiUrl + "/api/vote/voteDetail/getVoteDetailsById",
+saveVoteDetails: apiUrl + "/api/vote/voteDetail/saveVoteDetail",
+updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetails"
+,getAllVoteDetailsForProgrammeId: apiUrl + "/api/vote/voteDetail/getAllVoteDetailForProgrammeId"
+
+//banks
+,getAllBankDetails: apiUrl + "/api/BankDetails",
+
+//years
+getAllYears: apiUrl + "/api/Years",
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HttpProviderService {
+
+  constructor(private webApiService: WebApiService) { }
+ 
+  //programme
+  public getAllProgramme(model : any): Observable<any> {
+    //console.log(sabhaID);
+    return this.webApiService.get(httpLink.getAllProgramme+ '/'+model);
+  }
+  
+
+  public deleteProgrammeById(model: any): Observable<any> {
+    return this.webApiService.post(httpLink.deleteProgrammeById + '/' + model, "");
+  }
+
+  public getProgrammeDetailById(model: any): Observable<any> {
+    return this.webApiService.get(httpLink.getProgrammeDetailById + '/' + model);
+  }
+
+  public saveProgramme(model: any): Observable<any> {
+    return this.webApiService.post(httpLink.saveProgramme, model);
+  }
+
+  public updateProgramme(model: any): Observable<any> {
+    return this.webApiService.post(httpLink.updateProgramme, model);
+  }
+
+  // public updateProgrammewithid(id : any, model: any): Observable<any> {
+  //   return this.webApiService.post(httpLink.updateProgramme+id, model);
+  // }
+ 
+//project
+public getAllProject(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllProject+ '/'+model);
+}
+
+public deleteProjectById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteProjectById + '/' + model, "");
+}
+
+public getProjectDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getProjectDetailById + '/' + model);
+}
+
+public saveProject(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveProject, model);
+}
+
+public updateProject(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateProject, model);
+}
+public getAllProjectsForProgrammeId(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllProjectsForProgramme + '/' + model);
+}
+
+
+//subproject
+public getAllSubproject(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllsubproject  + '/'+model);
+}
+
+public deleteSubprojectById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deletesubprojectById + '/' + model, "");
+}
+
+public getSubprojectDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getsubprojectDetailById + '/' + model);
+}
+
+public saveSubproject(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.savesubproject, model);
+}
+
+public updateSubproject(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updatesubproject, model);
+}
+
+public getAllsubprojectforprojectID(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllsubprojectforprojectID + '/' + model);
+}
+
+public getAllsubprojectforprogrammeID(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllsubprojectforProgrammeID + '/' + model);
+}
+
+//incometitle
+public getAllIncometitle(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllIncometitle  + '/'+model);
+}
+
+public getAllIncometitleByProgrammeId(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllIncometitleByProgrammeId + '/' + model);
+}
+
+public deleteIncometitleById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteIncometitleById + '/' + model, "");
+}
+
+public getIncometitleDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getIncometitleDetailById + '/' + model);
+}
+
+public saveIncometitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveIncometitle, model);
+}
+
+public updateIncometitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateIncometitle, model);
+}
+
+//accountbalancedetail
+public getAllAccountBalanceDetail(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllAccountBalanceDetail  + '/'+model);
+}
+
+public deleteAccountBalanceDetailById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteAccountBalanceDetailById + '/' + model, "");
+}
+
+public getAccountBalanceDetailDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAccountBalanceDetailDetailById + '/' + model);
+}
+
+public saveAccountBalanceDetail(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveAccountBalanceDetail, model);
+}
+
+public updateAccountBalanceDetail(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateAccountBalanceDetail, model);
+}
+
+//balancesheetbalance
+public getAllBalancesheetBalance(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetBalance  + '/'+model);
+}
+
+public deleteBalancesheetBalanceById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteBalancesheetBalanceById + '/' + model, "");
+}
+
+public getBalancesheetBalanceDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getBalancesheetBalanceDetailById + '/' + model);
+}
+
+public saveBalancesheetBalance(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveBalancesheetBalance, model);
+}
+
+public updateBalancesheetBalance(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateBalancesheetBalance, model);
+}
+
+//accountdetail
+public getAllAccountDetail(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllAccountDetail  + '/'+model);
+}
+
+public deleteAccountDetailById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteAccountDetailById + '/' + model, "");
+}
+
+public getAccountDetailDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAccountDetailDetailById + '/' + model);
+}
+
+public saveAccountDetail(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveAccountDetail, model);
+}
+
+public updateAccountDetail(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateAccountDetail, model);
+}
+
+//balancesheetsubtitle
+public getAllBalancesheetSubtitle(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetSubtitle  + '/'+model);
+}
+
+public deleteBalancesheetSubtitleById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteBalancesheetSubtitleById + '/' + model, "");
+}
+
+public getBalancesheetSubtitleDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getBalancesheetSubtitleDetailById + '/' + model);
+}
+
+public saveBalancesheetSubtitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveBalancesheetSubtitle, model);
+}
+
+public updateBalancesheetSubtitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateBalancesheetSubtitle, model);
+}
+
+public getAllBalancesheetSubtitleByTitleID(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetSubtitleByTitleID + '/' + model);
+}
+
+//balancesheettitle
+public getAllBalancesheetTitle(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetTitle  + '/'+model);
+}
+
+public deleteBalancesheetTitleById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteBalancesheetTitleById + '/' + model, "");
+}
+
+public getBalancesheetTitleDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getBalancesheetTitleDetailById + '/' + model);
+}
+
+public saveBalancesheetTitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveBalancesheetTitle, model);
+}
+
+public updateBalancesheetTitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateBalancesheetTitle, model);
+}
+
+//incomesubtitle
+public getAllIncomeSubtitle(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllIncomeSubtitle  + '/'+model);
+}
+
+public deleteIncomeSubtitleById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteIncomeSubtitleById + '/' + model, "");
+}
+
+public getIncomeSubtitleDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getIncomeSubtitleDetailById + '/' + model);
+}
+
+public saveIncomeSubtitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveIncomeSubtitle, model);
+}
+
+public updateIncomeSubtitle(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateIncomeSubtitle, model);
+}
+
+public getAllIncomeSubtitlebyTitleID(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllIncomeSubtitlebyTitleID + '/' + model);
+}
+
+public getAllIncomeSubtitlebyProgrammeID(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllIncomeSubtitlebyProgrammeID + '/' + model);
+}
+
+//voteallocation
+public getAllVoteAllocation(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAllocation  + '/'+model);
+}
+
+public deleteVoteAllocationById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteVoteAllocationById + '/' + model, "");
+}
+
+public getVoteAllocationDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getVoteAllocationDetailById + '/' + model);
+}
+
+public saveVoteAllocation(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveVoteAllocation, model);
+}
+
+public updateVoteAllocation(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateVoteAllocation, model);
+}
+
+//votedetails
+public getAllVoteDetails(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteDetails  + '/'+model);
+}
+
+public deleteVoteDetailsById(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteVoteDetailsById + '/' + model, "");
+}
+
+public getVoteDetailsDetailById(model: any): Observable<any> {
+  return this.webApiService.get(httpLink.getVoteDetailsDetailById + '/' + model);
+}
+
+public saveVoteDetails(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveVoteDetails, model);
+}
+
+public updateVoteDetails(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateVoteDetails, model);
+}
+public getAllVoteDetailsForProgrammeId(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteDetailsForProgrammeId  + '/'+model);
+}
+
+//bank details
+public getAllBankDetails(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBankDetails);
+}
+
+
+//Years details
+public getAllYears(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllYears);
+}
+
+}
