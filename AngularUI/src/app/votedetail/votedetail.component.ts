@@ -19,10 +19,12 @@ export class VotedetailComponent implements OnInit {
   
   isSubmitted: boolean = false;
   isValid : boolean;
-  ProgrammeID:number;
-  ProjectID:number;
-  IncomeTitleID:number;
-  IncomeSubTitleID:number;
+  // ProgrammeID:any;
+  objProgramme:any;
+  objProject:any;
+  objSubProject:any;
+  objIncomeTitle:any;
+  objIncomeSubTitle:any;
   VoteCode :any;
 
   APIVoteDetailsList:any;
@@ -140,27 +142,18 @@ async getAllVoteDetailsForProgrammeId(id : any) {
     });
 }
 
-
-
 async LoadProjectsandIncomeTitles(id : any) {
-  console.log(id);
-  // this.APIProgrammesList[index];
-
-  const ids = this.APIProgrammesList.map((programme) => programme.code).filter(c => c.id=id);
-  
-  console.log(ids);
-  // let id : any=this.APIProgrammesList[index].id;
-  let index = this.APIProgrammesList.indexOf(id); 
-  // let index = this.APIProgrammesList.index(x => x.id === id);
-  // let code : any=this.APIProgrammesList[index].code;
-  console.log(index);
-  // this.VoteCode=localStorage.getItem('sabhaCode')+"-"+this.APIProgrammesList[index].code;
-  // console.log(this.VoteCode);
+  // this.ProgrammeID=id;
+  // console.log(id);
+  this.objProgramme=null;
+  this.objProgramme = this.APIProgrammesList.find(obj => obj.id == id);
+  this.VoteCode =localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code;
+  this.selectedVoteDetail.code=this.VoteCode;
   this.getAllProjectsByProgrammeId(id);
   this.getAllIncomeTitlesByProgrammeId(id);
   
   //to load the table when selecting programmes drop down only
-  // this.getAllVoteDetailsForProgrammeId(id);
+  this.getAllVoteDetailsForProgrammeId(id);
 }
 
 async getAllProjectsByProgrammeId(id : any) {
@@ -184,6 +177,10 @@ async getAllProjectsByProgrammeId(id : any) {
 }
 
 async getAllSubProjectsByProjectId(id : any) {
+  this.objProject=null;
+  this.objProject = this.APIProjectsListByProgramme.find(obj => obj.id == id);
+  this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code;
+  this.selectedVoteDetail.code=this.VoteCode;
   this.httpProvider.getAllsubprojectforprojectID(id).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
@@ -203,6 +200,20 @@ async getAllSubProjectsByProjectId(id : any) {
     });
 }
 
+onchangeSubproject(id : any)
+{
+  this.objSubProject=null;
+  this.objSubProject = this.APISubProjectsByProject.find(obj => obj.id == id);
+  this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code+ "-"+ this.objSubProject.code;
+  this.selectedVoteDetail.code=this.VoteCode;
+}
+onchangeSubTitle(id : any)
+{
+  this.objIncomeSubTitle=null;
+  this.objIncomeSubTitle = this.APIIncomeSubTitleListByTitle.find(obj => obj.id == id);
+  this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code+ "-"+ this.objSubProject.code+ "-"+ this.objIncomeSubTitle.code;
+  this.selectedVoteDetail.code=this.VoteCode;
+}
 
 async getAllIncomeTitlesByProgrammeId(id : any) {
   this.httpProvider.getAllIncometitleByProgrammeId(id).subscribe({
@@ -225,6 +236,8 @@ async getAllIncomeTitlesByProgrammeId(id : any) {
 }
 
 async getAllIncomeSubTitlesByIncomeTitleID(id : any) {
+  this.objIncomeTitle=null;
+  this.objIncomeTitle = this.APIIncomeTitleListByProgramme.find(obj => obj.id == id);
   this.httpProvider.getAllIncomeSubtitlebyTitleID(id).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
@@ -302,34 +315,35 @@ async getAllIncomeSubTitlesByIncomeTitleID(id : any) {
 else {
       this.selectedVoteDetail.sabhaID = Number(localStorage.getItem('sabhaId'));
       this.selectedVoteDetail.status = 1;
+      this.selectedVoteDetail.incomeOrExpense = 1;
+      this.selectedVoteDetail.sabhaCode = localStorage.getItem('sabhaCode');
 
-      this.selectedVoteDetail.programmeNameSinhala = null;
-      this.selectedVoteDetail.programmeNameEnglish = null;
-      this.selectedVoteDetail.programmeNameTamil = null;
-      this.selectedVoteDetail.programmeCode = null;
-      this.selectedVoteDetail.projectNameSinhala = null;
-      this.selectedVoteDetail.projectNameEnglish = null;
-      this.selectedVoteDetail.projectNameTamil = null;
-      this.selectedVoteDetail.projectCode = null;
-      this.selectedVoteDetail.subprojectNameSinhala = null;
-      this.selectedVoteDetail.subprojectNameEnglish = null;
-      this.selectedVoteDetail.subprojectNameTamil = null;
-      this.selectedVoteDetail.subprojectCode = null;
-      this.selectedVoteDetail.incomeTitleNameSinhala = null;
-      this.selectedVoteDetail.incomeTitleNameEnglish = null;
-      this.selectedVoteDetail.incomeTitleNameTamil = null;
-      this.selectedVoteDetail.incomeTitleCode = null;
-      this.selectedVoteDetail.incomeSubtitleNameSinhala = null;
-      this.selectedVoteDetail.incomeSubtitleNameEnglish = null;
-      this.selectedVoteDetail.incomeSubtitleNameTamil = null;
-      this.selectedVoteDetail.incomeSubtitleCode = null;
-      this.selectedVoteDetail.incomeOrExpense  = null;
+      this.selectedVoteDetail.programmeNameSinhala = this.objProgramme.nameSinhala;
+      this.selectedVoteDetail.programmeNameEnglish = this.objProgramme.nameEnglish;
+      this.selectedVoteDetail.programmeNameTamil = this.objProgramme.nameTamil;
+      this.selectedVoteDetail.programmeCode = this.objProgramme.code;
+      this.selectedVoteDetail.projectNameSinhala = this.objProject.nameSinhala;
+      this.selectedVoteDetail.projectNameEnglish = this.objProject.nameEnglish;
+      this.selectedVoteDetail.projectNameTamil = this.objProject.nameTamil;
+      this.selectedVoteDetail.projectCode = this.objProject.code;
+      this.selectedVoteDetail.subprojectNameSinhala = this.objSubProject.nameSinhala;
+      this.selectedVoteDetail.subprojectNameEnglish = this.objSubProject.nameEnglish;
+      this.selectedVoteDetail.subprojectNameTamil = this.objSubProject.nameTamil;
+      this.selectedVoteDetail.subprojectCode = this.objSubProject.code;
+      this.selectedVoteDetail.incomeTitleNameSinhala = this.objIncomeTitle.nameSinhala;
+      this.selectedVoteDetail.incomeTitleNameEnglish = this.objIncomeTitle.nameEnglish;
+      this.selectedVoteDetail.incomeTitleNameTamil = this.objIncomeTitle.nameTamil;
+      this.selectedVoteDetail.incomeTitleCode = this.objIncomeTitle.code;
+      this.selectedVoteDetail.incomeSubtitleNameSinhala = this.objIncomeSubTitle.nameSinhala;
+      this.selectedVoteDetail.incomeSubtitleNameEnglish = this.objIncomeSubTitle.nameEnglish;
+      this.selectedVoteDetail.incomeSubtitleNameTamil = this.objIncomeSubTitle.nameTamil;
+      this.selectedVoteDetail.incomeSubtitleCode = this.objIncomeSubTitle.code;
 
+  console.log(this.selectedVoteDetail);
   this.httpProvider.saveVoteDetails(this.selectedVoteDetail)
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         setTimeout(() => {this.refresh();}, 2000);
          Notify.success('Income Title Created successfully..!');
     },
     error: error => {
@@ -338,8 +352,10 @@ else {
 });
 }
 setTimeout(() => {
-this.selectedVoteDetail = new VoteDetail();
-this.refresh();
+  this.selectedVoteDetail = new VoteDetail();
+  this.selectedVoteDetail.programmeID=this.objProgramme.id;
+  this.getAllVoteDetailsForProgrammeId(this.objProgramme.id);
+// this.refresh();
 }, 1000);
 }
 }
@@ -364,7 +380,9 @@ this.refresh();
     });
     setTimeout(() => {
       this.selectedVoteDetail = new VoteDetail();
-      this.refresh();
+      this.selectedVoteDetail.programmeID=this.objProgramme.id;
+      this.getAllVoteDetailsForProgrammeId(this.objProgramme.id);
+      // this.refresh();
       }, 1000);
   }
 }

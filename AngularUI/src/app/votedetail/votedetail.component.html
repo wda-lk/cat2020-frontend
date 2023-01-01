@@ -9,10 +9,10 @@
                       </div>
                       <div class="card-body">
                             <div *ngIf="isSinhala;">
-                                <label>Select Vote Programme</label>
+                                <label>Select Vote Programme</label> 
                                 <select class="form-control" [(ngModel)]="selectedVoteDetail.programmeID" (ngModelChange)="LoadProjectsandIncomeTitles($event);">
                                     <option  value="0">--Select Vote Programme</option>
-                                    <option *ngFor=" let programme of APIProgrammesList" [value]="programme.index" > {{(programme.code +" :: " + programme.nameSinhala)}} </option>
+                                    <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameSinhala)}} </option>
                                 </select>
                             </div>
     
@@ -58,7 +58,7 @@
                             
                             <div *ngIf="isSinhala;">
                                 <label>Select Sub Project</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID"  (ngModelChange)="onchangeSubproject($event);">
                                     <option value="0">--Select Vote Income Sub Project</option>
                                     <option *ngFor=" let subproject of APISubProjectsByProject" [value]="subproject.id"> {{(subproject.code +" :: " + subproject.nameSinhala)}} </option>
                                 </select>
@@ -66,14 +66,14 @@
     
                             <div *ngIf="isEnglish;">
                                 <label>Select Sub Project</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID" (ngModelChange)="onchangeSubproject($event);">
                                     <option value="0">--Select Vote Income Sub Project</option>
                                     <option *ngFor=" let subproject of APISubProjectsByProject" [value]="subproject.id"> {{(subproject.code +" :: " + subproject.nameEnglish)}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isTamil;">
                                 <label>Select Sub Project</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.subprojectID" (ngModelChange)="onchangeSubproject($event);">
                                     <option value="0">--Select Vote Income Sub Project</option>
                                     <option *ngFor=" let subproject of APISubProjectsByProject" [value]="subproject.id"> {{(subproject.code +" :: " + subproject.nameTamil)}} </option>
                                 </select>
@@ -104,7 +104,7 @@
 
                             <div *ngIf="isSinhala;">
                                 <label>Select Income Subtitle</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID" (ngModelChange)="onchangeSubTitle($event);">
                                     <option value="0">--Select Vote Income Subtitle</option>
                                     <option *ngFor=" let subtitle of APIIncomeSubTitleListByTitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameSinhala)}} </option>
                                 </select>
@@ -112,14 +112,14 @@
     
                             <div *ngIf="isEnglish;">
                                 <label>Select Income Subtitle</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID" (ngModelChange)="onchangeSubTitle($event);">
                                     <option value="0">--Select Vote Income Subtitle</option>
                                     <option *ngFor=" let subtitle of APIIncomeSubTitleListByTitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameEnglish)}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isTamil;">
                                 <label>Select Income Subtitle</label>
-                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID">
+                                <select class="form-control" [(ngModel)]="selectedVoteDetail.incomeSubtitleID" (ngModelChange)="onchangeSubTitle($event);">
                                     <option value="0">--Select Vote Income Subtitle</option>
                                     <option *ngFor=" let subtitle of APIIncomeSubTitleListByTitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameTail)}} </option>
                                 </select>
@@ -194,6 +194,7 @@
                                             <th>Sub Title</th> -->
                                               <td ><span *ngIf="isSinhala">{{votedetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{votedetail.nameEnglish}}</span> <span *ngIf="isTamil">{{votedetail.nameTamil}}</span> </td> 
                                               <td>{{ votedetail.code }}</td>
+                                              <td>{{ votedetail.voteOrder }}</td>
                                             <td class="td-actions text-right">
                                                 <button mat-raised-button (click)="editVoteDetail(votedetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
                                                     <i class="material-icons">edit</i>

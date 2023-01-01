@@ -103,7 +103,7 @@ updateVoteAllocation: apiUrl + "/api/vote/voteallocations/updateVoteAllocation"
 deleteVoteDetailsById: apiUrl + "/api/vote/voteDetail/deleteVoteDetails",
 getVoteDetailsDetailById: apiUrl + "/api/vote/voteDetail/getVoteDetailsById",
 saveVoteDetails: apiUrl + "/api/vote/voteDetail/saveVoteDetail",
-updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetails"
+updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail"  //ok
 ,getAllVoteDetailsForProgrammeId: apiUrl + "/api/vote/voteDetail/getAllVoteDetailForProgrammeId"
 
 //banks

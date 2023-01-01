@@ -26,7 +26,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 export const AdminLayoutRoutes: Routes = [
     
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
+    // { path: 'user-profile',   component: UserProfileComponent },
 
     { path: 'programmes',   component: ProgrammesComponent },
     { path: 'voteincometitle',   component: VoteincometitleComponent }, 

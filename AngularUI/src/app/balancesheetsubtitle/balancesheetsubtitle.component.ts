@@ -4,7 +4,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { BalancesheetSubtitle } from '../models/Balancesheetsubtitle';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { thisExpression } from '../../../_node_modules/@babel/types/lib/index-legacy';
 
 @Component({
   selector: 'app-balancesheetsubtitle',
