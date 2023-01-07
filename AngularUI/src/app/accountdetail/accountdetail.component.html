@@ -9,7 +9,7 @@
                       </div>
                       <div class="card-body">
                             <div >
-                                <label>Select Vote Bank</label>
+                                <label>Select Bank</label>
                                 <select class="form-control" [(ngModel)]="selectedAccountDetail.bankID" >
                                     <option *ngFor=" let bank of APIBanksList" [value]="bank.id"> {{(bank.description)}} </option>
                                 </select>

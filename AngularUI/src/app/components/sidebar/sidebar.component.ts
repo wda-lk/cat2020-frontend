@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../_services';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -7,26 +8,24 @@ declare interface RouteInfo {
     icon: string;
     class: string;
 }
+
+declare interface VoteManagementMainFromsRouteInfo {
+  path: string;
+  title: string;
+  icon: string;
+  class: string;
+}
+
+declare interface VoteManagementAllocaionFromsRouteInfo {
+  path: string;
+  title: string;
+  icon: string;
+  class: string;
+}
+
 export const ROUTES: RouteInfo[] = [
-  { path: '/dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
 
-  { path: '/programmes', title: 'Programmes',  icon:'content_paste', class: '' },
-  { path: '/voteincometitle', title: 'Vote Income Titles',  icon:'content_paste', class: '' }, 
-  { path: '/voteincomesubtitle', title: 'Vote Income Sub Titles',  icon:'content_paste', class: '' }, //to test
-  { path: '/voteincomeproject', title: 'Vote Income Projects',  icon:'class', class: '' }, //to test
-  { path: '/voteincomesubproject', title: 'Vote Income Sub Projects',  icon:'class', class: '' }, //to test
-  
-  { path: '/balancesheettitle', title: 'Balancesheet Title',  icon:'content_paste', class: '' },
-  { path: '/balancesheetsubtitle', title: 'Balancesheet Sub Titles',  icon:'content_paste', class: '' }, 
-
-  { path: '/votedetail', title: 'Vote Details',  icon:'content_paste', class: '' }, //to test
-
-  { path: '/accountdetail', title: 'Account Details',  icon:'class', class: '' }, //to test
-  { path: '/accountbalancedetail', title: 'Account Balance Details',  icon:'class', class: '' }, //to test
-  
-  { path: '/voteallocation', title: 'Vote Allocations',  icon:'class', class: '' }, //to test
-  { path: '/balancesheetbalance', title: 'Balancesheet Balances',  icon:'class', class: '' }, //to test
- 
+ { path: '/dashboard', title: 'Dashboard', icon: 'dashboard', class: '' },
 
   // { path: '/user-profile', title: 'User Profile',  icon:'person', class: '' },
   // { path: '/typography', title: 'Create User',  icon:'key', class: '' },
@@ -35,6 +34,32 @@ export const ROUTES: RouteInfo[] = [
     //{ path: '/notifications', title: 'Notifications',  icon:'notifications', class: '' },
     //{ path: '/upgrade', title: 'Upgrade to PRO',  icon:'unarchive', class: 'active-pro' },
 ]
+
+//Vote Managament Sub Menus
+export const VOTEMANAGEMENTMAINFORMSROUTES: VoteManagementAllocaionFromsRouteInfo[] = [
+
+  { path: '/programmes', title: 'Programmes',  icon:'assignment_turned_in', class: '' },
+  { path: '/voteincometitle', title: 'Vote Income Titles',  icon:'assignment_turned_in', class: '' }, 
+  { path: '/voteincomesubtitle', title: 'Vote Income Sub Titles',  icon:'assignment_turned_in', class: '' }, 
+  { path: '/voteincomeproject', title: 'Vote Income Projects',  icon:'assignment_turned_in', class: '' }, 
+  { path: '/voteincomesubproject', title: 'Vote Income Sub Projects',  icon:'assignment_turned_in', class: '' }, 
+  
+  { path: '/balancesheettitle', title: 'Balancesheet Title',  icon:'assignment_turned_in', class: '' },
+  { path: '/balancesheetsubtitle', title: 'Balancesheet Sub Titles',  icon:'assignment_turned_in', class: '' }, 
+
+  { path: '/votedetail', title: 'Vote Details',  icon:'view_list', class: '' }, 
+  { path: '/accountdetail', title: 'Account Details',  icon:'monetization_on', class: '' },
+]
+
+export const VOTEMANAGEMENTALLOCATIONFORMSROUTES: VoteManagementMainFromsRouteInfo[] = [
+
+  { path: '/accountbalancedetail', title: 'Account Balance Details',  icon:'monetization_on', class: '' }, 
+  { path: '/voteallocation', title: 'Vote Allocations',  icon:'attach_money', class: '' }, 
+  { path: '/balancesheetbalance', title: 'Balancesheet Balances',  icon:'attach_money', class: '' }
+]
+//end of Vote Managament Sub Menus
+
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -42,14 +67,34 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[];
+  voteManagementMainFormsMenuItems: any[];
+  voteManagementAllocationFormsMenuItems: any[];
 
-  constructor() { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   logopath: any;
   ngOnInit() {
     this.logopath = localStorage.getItem('CurrentLogopathNm');
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.voteManagementMainFormsMenuItems = VOTEMANAGEMENTMAINFORMSROUTES.filter(menuItem => menuItem);
+    this.voteManagementAllocationFormsMenuItems = VOTEMANAGEMENTALLOCATIONFORMSROUTES.filter(menuItem => menuItem);
+
+    (function($){
+	$(document).ready(function(){
+		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+			event.preventDefault(); 
+			event.stopPropagation(); 
+			$(this).parent().siblings().removeClass('open');
+			$(this).parent().toggleClass('open');
+		});
+	});
+})(jQuery);
+
   }
+
+  logout() {
+    this.authenticationService.logout();
+}
   isMobileMenu() {
       if ($(window).width() > 991) {
           return false;

@@ -14,10 +14,12 @@ export class AccountbalancedetailComponent implements OnInit {
   selectedAccountbalancedetail: AccountBalanceDetail = new AccountBalanceDetail();
   loading = false;
   APIAccountbalancedetailsList:any;
+  APIAccountbalancedetailsListByAccountId : any;
   APIAccountdetailsList :any;
   APIYearsList :any;
   isSubmitted: boolean = false;
   isValid : boolean;
+  objSelectedAccountDetail:any;
 
   SelectedLanguage : any;
   isSinhala :boolean;
@@ -41,7 +43,7 @@ export class AccountbalancedetailComponent implements OnInit {
     
     this.loading = true;
     this.isValid = false;
-    this.getAllAccountbalancedetails();
+    // this.getAllAccountbalancedetails();
     this.getAllAccountdetails();
     this.getAllYears();
     this.loading = false;
@@ -102,6 +104,30 @@ async getAllAccountbalancedetails() {
           if(error.error && error.error.message){
             Notify.failure(error.error.message);
             this.APIAccountbalancedetailsList = [];
+          }
+      }}
+    });
+}
+
+async getAllAccountbalancedetailsByAccountId(id :any) {
+
+  this.objSelectedAccountDetail=null;
+  this.objSelectedAccountDetail = this.APIAccountdetailsList.find(obj => obj.id == id);
+
+  this.httpProvider.getAllAccountbalancedetailsByAccountIdandSabhaId(id,localStorage.getItem('sabhaId')).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      if (resultData) {
+        this.APIAccountbalancedetailsListByAccountId = resultData;
+      }
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            this.APIAccountbalancedetailsListByAccountId = [];
           }
       }}
     });
@@ -174,8 +200,9 @@ else {
 });
 }
 setTimeout(() => {
-this.selectedAccountbalancedetail = new AccountBalanceDetail();
-this.refresh();
+  this.selectedAccountbalancedetail = new AccountBalanceDetail();
+        this.selectedAccountbalancedetail.accountDetailID=this.objSelectedAccountDetail.id;
+        this.getAllAccountbalancedetailsByAccountId(this.objSelectedAccountDetail.id) ;
 }, 1000);
 }
 }
@@ -191,7 +218,6 @@ this.refresh();
       .subscribe({
         next: (data) => {
              var resultData = data.body;
-             setTimeout(() => {this.refresh();}, 2000);
              Notify.success('Account balance detail Deleted successfully..!');
         },
         error: error => {
@@ -200,7 +226,8 @@ this.refresh();
     });
     setTimeout(() => {
       this.selectedAccountbalancedetail = new AccountBalanceDetail();
-      this.refresh();
+        this.selectedAccountbalancedetail.accountDetailID=this.objSelectedAccountDetail.id;
+        this.getAllAccountbalancedetailsByAccountId(this.objSelectedAccountDetail.id) ;
       }, 1000);
   }
 }

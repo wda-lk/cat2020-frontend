@@ -19,6 +19,7 @@ export class VotedetailComponent implements OnInit {
   
   isSubmitted: boolean = false;
   isValid : boolean;
+  hasErrors : number;
   // ProgrammeID:any;
   objProgramme:any;
   objProject:any;
@@ -30,6 +31,7 @@ export class VotedetailComponent implements OnInit {
   APIVoteDetailsList:any;
   APIVoteDetailsForProgrammeList:any;
   APIProgrammesList :any;
+  APIProjectsList :any;
   APIProjectsListByProgramme :any;
   APISubProjectsByProject :any;
   APIIncomeTitleListByProgramme :any;
@@ -88,7 +90,7 @@ export class VotedetailComponent implements OnInit {
       if (data != null && data.body != null) {
         var resultData = data.body;
         if (resultData) {
-          this.APIProgrammesList = resultData;
+          this.APIProjectsList = resultData;
         }
       }
     },
@@ -96,7 +98,7 @@ export class VotedetailComponent implements OnInit {
           if (error.status == 404) {
             if(error.error && error.error.message){
               Notify.failure(error.error.message);
-              this.APIProgrammesList = [];
+              this.APIProjectsList = [];
             }
         }}
       });
@@ -209,9 +211,16 @@ onchangeSubproject(id : any)
 }
 onchangeSubTitle(id : any)
 {
+
   this.objIncomeSubTitle=null;
   this.objIncomeSubTitle = this.APIIncomeSubTitleListByTitle.find(obj => obj.id == id);
+  if(this.objProject!=null && this.objProject.id>0 )
+  {
   this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code+ "-"+ this.objSubProject.code+ "-"+ this.objIncomeSubTitle.code;
+  }
+  else{
+    this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objIncomeSubTitle.code;
+  }
   this.selectedVoteDetail.code=this.VoteCode;
 }
 
@@ -260,46 +269,59 @@ async getAllIncomeSubTitlesByIncomeTitleID(id : any) {
 
 
   async updateRecord() {
-
+    this.hasErrors=0;
     if (this.selectedVoteDetail.programmeID == null){
       this.isValid=false; Notify.warning('Please select a Programme.');
     } else{this.isValid=true;}
 
-    if (this.selectedVoteDetail.projectID == null){
-      this.isValid=false; Notify.warning('Please select a Project.');
-    } else{this.isValid=true;}
+    // if (this.selectedVoteDetail.projectID == null){
+    //   this.isValid=false; Notify.warning('Please select a Project.');
+    // } else{this.isValid=true;}
 
 
-    if (this.selectedVoteDetail.subprojectID == null){
-      this.isValid=false; Notify.warning('Please select a Sub Project.');
-    } else{this.isValid=true;}
+    // if (this.selectedVoteDetail.subprojectID == null){
+    //   this.isValid=false; Notify.warning('Please select a Sub Project.');
+    // } else{this.isValid=true;}
 
 
     if (this.selectedVoteDetail.incomeTitleID == null){
+      this.hasErrors+1;
       this.isValid=false; Notify.warning('Please select a Income Title.');
-    } else{this.isValid=true;}
+    } 
+    else{
+      this.isValid=true;
+    }
 
     if (this.selectedVoteDetail.incomeSubtitleID == null){
       this.isValid=false; Notify.warning('Please select a Income Subtitle.');
-    } else{this.isValid=true;}
+    } else{
+      this.isValid=true;
+    }
 
     if (this.selectedVoteDetail.nameEnglish == null && this.isEnglish==true){
       this.isValid=false; Notify.warning('Name English is Required.');
-    } else{this.isValid=true;}
+    } else{
+      this.isValid=true;
+    }
 
     if (this.selectedVoteDetail.nameSinhala == null && this.isSinhala==true) {
       this.isValid=false; Notify.warning('Name Sinhala is Required.');
-    } else{this.isValid=true;}
+    } else{
+      this.isValid=true;
+    }
 
     if (this.selectedVoteDetail.nameTamil == null && this.isTamil==true){
     this.isValid=false; Notify.warning('Name Tamil is Required.');
-    } else{this.isValid=true;}
+    } else{
+      this.isValid=true;
+    }
 
     if (this.selectedVoteDetail.code == null){
       this.isValid=false; Notify.warning('Code is Required.');
-    } else{this.isValid=true;}
+    } else{this.isValid=true;
+    }
 
-    if (this.isValid==true) {
+    if (this.isValid==true ) {
     if (this.selectedVoteDetail.id !== undefined) {
     this.httpProvider.updateVoteDetails(this.selectedVoteDetail)
     .subscribe({
@@ -313,32 +335,76 @@ async getAllIncomeSubTitlesByIncomeTitleID(id : any) {
   });
 }
 else {
+      if (this.isSinhala==true && this.selectedVoteDetail.nameEnglish == null) {
+        this.selectedVoteDetail.nameEnglish="-";
+      } 
+      if (this.isSinhala==true && this.selectedVoteDetail.nameTamil == null) {
+        this.selectedVoteDetail.nameTamil="-";
+      } 
+   
+
+      if (this.isTamil==true && this.selectedVoteDetail.nameSinhala == null) {
+        this.selectedVoteDetail.nameSinhala="-";
+      } 
+      if (this.isTamil==true && this.selectedVoteDetail.nameEnglish == null) {
+        this.selectedVoteDetail.nameEnglish="-";
+      } 
+
+      if (this.isEnglish==true && this.selectedVoteDetail.nameSinhala == null) {
+        this.selectedVoteDetail.nameSinhala="-";
+      } 
+      if (this.isTamil==true && this.selectedVoteDetail.nameTamil == null) {
+        this.selectedVoteDetail.nameTamil="-";
+      } 
+
       this.selectedVoteDetail.sabhaID = Number(localStorage.getItem('sabhaId'));
       this.selectedVoteDetail.status = 1;
       this.selectedVoteDetail.incomeOrExpense = 1;
       this.selectedVoteDetail.sabhaCode = localStorage.getItem('sabhaCode');
 
       this.selectedVoteDetail.programmeNameSinhala = this.objProgramme.nameSinhala;
+      this.selectedVoteDetail.programmeNameSinhala = this.objProgramme.nameSinhala;
       this.selectedVoteDetail.programmeNameEnglish = this.objProgramme.nameEnglish;
       this.selectedVoteDetail.programmeNameTamil = this.objProgramme.nameTamil;
       this.selectedVoteDetail.programmeCode = this.objProgramme.code;
+
+      if(this.objProject!=null && this.objProject.id>0){
+      this.selectedVoteDetail.projectCode = this.objProject.code;
       this.selectedVoteDetail.projectNameSinhala = this.objProject.nameSinhala;
       this.selectedVoteDetail.projectNameEnglish = this.objProject.nameEnglish;
       this.selectedVoteDetail.projectNameTamil = this.objProject.nameTamil;
-      this.selectedVoteDetail.projectCode = this.objProject.code;
+      
+      this.selectedVoteDetail.subprojectCode = this.objSubProject.code;
       this.selectedVoteDetail.subprojectNameSinhala = this.objSubProject.nameSinhala;
       this.selectedVoteDetail.subprojectNameEnglish = this.objSubProject.nameEnglish;
       this.selectedVoteDetail.subprojectNameTamil = this.objSubProject.nameTamil;
-      this.selectedVoteDetail.subprojectCode = this.objSubProject.code;
+      }
+      else
+      {        
+        this.selectedVoteDetail.projectID = 0;
+        this.selectedVoteDetail.projectCode = null;
+        this.selectedVoteDetail.projectNameSinhala = null
+        this.selectedVoteDetail.projectNameEnglish = null;
+        this.selectedVoteDetail.projectNameTamil = null;
+        
+        this.selectedVoteDetail.subprojectID = 0;
+        this.selectedVoteDetail.subprojectCode = null;
+        this.selectedVoteDetail.subprojectNameSinhala = null;
+        this.selectedVoteDetail.subprojectNameEnglish = null;
+        this.selectedVoteDetail.subprojectNameTamil = null;
+        }
+
+        if(this.objIncomeTitle!=null && this.objIncomeTitle.id>0){
       this.selectedVoteDetail.incomeTitleNameSinhala = this.objIncomeTitle.nameSinhala;
       this.selectedVoteDetail.incomeTitleNameEnglish = this.objIncomeTitle.nameEnglish;
       this.selectedVoteDetail.incomeTitleNameTamil = this.objIncomeTitle.nameTamil;
       this.selectedVoteDetail.incomeTitleCode = this.objIncomeTitle.code;
+        
       this.selectedVoteDetail.incomeSubtitleNameSinhala = this.objIncomeSubTitle.nameSinhala;
       this.selectedVoteDetail.incomeSubtitleNameEnglish = this.objIncomeSubTitle.nameEnglish;
       this.selectedVoteDetail.incomeSubtitleNameTamil = this.objIncomeSubTitle.nameTamil;
       this.selectedVoteDetail.incomeSubtitleCode = this.objIncomeSubTitle.code;
-
+        }
   console.log(this.selectedVoteDetail);
   this.httpProvider.saveVoteDetails(this.selectedVoteDetail)
   .subscribe({
@@ -366,7 +432,7 @@ setTimeout(() => {
 
   async deleteVoteDetail(voteDetail: VoteDetail) {
     this.loading = true;
-    if (confirm(`Are you sure you want to delete the product ${voteDetail.code + "::" + voteDetail.nameEnglish}. This cannot be undone.`)) {
+    if (confirm(`Are you sure you want to delete the product ${voteDetail.code}. This cannot be undone.`)) {
       this.httpProvider.deleteVoteDetailsById(voteDetail.id)
       .subscribe({
         next: (data) => {

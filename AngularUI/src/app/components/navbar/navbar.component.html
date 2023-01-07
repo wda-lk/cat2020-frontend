@@ -1,11 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
     <div style="height:40px; width:100%;">
-    <span style="font-size: 25px; font-weight: bold; width:100%; margin-left:30px;">{{ SbhName }}</span>
-    <br><span style="font-size: 15px; width:100%; margin-left:30px;">
+    <span style="font-size: 27px; font-weight: bold; width:100%; margin-left:30px;">{{ SbhName }}</span>
+    <br><span style="font-size: 18px; width:100%; margin-left:30px;">
         {{ProvNm}} | {{DistNm }}
     </span>
     <hr>
-    <span style="font-size: 15px; width:100%; margin-left:30px;">{{getTitle()}}</span>
+    <span style="font-size: 15px; width:100%; margin-left:30px;"> {{getTitle()}}</span>
+
+    
     <hr>
     </div>
     <div class="container-fluid">
@@ -37,17 +39,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="javascript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="material-icons">notifications</i>
-                        <span class="notification">1</span>
+                        <span class="notification">2</span>
                         <p>
                             <span class="d-lg-none d-md-block">Some Actions</span>
                         </p>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="javascript:void(0)">Your Default Language : {{SelectedLanguage}}</a>
-                        <!-- <a class="dropdown-item" href="javascript:void(0)">Notification 2</a>
-                        <a class="dropdown-item" href="javascript:void(0)">Notification 3</a>
-                        <a class="dropdown-item" href="javascript:void(0)">Notification 4</a>
-                        <a class="dropdown-item" href="javascript:void(0)">Notification 5</a> -->
+                        <a class="dropdown-item" href="javascript:void(0)">Default Language : {{SelectedLanguage}}</a>
+                        <a class="dropdown-item" href="javascript:void(0)">Sabha Code : {{SabhaCode}}</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -58,7 +57,7 @@
                         </p>
                     </a>
                 </li>
-                <button class="btn btn-link nav-item nav-link" (click)="logout()">Logout</button>
+                <button class="btn btn-link nav-item nav-link" (click)="logout()">Logout </button>
             </ul>
         </div>
     </div>

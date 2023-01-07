@@ -11,21 +11,21 @@
              
                             <div *ngIf="isSinhala;">
                                 <label>Select Account</label>
-                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" >
+                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" (ngModelChange)="getAllAccountbalancedetailsByAccountId($event);">
                                     <option value="0"> --Select Account--</option>
                                     <option *ngFor=" let accountdetail of APIAccountdetailsList" [value]="accountdetail.id"> {{(accountdetail.nameSinhala + ":" + accountdetail.accountNo )}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isTamil;">
                                 <label>Select Account</label>
-                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" >
+                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" (ngModelChange)="getAllAccountbalancedetailsByAccountId($event);">
                                     <option value="0"> --Select Account--</option>
                                     <option *ngFor=" let accountdetail of APIAccountdetailsList" [value]="accountdetail.id"> {{(accountdetail.nameTamil + ":" + accountdetail.accountNo )}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isEnglish;">
                                 <label>Select Account</label>
-                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" >
+                                <select class="form-control" [(ngModel)]="selectedAccountbalancedetail.accountDetailID" (ngModelChange)="getAllAccountbalancedetailsByAccountId($event);">
                                     <option value="0"> --Select Account--</option>
                                     <option *ngFor=" let accountdetail of APIAccountdetailsList" [value]="accountdetail.id"> {{(accountdetail.nameEnglish + ":" + accountdetail.accountNo )}} </option>
                                 </select>
@@ -79,14 +79,14 @@
                                     <tbody>
                                         <tr>
                                             <th>#</th>
-                                              <!-- <th>Account Name</th> -->
+                                              <th>Account Name</th>
                                               <th>Year</th>
                                               <th>Account Balance</th>
                                               <th>Options</th>
                                           </tr>
-                                          <tr *ngFor="let accountbalancedetail of APIAccountbalancedetailsList; index as i">
+                                          <tr *ngFor="let accountbalancedetail of APIAccountbalancedetailsListByAccountId; index as i">
                                               <td>{{ i+1 }}</td>
-                                              <!-- <td>AccountdetailName</td> -->
+                                              <td ><span *ngIf="isSinhala">{{objSelectedAccountDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{objSelectedAccountDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{objSelectedAccountDetail.nameTamil}}</span> </td> 
                                               <td>{{ accountbalancedetail.year }}</td>
                                               <td>{{ accountbalancedetail.balanceAmount }}</td>
                                             <td class="td-actions text-right">

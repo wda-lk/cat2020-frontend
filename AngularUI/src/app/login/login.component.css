@@ -10,12 +10,12 @@ body {
     }
     
     .login-box {
-    background: url(../../assets/img/bluebackg.png);
+    /* background: url(../../assets/img/bluebackg.png); */
     background-size: cover;
     background-position: center;
-    padding: 50px;
-    margin: 50px auto;
-    min-height: 700px;
+    padding: 20px;
+    margin: 20px auto;
+    min-height: 400px;
     -webkit-box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
     }

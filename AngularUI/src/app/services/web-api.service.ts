@@ -9,6 +9,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 })
 export class WebApiService {
 
+  token = localStorage.getItem('token');
 
   constructor(private httpClient: HttpClient) {
   }
@@ -22,6 +23,7 @@ export class WebApiService {
         'Content-Type':  'application/json',
         'Cache-Control' : 'no-cache',
         'Pragma' : 'no-cache'
+        // , 'Authorization': this.token
       }),
       observe: "response" as 'body'
     };
@@ -44,6 +46,7 @@ export class WebApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
+        // ,'Authorization': this.token
       }),
       observe: "response" as 'body'
     };

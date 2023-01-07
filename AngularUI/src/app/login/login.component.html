@@ -1,6 +1,6 @@
 ﻿<meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>CAT20 - Vote Management System</title>
+<title>CAT20 - Automation System</title>
 <link href='https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css' rel='stylesheet'>
 <link href='' rel='stylesheet'>
 <script type='text/javascript' src=''></script>
@@ -9,26 +9,15 @@
 
 <style src="../../assets/css/loginpage.css"></style>
 
-<div style="text-align: center;">
+<div style="text-align: center; ">
                             <section class="body">
-    <div class="container">
-        <div class="login-box">
+    <div class="container mt-5">
+        <div class="login-box ">
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="logo">
-                      
-						<br>
-						
-                    </div>
-                    <div style="text-align: center;"><img src="../../assets/img/govlogo.jpg" alt="" width="25%"></div>
-                </div>
-				
-            </div>
-			
-            <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 offset-md-3 mt-5">
+                    <div style="text-align: center;"><img src="../../assets/img/govlogo.jpg" alt="" width="20%"><img src="../../assets/img/cat2020logo.jpg" alt="" width="25%"></div>
                     <br>
-                    <h3 class="header-title">CAT20 LOGIN</h3>
+                    <h3 class="header-title"><b>User Login</b></h3>
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="mb-3">
                             <!-- <label class="form-label">Username</label> -->
@@ -52,54 +41,16 @@
                         </button>
                         <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
                         <br>
-                        <div class="form-group">
-                            <!-- <div class="text-center">New Member? <a href="">Sign up Now</a></div> -->
-                        </div>
                     </form>
                 </div>
-                <div class="col-sm-6 hide-on-mobile">
-                    <div id="demo" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ul class="carousel-indicators">
-                            <li data-target="" data-slide-to="0" class="active"></li>
-                            <li data-target="" data-slide-to="1"></li>
-                        </ul>
-                        <!-- The slideshow -->
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="slider-feature-card">
-                                    <img src="../../assets/img/cat2020logo.jpg" alt="">
-                                    <h3 class="slider-title">Vote Management System</h3>
-                                    <p class="slider-description">You Are Welcome..!</p>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="slider-feature-card">
-                                    <img src="../../assets/img/govlogo.jpg" alt="">
-                                    <h3 class="slider-title">CAT20</h3>
-                                    <p class="slider-description">Ministry of Public Administration, Home Affairs, Provincials and Local Government</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Left and right controls -->
-                        <!-- <a class="carousel-control-prev" href="" data-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </a>
-                        <a class="carousel-control-next" href="" data-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-							
-                        </a> -->
-                    </div>
-                </div>
-				
             </div>
-			<br>
-			<br><br><br><br>
-			<div class="text-left">Ministry of Public Administration, Home Affairs, Provincials and Local Government</div>
+			<div style="text-align: center;"><b>Ministry of Public Administration, Home Affairs, <br>Provincial Councils and Local Government</b></div>
         </div>
-		
     </div>
-	
+	<div style="text-align: center;"><i>
+        &copy;
+         CAT2020 Copyright Wayamba Development Authority -  {{test | date: 'yyyy'}}</i>
+    </div>
 </section>
                             <script type='text/javascript'></script>
                           </div>               

@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit {
     DistNm : any;
     ProvNm: any;
     UserNameWithInitials : any;
+    SabhaCode : any;
     SelectedLanguage : any;
     SelectedLanguageId : any;
 
@@ -46,6 +47,7 @@ export class NavbarComponent implements OnInit {
     //   this.ProvNm = this.systemuser.provinceName;
       this.UserNm = localStorage.getItem('CurrentUserNm'); 
       this.SbhName = localStorage.getItem('CurrentSabhaNm');
+      this.SabhaCode = localStorage.getItem('sabhaCode');
       this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
       this.SelectedLanguageId = localStorage.getItem('CurrentSabhaLangId');
       this.DistNm = localStorage.getItem('CurrentDistrictNm');

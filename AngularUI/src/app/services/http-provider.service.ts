@@ -51,7 +51,9 @@ updateIncometitle: apiUrl + "/api/vote/incometitle/updateIncomeTitle"
 deleteAccountBalanceDetailById: apiUrl + "/api/vote/accountBalance/deleteAccountBalanceDetail",
 getAccountBalanceDetailDetailById: apiUrl + "/api/vote/accountBalance/getAccountBalanceDetailById",
 saveAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/saveAccountBalanceDetail",
-updateAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/updateAccountBalanceDetail"
+updateAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/updateAccountBalanceDetail",
+getAllAccountbalancedetailsByAccountIdandSabhaId: apiUrl + "/api/vote/accountBalance/getAllAccountBalanceDetailsForAccountDetailIdandSabhaId"
+
 
 //balancesheetbalance
 ,getAllBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/getAllBalancesheetBalancesForSabhaId",
@@ -96,11 +98,13 @@ updateIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/updateIncomeSubtitle"
 deleteVoteAllocationById: apiUrl + "/api/vote/voteallocations/deleteVoteAllocation",
 getVoteAllocationDetailById: apiUrl + "/api/vote/voteallocations/getVoteAllocationById",
 saveVoteAllocation: apiUrl + "/api/vote/voteallocations/saveVoteAllocation",
-updateVoteAllocation: apiUrl + "/api/vote/voteallocations/updateVoteAllocation"
+updateVoteAllocation: apiUrl + "/api/vote/voteallocations/updateVoteAllocation",
+getAllVoteAllocationbyVoteDetailIdandSabhaId: apiUrl + "/api/vote/voteAllocations/getAllVoteAllocationsForVoteDetailIdandSabhaId",
+getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear: apiUrl + "/api/vote/voteAllocations/getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear"
 
 //votedetails
 ,getAllVoteDetails: apiUrl + "/api/vote/voteDetail/getAllVoteDetailBySabhaId",
-deleteVoteDetailsById: apiUrl + "/api/vote/voteDetail/deleteVoteDetails",
+deleteVoteDetailsById: apiUrl + "/api/vote/voteDetail/deleteVoteDetail",
 getVoteDetailsDetailById: apiUrl + "/api/vote/voteDetail/getVoteDetailsById",
 saveVoteDetails: apiUrl + "/api/vote/voteDetail/saveVoteDetail",
 updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail"  //ok
@@ -247,6 +251,11 @@ public updateAccountBalanceDetail(model: any): Observable<any> {
   return this.webApiService.post(httpLink.updateAccountBalanceDetail, model);
 }
 
+public getAllAccountbalancedetailsByAccountIdandSabhaId(accountdetail: any,sabha: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllAccountbalancedetailsByAccountIdandSabhaId + '/' + accountdetail + '/' + sabha);
+}
+
+
 //balancesheetbalance
 public getAllBalancesheetBalance(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllBalancesheetBalance  + '/'+model);
@@ -384,6 +393,15 @@ public saveVoteAllocation(model: any): Observable<any> {
 public updateVoteAllocation(model: any): Observable<any> {
   return this.webApiService.post(httpLink.updateVoteAllocation, model);
 }
+
+public getAllVoteAllocationbyVoteDetailIdandSabhaId(vote: any,sabha: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAllocationbyVoteDetailIdandSabhaId + '/' + vote + '/' + sabha);
+}
+
+public getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear(vote: any,sabha: any,year: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear + '/' + vote + '/' + sabha + '/' + year);
+}
+
 
 //votedetails
 public getAllVoteDetails(model : any): Observable<any> {

@@ -26,6 +26,8 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 // import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 
+import { WebApiService } from '../app/services/web-api.service';
+
 
 // import { MatTableDataSource } from '@angular/material';
 // import { MatTableDataSource } from '@angular/material/table';
@@ -51,6 +53,7 @@ import { LoginComponent } from './login';
     // MatTableDataSource,
     FormsModule,
     // MatPaginatorModule
+   
 
     //for login
     BrowserModule
@@ -62,8 +65,9 @@ import { LoginComponent } from './login';
     LoginComponent
   ],
   providers: [
-    // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    WebApiService
   ],
   bootstrap: [AppComponent]
 })

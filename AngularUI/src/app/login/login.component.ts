@@ -7,12 +7,15 @@ import { AuthenticationService } from '../../app/_services';
 
 @Component({ templateUrl: 'login.component.html' ,
 styleUrls: ['./login.component.css','../../assets/css/main.css']})
+
 export class LoginComponent implements OnInit {
     loginForm!: FormGroup;
     loading = false;
     submitted = false;
     error = '';
 
+    test : Date = new Date();
+    
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -21,7 +24,7 @@ export class LoginComponent implements OnInit {
     ) { 
         // redirect to home if already logged in
         if (this.authenticationService.userValue) { 
-            this.router.navigate(['/']);
+            this.router.navigate(['/dashboard']);
         }
     }
 
@@ -51,10 +54,15 @@ export class LoginComponent implements OnInit {
                 next: () => {
                     // get return url from route parameters or default to '/'
                     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigate([returnUrl]);
+                    // this.router.navigate([returnUrl]);
+                    // this.router.navigate(['/dashboard']);
+                    // setTimeout(() => {
+                        this.router.navigate(['/dashboard']);
+                // }, 3000);
+                    
                 },
                 error: error => {
-                    // this.error = error;
+                    //  this.error = error;
                     this.error = "Invalid Username or Password. Please try again.";
                     this.loading = false;
                 }

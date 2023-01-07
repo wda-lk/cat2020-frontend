@@ -11,18 +11,21 @@
                         <div *ngIf="isSinhala;">
                             <label>Select Vote Programme</label>
                             <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
+                                <option value="0" > --Select Programme-- </option>
                                 <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameSinhala)}} </option>
                             </select>
                         </div>
 
                         <div *ngIf="isEnglish;">
                             <label>Select Vote Programme</label>
+                            <option value="0" > --Select Programme-- </option>
                             <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
                                 <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameEnglish)}} </option>
                             </select>
                         </div>
                         <div *ngIf="isTamil;">
                             <label>Select Vote Programme</label>
+                            <option value="0" > --Select Programme-- </option>
                             <select class="form-control" [(ngModel)]="selectedProject.programmeID" (ngModelChange)="getAllProjectsByProgrammeId($event);">
                                 <option *ngFor=" let programme of APIProgrammesList" [value]="programme.id" > {{(programme.code +" :: " + programme.nameTamil)}} </option>
                             </select>

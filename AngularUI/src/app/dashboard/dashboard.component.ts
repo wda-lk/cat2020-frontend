@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
 import * as Chartist from 'chartist';
+import { HttpProviderService } from '../services/http-provider.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +13,31 @@ export class DashboardComponent implements OnInit {
   
   userList:any;
   PrgList:any;
-  constructor(private httpClient: HttpClient) { }
+  APIProgrammesList:any;
+
+  constructor(private httpClient: HttpClient, private httpProvider: HttpProviderService) { }
+
+
+
+  // async getAllProgrammes() {
+  //   this.httpProvider.getAllProgramme(localStorage.getItem('sabhaId')).subscribe({
+  //     next: (data) => {
+  //     if (data != null && data.body != null) {
+  //       var resultData = data.body;
+  //       if (resultData) {
+  //         this.APIProgrammesList = resultData;
+  //       }
+  //     }
+  //   },
+  //   error: error => {
+  //         if (error.status == 404) {
+  //           if(error.error && error.error.message){
+  //             // Notify.failure(error.error.message);
+  //             this.APIProgrammesList = [];
+  //           }
+  //       }}
+  //     });
+  // }
 
   // getUserList(){
   //   return this.httpClient.get('http://54.249.159.219/api/Sabhas');
@@ -150,28 +175,28 @@ export class DashboardComponent implements OnInit {
 
     //     ]
     //   };
-      // var optionswebsiteViewsChart = {
-      //     axisX: {
-      //         showGrid: false
-      //     },
-      //     low: 0,
-      //     high: 1000,
-      //     chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
-      // };
-      // var responsiveOptions: any[] = [
-      //   ['screen and (max-width: 640px)', {
-      //     seriesBarDistance: 5,
-      //     axisX: {
-      //       labelInterpolationFnc: function (value) {
-      //         return value[0];
-      //       }
-      //     }
-      //   }]
-      // ];
-      // var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
+    //   var optionswebsiteViewsChart = {
+    //       axisX: {
+    //           showGrid: false
+    //       },
+    //       low: 0,
+    //       high: 1000,
+    //       chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
+    //   };
+    //   var responsiveOptions: any[] = [
+    //     ['screen and (max-width: 640px)', {
+    //       seriesBarDistance: 5,
+    //       axisX: {
+    //         labelInterpolationFnc: function (value) {
+    //           return value[0];
+    //         }
+    //       }
+    //     }]
+    //   ];
+    //   var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
 
-      // //start animation for the Emails Subscription Chart
-      // this.startAnimationForBarChart(websiteViewsChart);
+    //   //start animation for the Emails Subscription Chart
+    //   this.startAnimationForBarChart(websiteViewsChart);
   }
 
 }
