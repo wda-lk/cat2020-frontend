@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-import { MatDividerModule } from '@angular/material/divider';
-import { IncomeSubtitle } from '../models/IncomeSubTitle';
+import { IncomeSubtitle } from '../models/IncomeSubtitle';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { AnyAaaaRecord } from 'dns';
-import { Programme } from 'app/models/programme';
 
 @Component({
   selector: 'app-voteincomesubtitle',
@@ -14,7 +10,6 @@ import { Programme } from 'app/models/programme';
 })
 export class VoteincomesubtitleComponent implements OnInit {
   selectedIncomeSubTitle: IncomeSubtitle = new IncomeSubtitle();
-  programme: Programme = new Programme();
   loading = false;
   APIIncomeSubTitlesList:any;
   APIIncomeSubTitlesForProgrammeList:any;
@@ -72,9 +67,9 @@ export class VoteincomesubtitleComponent implements OnInit {
       });
   }
 
-
-  getAllDataForProgramme(id:any)
+  getAllDataForProgrammeID(id:any)
   {
+    console.log(id);
     this.getAllIncomeTitlesByProgrammeId(id);
     this.getAllIncomeSubTitlesForProgramme(id);
   }
@@ -216,7 +211,7 @@ else {
 setTimeout(() => {
 this.selectedIncomeSubTitle = new IncomeSubtitle();
 this.selectedIncomeSubTitle.programmeID=this.ProgrammeID;
-this.getAllDataForProgramme(this.ProgrammeID) ;
+this.getAllDataForProgrammeID(this.ProgrammeID) ;
 // this.refresh();
 }, 1000);
 }
@@ -242,7 +237,7 @@ this.getAllDataForProgramme(this.ProgrammeID) ;
     setTimeout(() => {
       this.selectedIncomeSubTitle = new IncomeSubtitle();
       this.selectedIncomeSubTitle.programmeID=this.ProgrammeID;
-      this.getAllDataForProgramme(this.ProgrammeID) ;
+      this.getAllDataForProgrammeID(this.ProgrammeID) ;
       }, 1000);
   }
 }

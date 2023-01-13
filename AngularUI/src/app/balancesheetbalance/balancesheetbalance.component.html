@@ -1,50 +1,82 @@
-<div class="main-content">
-    <div class="container-fluid">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h4 class="m-0">Balancesheet Balances</h4>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">Vote Management</li>
+              <li class="breadcrumb-item active">Balancesheet Balances</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 col-md-12">
-                  <div class="card">
+                  <div class="card card-primary">
                       <div class="card-header card-header-primary">
-                          <h4 class="card-title ">Balancesheet Balance</h4>
-                          <p class="card-category">Create Balancesheet Balance</p>
-                      </div>
+                          <h4 class="card-title ">Create Balancesheet Balance</h4>
+                          <!-- <p class="card-category">Create Vote Programme</p> -->
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
                       <div class="card-body">
                            
                             <div *ngIf="isSinhala;">
                                 <label>Select Title</label>
-                                <select class="form-control" [(ngModel)]="TitleID" name="source" (change)="getAllBalancesheetSubtitleByTitleID();"> 
+                                <select class="form-control" [(ngModel)]="TitleID" name="source" (ngModelChange)="getAllBalancesheetSubtitleByTitleID($event);"> 
+                                  <option value="0" > --Select Balancesheet Title-- </option>
                                     <option *ngFor=" let Balancesheettitle of APIBalancesheettitleList" [value]="Balancesheettitle.id"> {{(Balancesheettitle.code +" :: " + Balancesheettitle.nameSinhala)}} </option>
                                 </select>
                             </div>
 
                             <div *ngIf="isEnglish;">
                                 <label>Select Title</label>
-                                <select class="form-control" [(ngModel)]="TitleID" name="source" (change)="getAllBalancesheetSubtitleByTitleID();"> 
+                                <select class="form-control" [(ngModel)]="TitleID" name="source" (ngModelChange)="getAllBalancesheetSubtitleByTitleID($event);"> 
+                                  <option value="0" > --Select Balancesheet Title-- </option>
                                     <option *ngFor=" let Balancesheettitle of APIBalancesheettitleList" [value]="Balancesheettitle.id"> {{(Balancesheettitle.code +" :: " + Balancesheettitle.nameEnglish)}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isTamil;">
                                 <label>Select Title</label>
-                                <select class="form-control" [(ngModel)]="TitleID" name="source" (change)="getAllBalancesheetSubtitleByTitleID();"> 
+                                <select class="form-control" [(ngModel)]="TitleID" name="source" (ngModelChange)="getAllBalancesheetSubtitleByTitleID($event);"> 
+                                  <option value="0" > --Select Balancesheet Title-- </option>
                                     <option *ngFor=" let Balancesheettitle of APIBalancesheettitleList" [value]="Balancesheettitle.id"> {{(Balancesheettitle.code +" :: " + Balancesheettitle.nameTamil)}} </option>
                                 </select>
                             </div>
 
                             <div *ngIf="isSinhala;">
                                 <label>Select Income Sub Title</label>
-                                <select class="form-control" [(ngModel)]="IncomeSubTitleID">
+                                <select class="form-control" [(ngModel)]="selectedBalancesheetBalance.voteDetailID" (ngModelChange)="onchangebalancesheetsubtitle($event);" >
+                                  <option value="0" > --Select Balancesheet Subtitle-- </option>
                                     <option *ngFor=" let subtitle of APIBalancesheetsubtitleListBybalancetitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameSinhala)}} </option>
                                 </select>
                             </div>
 
                             <div *ngIf="isEnglish;">
                                 <label>Select Income Sub Title</label>
-                                <select class="form-control" [(ngModel)]="IncomeSubTitleID">
+                                <select class="form-control" [(ngModel)]="selectedBalancesheetBalance.voteDetailID"  (ngModelChange)="onchangebalancesheetsubtitle($event);">
+                                  <option value="0" > --Select Balancesheet Subtitle-- </option>
                                     <option *ngFor=" let subtitle of APIBalancesheetsubtitleListBybalancetitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameEnglish)}} </option>
                                 </select>
                             </div>
                             <div *ngIf="isTamil;">
                                 <label>Select Income Sub Title</label>
-                                <select class="form-control" [(ngModel)]="IncomeSubTitleID">
+                                <select class="form-control" [(ngModel)]="selectedBalancesheetBalance.voteDetailID"  (ngModelChange)="onchangebalancesheetsubtitle($event);">
+                                  <option value="0" > --Select Balancesheet Subtitle-- </option>
                                     <option *ngFor=" let subtitle of APIBalancesheetsubtitleListBybalancetitle" [value]="subtitle.id"> {{(subtitle.code +" :: " + subtitle.nameTamil)}} </option>
                                 </select>
                             </div>
@@ -52,7 +84,7 @@
 
                             <div >
                                 <label>Select Year</label>
-                                <select class="form-control" [(ngModel)]="selectedBalancesheetBalance.year">
+                                <select class="form-control" [(ngModel)]="selectedBalancesheetBalance.year"  (ngModelChange)="onchangeYear($event);"  >
                                     <option selected>-- Select Year --</option>
                                     <option *ngFor=" let yeardetail of APIYearsList" [value]="yeardetail.description">  {{(yeardetail.description)}}  </option>
                                 </select>
@@ -64,36 +96,31 @@
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateRecord()">{{(selectedBalancesheetBalance.id!==undefined)?'Update':'Create'}}</button>
+                                &nbsp;
                                 <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
-                                <div class="loading" *ngIf="loading">
-                                <mat-spinner></mat-spinner>
-                            </div>
+                                <!-- <div class="loading" *ngIf="loading">
+                                <mat-spinner></mat-spinner> -->
+                            <!-- </div> -->
                       </div>
                   </div>
                 </div>
             </div>
-              <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                      <div class="card-header card-header-tabs card-header-primary">
-                          <div class="nav-tabs-navigation">
-                              <div class="nav-tabs-wrapper">
-                                  <span class="nav-tabs-title"></span>
-                                  <ul class="nav nav-tabs" data-tabs="tabs">
-                                    <li class="nav-item">
-                                        <a mat-button class="nav-link" href="#inEnglish" data-toggle="tab">
-                                            <i class="material-icons"> </i> Balancesheet Balances List
-                                            <div class="ripple-container"></div>
-                                        </a>
-                                    </li>
-                                  
-                                  </ul>
-                              </div>
-                          </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 class="card-title">Balancesheet Balances List</h3>
+        
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
                       </div>
+                    </div>
                       <div class="card-body">
                           <div class="tab-content">
-                            <div class="tab-pane active" id="inEnglish">
-                                <table class="table">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
                                     <tbody>
                                         <tr>
                                             <th>#</th>
@@ -104,32 +131,34 @@
                                             <th>Comment</th>
                                             <th>Options</th>
                                         </tr>
-                                        <tr *ngFor="let balancesheetalance of APIBalancesheetalancesList; index as i">
+                                        <tr *ngFor="let balancesheetalance of APIBalancesheetalancesListforvoteidandyear; index as i">
                                             <td>{{ i+1 }}</td>
                                             <!-- <td> Title</td>
                                             <td> SubTitle</td> -->
                                             <td>{{ balancesheetalance.year }}</td>
                                             <td>{{ balancesheetalance.balance }}</td>
                                             <td>{{ balancesheetalance.comment }}</td>
-                                            <td class="td-actions text-right">
-                                                <button mat-raised-button (click)="editBalancesheetBalance(balancesheetalance)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">edit</i>
+                                            <td class="td-actions">
+                                                <button mat-raised-button (click)="editBalancesheetBalance(balancesheetalance)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button (click)="deleteSubProject(balancesheetalance)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">close</i>
+                                                &nbsp;
+                                                <button (click)="deleteBalancesheetBalance(balancesheetalance)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
-                            </div>
-                             
+                                  </table>
+                              </div>
+                              
                           </div>
                       </div>
                   </div>
               </div>
           
         </div>
-    </div>
-  </div>
+    </div><!-- /.container-fluid -->
+</section>
+</div>
   

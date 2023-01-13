@@ -1,30 +1,38 @@
-<div class="main-content">
-    <div class="container-fluid">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h4 class="m-0">Vote Income Estimate</h4>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">Vote Management</li>
+              <li class="breadcrumb-item active">Estimated Income</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 col-md-12">
-                  <div class="card">
+                  <div class="card card-primary">
                       <div class="card-header card-header-primary">
-                          <h4 class="card-title ">Vote Allocation </h4>
-                          <p class="card-category">Create Vote Allocation</p>
-                      </div>
-
-                       
-
-                      <!-- <div class="combobox">
-                        <input type="text" [(ngModel)]="inputItem" (ngModelChange)="getFilteredList()" class="combobox-input" (keyup)="onKeyPress($event)" (blur)="toggleListDisplay(0)" (focus)="toggleListDisplay(1)" placeholder="Select one..." [ngClass]="{'error': showError}">
-                      <span *ngIf="showError" class="error-text"><i>Invalid Selection.</i></span>
-                      <div class="combobox-options" *ngIf="!listHidden">
-                        <list-item *ngFor="let item of filteredList;let i = index" (click)="selectItem(i)" [ngClass]="{'selected': i===selectedIndex}">{{item}}</list-item>
-                      </div>
-                    </div>
-                     -->
-                      <!-- <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Number</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [(ngModel)]="selectedVoteallocation.voteDetailID"  [matAutocomplete]="auto"> <mat-autocomplete #auto="matAutocomplete">
-                          <mat-option *ngFor="let option of APIVoteDetailsList | async" [value]="votedetail.id">{{votedetail.code}}</mat-option>
-                        </mat-autocomplete>
-                      </mat-form-field> -->
-                      
+                          <h4 class="card-title ">Estimate Estimated Income</h4>
+                          <!-- <p class="card-category">Create Vote Programme</p> -->
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
                       <div class="card-body">
                         <!-- <div *ngIf="isSinhala;">
                             <label>Select / Search Vote Detail</label> 
@@ -113,37 +121,32 @@
 
                               <!-- <input type="text" [(ngModel)]="selectedVoteallocation.votedetailID" placeholder="Select Accountdetail" class="form-control"required/> -->
                               <br>
-                              <input type="text" [(ngModel)]="selectedVoteallocation.allocationAmount" placeholder="Type Vote Allocation Amount" class="form-control"required/>
+                              <input type="text" [(ngModel)]="selectedVoteallocation.allocationAmount" placeholder="Type Estimated Amount" class="form-control"required/>
                               <br>
                               <input type="text" [(ngModel)]="selectedVoteallocation.incomeAmount" placeholder="Type Vote Total Income" class="form-control"required/>
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateRecord()">{{(selectedVoteallocation.id!==undefined)?'Update':'Create'}}</button>
+                                &nbsp;
                                 <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
-                                <div class="loading" *ngIf="loading">
+                                <!-- <div class="loading" *ngIf="loading">
                                 <mat-spinner></mat-spinner>
-                            </div>
+                            </div> -->
                       </div>
                   </div>
                 </div>
             </div>
-              <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                      <div class="card-header card-header-tabs card-header-primary">
-                          <div class="nav-tabs-navigation">
-                            <div class="nav-tabs-wrapper">
-                                <span class="nav-tabs-title"></span>
-                                <ul class="nav nav-tabs" data-tabs="tabs">
-                                  <li class="nav-item">
-                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
-                                          <i class="material-icons"></i> Vote Allocations List 
-                                          <div class="ripple-container"></div>
-                                      </a>
-                                  </li>
-                                </ul>
-                            </div>
-                          </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 class="card-title">Estimated Income List</h3>
+        
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
                       </div>
+                    </div>
                       <div class="card-body">
                           <div class="tab-content">
                               
@@ -154,8 +157,8 @@
                                             <th>#</th>
                                               <th>Vote Name</th>
                                               <!-- <th>Year</th> -->
-                                              <th>Vote Allocation Amount</th>
-                                              <th>Vote Total Income</th>
+                                              <th>Vote Allocation </th>
+                                              <th>Estimated Total Income</th>
                                               <th>Options</th>
                                           </tr>
                                           <tr *ngFor="let voteallocation of APIVoteallocationsListbyVoteDetailIdandSabhaId; index as i">
@@ -164,25 +167,27 @@
                                               <!-- <td>{{ voteallocation.year }}</td> -->
                                               <td>{{ voteallocation.allocationAmount }}</td>
                                               <td>{{ voteallocation.incomeAmount }}</td>
-                                            <td class="td-actions text-right">
-                                                <button mat-raised-button (click)="editVoteAllocation(voteallocation)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">edit</i>
+                                            <td class="td-actions">
+                                                <button mat-raised-button (click)="editVoteAllocation(voteallocation)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button (click)="deleteVoteAllocation(voteallocation)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">close</i>
+                                                &nbsp;
+                                                <button (click)="deleteVoteAllocation(voteallocation)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                   </table>
                               </div>
-                             
+                              
                           </div>
                       </div>
                   </div>
               </div>
           
         </div>
-    </div>
-  </div>
+    </div><!-- /.container-fluid -->
+</section>
+</div>
   

@@ -59,8 +59,10 @@ getAllAccountbalancedetailsByAccountIdandSabhaId: apiUrl + "/api/vote/accountBal
 ,getAllBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/getAllBalancesheetBalancesForSabhaId",
 deleteBalancesheetBalanceById: apiUrl + "/api/vote/balancesheetbalances/deleteBalancesheetBalance",
 getBalancesheetBalanceDetailById: apiUrl + "/api/vote/balancesheetbalances/getBalancesheetBalanceById",
+GetAllBalancesheetBalancesForVoteDetailIdandYear: apiUrl + "/api/vote/balancesheetbalances/GetAllBalancesheetBalancesForVoteDetailIdandYear",
 saveBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/saveBalancesheetBalance",
 updateBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/updateBalancesheetBalance"
+
 
 //accountdetail
 ,getAllAccountDetail: apiUrl + "/api/vote/AccountDetails/getAllAccountDetailsForOfficeId",
@@ -116,10 +118,19 @@ updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail"  //ok
 //years
 getAllYears: apiUrl + "/api/Years",
 
-//User
+//security Questions
+getAllSecurityQuestions: apiUrl + "/api/UserRecoverQuestions",
+
+//user
+getUserById: apiUrl + "/api/Users/getUserById",
+updateUserDetails: apiUrl + "/api/Users/updateUser",
 getAllUsers:apiUrl+"/api/Users/getAllUsers",
 saveUser:apiUrl+"/api/Users/saveUser",
-updateUser:apiUrl+"/api/Users/updateUser",
+
+//Genders
+getAllGenders: apiUrl + "/api/Genders"
+
+
 }
 
 @Injectable({
@@ -156,19 +167,6 @@ export class HttpProviderService {
   //   return this.webApiService.post(httpLink.updateProgramme+id, model);
   // }
  
-//User
-
-public getAllUsers(sabhaID : any): Observable<any> {
-  return this.webApiService.get(httpLink.getAllUsers+ '/'+sabhaID);
-}
- 
-public saveUser(model: any): Observable<any> {
-  return this.webApiService.post(httpLink.saveUser, model);
-}
-
-public updateUser(model: any): Observable<any> {
-  return this.webApiService.post(httpLink.updateUser, model);
-}
 //project
 public getAllProject(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllProject+ '/'+model);
@@ -192,6 +190,7 @@ public updateProject(model: any): Observable<any> {
 public getAllProjectsForProgrammeId(model: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllProjectsForProgramme + '/' + model);
 }
+
 
 //subproject
 public getAllSubproject(model : any): Observable<any> {
@@ -284,6 +283,10 @@ public deleteBalancesheetBalanceById(model: any): Observable<any> {
 
 public getBalancesheetBalanceDetailById(model: any): Observable<any> {
   return this.webApiService.get(httpLink.getBalancesheetBalanceDetailById + '/' + model);
+}
+
+public GetAllBalancesheetBalancesForVoteDetailIdandYear(voteid: any,year: any): Observable<any> {
+  return this.webApiService.get(httpLink.GetAllBalancesheetBalancesForVoteDetailIdandYear + '/' + voteid+ '/' + year);
 }
 
 public saveBalancesheetBalance(model: any): Observable<any> {
@@ -453,6 +456,32 @@ public getAllBankDetails(): Observable<any> {
 //Years details
 public getAllYears(): Observable<any> {
   return this.webApiService.get(httpLink.getAllYears);
+}
+
+//Security Questions
+public getAllSecurityQuestions(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllSecurityQuestions);
+}
+
+//user
+public getUserById(model : any): Observable<any> {
+  return this.webApiService.get(httpLink.getUserById  + '/'+model);
+}
+public updateUserDetails(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateUserDetails, model);
+}
+public getAllUsers(sabhaID : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllUsers+ '/'+sabhaID);
+}
+ 
+public saveUser(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveUser, model);
+}
+
+
+//Gender
+public getAllGenders(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllGenders);
 }
 
 }

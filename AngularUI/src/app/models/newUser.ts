@@ -6,15 +6,15 @@ export class NewUser {
     nameWithInitials:string="";
     password:string="";
     nic:string="";
-    contactNo:number=null;
-    birthday: Date =null   ;
-    sabhaID: number =null   ;
-    officeID: number =null   ;
-    activeStatus: number =null ;
-    genderID: number =null   ;
+    contactNo:number=0;
+    birthday?: Date ;
+    sabhaID?: number ;
+    officeID?: number ;
+    activeStatus?: number;
+    genderID?: number  ;
     profilePicPath:string="";
-    q1Id: number =null   ;
-   answer1:string="";
-    q2Id: number =null   ;
+    q1Id?: number   ;
+    answer1:string="";
+    q2Id?: number  ;
     answer2:string="";
 }

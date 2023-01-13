@@ -1,12 +1,38 @@
-<div class="main-content">
-    <div class="container-fluid">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h4 class="m-0">Vote Income Titles</h4>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">Vote Management</li>
+              <li class="breadcrumb-item active">Vote Income Titles</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 col-md-12">
-                  <div class="card">
+                  <div class="card card-primary">
                       <div class="card-header card-header-primary">
-                          <h4 class="card-title ">Vote Income Titles</h4>
-                          <p class="card-category">Create Vote Income Title</p>
-                      </div>
+                          <h4 class="card-title ">Create Vote Income Title</h4>
+                          <!-- <p class="card-category">Create Vote Programme</p> -->
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
                       <div class="card-body">
                              <div *ngIf="isSinhala;">
                                 <label>Select a Vote Programme</label>
@@ -43,32 +69,26 @@
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateRecord()">{{(selectedIncomeTitle.id!==undefined)?'Update':'Create'}}</button>
+                                &nbsp;
                                 <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
-                                <div class="loading" *ngIf="loading">
+                                <!-- <div class="loading" *ngIf="loading">
                                 <mat-spinner></mat-spinner>
-                            </div> 
+                            </div>  -->
                      </div> 
                   </div>
-                </div>
             </div>
-              <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                      <div class="card-header card-header-tabs card-header-primary">
-                          <div class="nav-tabs-navigation">
-                            <div class="nav-tabs-wrapper">
-                                <span class="nav-tabs-title"></span>
-                                <ul class="nav nav-tabs" data-tabs="tabs">
-                                  <li class="nav-item">
-                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
-                                          <i class="material-icons"></i> Vote Income Titles List 
-                                          <div class="ripple-container"></div>
-                                      </a>
-                                  </li>
-                                 
-                                </ul>
-                            </div>
-                          </div>
+        </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 class="card-title">Vote Income Title List</h3>
+        
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
                       </div>
+                    </div>
                       <div class="card-body">
                           <div class="tab-content">
                               
@@ -87,24 +107,26 @@
                                               <td ><span *ngIf="isSinhala">{{incomeTitile.nameSinhala}}</span> <span *ngIf="isEnglish">{{incomeTitile.nameEnglish}}</span> <span *ngIf="isTamil">{{incomeTitile.nameTamil}}</span> </td> 
                                               <td>{{ incomeTitile.code }}</td>
                                             <td class="td-actions text-right">
-                                                <button mat-raised-button (click)="editIncomeTitle(incomeTitile)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">edit</i>
+                                                <button mat-raised-button (click)="editIncomeTitle(incomeTitile)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button (click)="deleteIncomeTitle(incomeTitile)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">close</i>
+                                                &nbsp;
+                                                <button (click)="deleteIncomeTitle(incomeTitile)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger "> 
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                   </table>
                               </div>
-                             
+                              
                           </div>
                       </div>
                   </div>
               </div>
           
         </div>
-    </div>
-  </div>
+    </div><!-- /.container-fluid -->
+</section>
+</div>
   

@@ -12,25 +12,27 @@
 <div style="text-align: center; ">
                             <section class="body">
     <div class="container mt-5">
-        <div class="login-box ">
+        <div class="">
             <div class="row">
                 <div class="col-sm-6 offset-md-3 mt-5">
-                    <div style="text-align: center;"><img src="../../assets/img/govlogo.jpg" alt="" width="20%"><img src="../../assets/img/cat2020logo.jpg" alt="" width="25%"></div>
+                    <div style="text-align: center;"><img src="../../assets/img/govlogo.jpg" alt="" width="20%">
+                        <!-- <img src="../../assets/img/cat2020logo.jpg" alt="" width="25%"> -->
+                    </div>
                     <br>
-                    <h3 class="header-title"><b>User Login</b></h3>
+                    <h3 class="header-title"><b>CAT20 Login</b></h3>
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="mb-3">
                             <!-- <label class="form-label">Username</label> -->
-                            <input type="text" formControlName="username" placeholder="Username / Email"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                                <div *ngIf="f.username.errors.required">Username is required</div>
+                            <input type="text" formControlName="username" placeholder="Username / Email"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
+                            <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+                                <div *ngIf="f['username'].errors?.['required']">Username is required</div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <!-- <label class="form-label">Password</label> -->
-                            <input type="password" formControlName="password" class="form-control" placeholder="Password"  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                <div *ngIf="f.password.errors.required">Password is required</div>
+                            <input type="password" formControlName="password" class="form-control" placeholder="Password"  [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+                            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                                <div *ngIf="f['password'].errors?.['required']">Password is required</div>
                             </div>
                             <br>
                             <!-- <a href="" class="forgot-password">Forgot Password?</a> -->
@@ -47,6 +49,7 @@
 			<div style="text-align: center;"><b>Ministry of Public Administration, Home Affairs, <br>Provincial Councils and Local Government</b></div>
         </div>
     </div>
+    <br>
 	<div style="text-align: center;"><i>
         &copy;
          CAT2020 Copyright Wayamba Development Authority -  {{test | date: 'yyyy'}}</i>

@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
         this.error = '';
         this.loading = true;
-        this.authenticationService.login(this.f.username.value, this.f.password.value)
+        this.authenticationService.login(this.f['username'].value, this.f['password'].value)
             .pipe(first())
             .subscribe({
                 next: () => {
@@ -57,7 +57,9 @@ export class LoginComponent implements OnInit {
                     // this.router.navigate([returnUrl]);
                     // this.router.navigate(['/dashboard']);
                     // setTimeout(() => {
+                        window.location.reload();
                         this.router.navigate(['/dashboard']);
+                         
                 // }, 3000);
                     
                 },

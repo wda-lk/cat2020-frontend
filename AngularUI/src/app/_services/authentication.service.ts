@@ -79,6 +79,7 @@ export class AuthenticationService {
         localStorage.clear();
         sessionStorage.clear();
         this.userSubject.next(null);
+        // window.location.reload();
         this.router.navigate(['/login']);
     }
 }

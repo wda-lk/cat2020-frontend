@@ -5,7 +5,6 @@ import { SubProject } from '../models/SubProject';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { AnyAaaaRecord } from 'dns';
-import { Programme } from 'app/models/programme';
 
 @Component({
   selector: 'app-voteincomesubproject',
@@ -14,7 +13,6 @@ import { Programme } from 'app/models/programme';
 })
 export class VoteincomesubprojectComponent implements OnInit {
   selectedSubProject: SubProject = new SubProject();
-  programme: Programme = new Programme();
   loading = false;
   APISubProjectsList:any;
   APIProgrammesList :any;

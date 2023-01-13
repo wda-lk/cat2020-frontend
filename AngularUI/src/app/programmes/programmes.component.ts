@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-import { MatDividerModule } from '@angular/material/divider';
 import { Programme } from '../models/programme';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { elementSelectors } from '@angular/cdk/schematics';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-programmes',
@@ -16,17 +14,19 @@ export class ProgrammesComponent implements OnInit {
   loading = false;
   APIProgrammesList:any;
   isSubmitted: boolean = false;
-  isValid : boolean;
+  isValid : boolean =false;
   SelectedLanguage : any;
-  isSinhala :boolean;
-  isTamil :boolean;
-  isEnglish :boolean;
+  isSinhala :boolean = false;
+  isTamil :boolean= false;
+  isEnglish :boolean= false;
 
-  constructor(private httpProvider: HttpProviderService) {
+  constructor(private httpProvider: HttpProviderService, private spinner: NgxSpinnerService) {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.refresh();
+    this.spinner.hide();
   }
 
   async refresh() {

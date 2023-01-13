@@ -1,12 +1,38 @@
-<div class="main-content">
-    <div class="container-fluid">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h4 class="m-0">Vote Programmes</h4>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">Vote Management</li>
+              <li class="breadcrumb-item active">Vote Programmes</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 col-md-12">
-                  <div class="card">
+                  <div class="card card-primary">
                       <div class="card-header card-header-primary">
-                          <h4 class="card-title ">Vote Programme</h4>
-                          <p class="card-category">Create Vote Programme</p>
-                      </div>
+                          <h4 class="card-title ">Create Vote Programme</h4>
+                          <!-- <p class="card-category">Create Vote Programme</p> -->
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
                       <div class="card-body">
                             <input type="text" [(ngModel)]="selectedProgramme.nameSinhala" placeholder="Type programme name in Sinhala" class="form-control"required/>
                             <br>
@@ -19,31 +45,26 @@
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateProgramme()">{{(selectedProgramme.id!==undefined)?'Update':'Create'}}</button>
+                                &nbsp;
                                 <button class="btn btn-danger" (click)="clearProgramme()">Clear</button>
                                 <div class="loading" *ngIf="loading">
-                                <mat-spinner></mat-spinner>
+                                 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
                             </div>
                       </div>
                   </div>
                 </div>
             </div>
               <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                      <div class="card-header card-header-tabs card-header-primary">
-                          <div class="nav-tabs-navigation">
-                            <div class="nav-tabs-wrapper">
-                                <span class="nav-tabs-title"></span>
-                                <ul class="nav nav-tabs" data-tabs="tabs">
-                                  <li class="nav-item">
-                                      <a mat-button class="nav-link active" href="#inSinhala" data-toggle="tab">
-                                          <i class="material-icons"></i> Vote Programmes List 
-                                          <div class="ripple-container"></div>
-                                      </a>
-                                  </li>
-                                </ul>
-                            </div>
-                          </div>
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 class="card-title">Vote Programmes List</h3>
+        
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
                       </div>
+                    </div>
                       <div class="card-body">
                           <div class="tab-content">
                               
@@ -60,12 +81,13 @@
                                             <td>{{ i+1 }}</td>
                                             <td ><span *ngIf="isSinhala">{{programme.nameSinhala}}</span> <span *ngIf="isEnglish">{{programme.nameEnglish}}</span> <span *ngIf="isTamil">{{programme.nameTamil}}</span> </td> 
                                             <td>{{ programme.code }}</td>
-                                            <td class="td-actions text-right">
-                                                <button mat-raised-button (click)="editProgramme(programme)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">edit</i>
+                                            <td class="td-actions">
+                                                <button mat-raised-button (click)="editProgramme(programme)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button (click)="deleteProgramme(programme)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
-                                                    <i class="material-icons">close</i>
+                                                &nbsp;
+                                                <button (click)="deleteProgramme(programme)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger ">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -79,6 +101,7 @@
               </div>
           
         </div>
-    </div>
-  </div>
+    </div><!-- /.container-fluid -->
+</section>
+</div>
   

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-import { MatDividerModule } from '@angular/material/divider';
-import { BalancesheetSubtitle } from '../models/Balancesheetsubtitle';
+import { BalancesheetSubtitle } from '../models/BalancesheetSubtitle';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 

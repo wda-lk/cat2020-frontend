@@ -5,7 +5,6 @@ import { BalancesheetBalance } from '../models/BalancesheetBalance';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { AnyAaaaRecord } from 'dns';
-import { Programme } from 'app/models/programme';
 
 @Component({
   selector: 'app-balancesheetbalance',
@@ -14,16 +13,17 @@ import { Programme } from 'app/models/programme';
 })
 export class BalancesheetbalanceComponent implements OnInit {
   selectedBalancesheetBalance: BalancesheetBalance = new BalancesheetBalance();
-  programme: Programme = new Programme();
   loading = false;
   APIBalancesheetalancesList:any;
   APIBalancesheettitleList :any;
   APIBalancesheetsubtitleListBybalancetitle :any;
-  TitleID : number;
+  APIBalancesheetalancesListforvoteidandyear : any;
+  TitleID : number=0;
+  selectedyear : number =0;
   isSubmitted: boolean = false;
   isValid : boolean;
   APIYearsList : any;
-  IncomeSubTitleID:any;
+  BalancesheetSubTitleID:any=0;
   SelectedLanguage : any;
   isSinhala :boolean;
   isTamil :boolean;
@@ -47,7 +47,7 @@ export class BalancesheetbalanceComponent implements OnInit {
 
     this.loading = true;
     this.isValid = false;
-    this.getAllBalanceSheetBalances();
+    //this.getAllBalanceSheetBalances();
     this.getAllBalancesheetTitles();
     this.getAllYears();
     //this.getAllBalancesheetBalancesByProgrammeId(26);
@@ -73,13 +73,14 @@ export class BalancesheetbalanceComponent implements OnInit {
       });
   }
 
-  async getAllBalancesheetSubtitleByTitleID() {
-    this.httpProvider.getAllBalancesheetSubtitleByTitleID(this.TitleID).subscribe({
+  async getAllBalancesheetSubtitleByTitleID(id:any) {
+    this.httpProvider.getAllBalancesheetSubtitleByTitleID(id).subscribe({
       next: (data) => {
       if (data != null && data.body != null) {
         var resultData = data.body;
         if (resultData) {
           this.APIBalancesheetsubtitleListBybalancetitle = resultData;
+          this.GetAllBalancesheetBalancesForVoteDetailIdandYear();
         }
       }
     },
@@ -92,6 +93,20 @@ export class BalancesheetbalanceComponent implements OnInit {
         }}
       });
   }
+
+
+  onchangebalancesheetsubtitle(id : any)
+  {
+    this.BalancesheetSubTitleID=id;
+    this.GetAllBalancesheetBalancesForVoteDetailIdandYear();
+  }
+  
+  onchangeYear(year : any)
+  {
+    this.selectedyear = year;
+    this.GetAllBalancesheetBalancesForVoteDetailIdandYear();
+  }
+
 
 async getAllBalanceSheetBalances() {
   this.httpProvider.getAllBalancesheetBalance(localStorage.getItem('sabhaId')).subscribe({
@@ -108,6 +123,26 @@ async getAllBalanceSheetBalances() {
           if(error.error && error.error.message){
             Notify.failure(error.error.message);
             this.APIBalancesheetalancesList = [];
+          }
+      }}
+    });
+}
+
+async GetAllBalancesheetBalancesForVoteDetailIdandYear() {
+  this.httpProvider.GetAllBalancesheetBalancesForVoteDetailIdandYear(this.BalancesheetSubTitleID,this.selectedyear).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      if (resultData) {
+        this.APIBalancesheetalancesListforvoteidandyear = resultData;
+      }
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            this.APIBalancesheetalancesListforvoteidandyear = [];
           }
       }}
     });
@@ -162,13 +197,14 @@ async getAllYears() {
   });
 }
 else {
+      this.selectedBalancesheetBalance.sabhaID=Number(localStorage.getItem('sabhaId'));
       this.selectedBalancesheetBalance.enteredDate = new Date();
       this.selectedBalancesheetBalance.status = 1;
   this.httpProvider.saveBalancesheetBalance(this.selectedBalancesheetBalance)
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         Notify.success('Income Title Created successfully..!');
+         Notify.success('Balancesheet Balance Created successfully..!');
     },
     error: error => {
       Notify.failure('Error Occured..!');
@@ -176,9 +212,14 @@ else {
 });
 }
 setTimeout(() => {
+this.BalancesheetSubTitleID=this.selectedBalancesheetBalance.voteDetailID;
+this.selectedyear=this.selectedBalancesheetBalance.year;
 this.selectedBalancesheetBalance = new BalancesheetBalance();
-this.refresh();
-}, 1000);
+this.selectedBalancesheetBalance.voteDetailID=this.BalancesheetSubTitleID;
+this.selectedBalancesheetBalance.year=this.selectedyear;
+this.GetAllBalancesheetBalancesForVoteDetailIdandYear();
+
+}, 2000);
 }
 }
 
@@ -186,14 +227,13 @@ this.refresh();
     this.selectedBalancesheetBalance = new BalancesheetBalance();
   }
 
-  async deleteBalancesheetBalance(subProject: BalancesheetBalance) {
+  async deleteBalancesheetBalance(balancesheetBalance: BalancesheetBalance) {
     this.loading = true;
-    if (confirm(`Are you sure you want to delete  ${subProject.balance }. This cannot be undone.`)) {
-      this.httpProvider.deleteSubprojectById(subProject.id)
+    if (confirm(`Are you sure you want to delete  ${balancesheetBalance.balance }. This cannot be undone.`)) {
+      this.httpProvider.deleteBalancesheetBalanceById(balancesheetBalance.id)
       .subscribe({
         next: (data) => {
              var resultData = data.body;
-             setTimeout(() => {this.refresh();}, 2000);
              Notify.success('BalancesheetBalance Deleted successfully..!');
         },
         error: error => {
@@ -201,14 +241,18 @@ this.refresh();
         }
     });
     setTimeout(() => {
+      this.BalancesheetSubTitleID=this.selectedBalancesheetBalance.voteDetailID;
+      this.selectedyear=this.selectedBalancesheetBalance.year;
       this.selectedBalancesheetBalance = new BalancesheetBalance();
-      this.refresh();
-      }, 1000);
+      this.selectedBalancesheetBalance.voteDetailID=this.BalancesheetSubTitleID;
+      this.selectedBalancesheetBalance.year=this.selectedyear;
+      this.GetAllBalancesheetBalancesForVoteDetailIdandYear();
+      }, 2000);
   }
 }
 
-editBalancesheetBalance(subProject: BalancesheetBalance) {
-  this.selectedBalancesheetBalance = subProject;
+editBalancesheetBalance(balancesheetBalance: BalancesheetBalance) {
+  this.selectedBalancesheetBalance = balancesheetBalance;
 }
 
 }

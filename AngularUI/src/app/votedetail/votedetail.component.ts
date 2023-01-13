@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-import { MatDividerModule } from '@angular/material/divider';
 import { VoteDetail } from '../models/VoteDetail';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { AnyAaaaRecord } from 'dns';
-import { Programme } from 'app/models/programme';
 
 @Component({
   selector: 'app-votedetail',
@@ -14,7 +10,6 @@ import { Programme } from 'app/models/programme';
 })
 export class VotedetailComponent implements OnInit {
   selectedVoteDetail: VoteDetail = new VoteDetail();
-  programme: Programme = new Programme();
   loading = false;
   
   isSubmitted: boolean = false;
@@ -148,7 +143,7 @@ async LoadProjectsandIncomeTitles(id : any) {
   // this.ProgrammeID=id;
   // console.log(id);
   this.objProgramme=null;
-  this.objProgramme = this.APIProgrammesList.find(obj => obj.id == id);
+  this.objProgramme = this.APIProgrammesList.find((obj:any) => obj.id == id);
   this.VoteCode =localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code;
   this.selectedVoteDetail.code=this.VoteCode;
   this.getAllProjectsByProgrammeId(id);
@@ -180,7 +175,7 @@ async getAllProjectsByProgrammeId(id : any) {
 
 async getAllSubProjectsByProjectId(id : any) {
   this.objProject=null;
-  this.objProject = this.APIProjectsListByProgramme.find(obj => obj.id == id);
+  this.objProject = this.APIProjectsListByProgramme.find((obj:any) => obj.id == id);
   this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code;
   this.selectedVoteDetail.code=this.VoteCode;
   this.httpProvider.getAllsubprojectforprojectID(id).subscribe({
@@ -205,7 +200,7 @@ async getAllSubProjectsByProjectId(id : any) {
 onchangeSubproject(id : any)
 {
   this.objSubProject=null;
-  this.objSubProject = this.APISubProjectsByProject.find(obj => obj.id == id);
+  this.objSubProject = this.APISubProjectsByProject.find((obj:any) => obj.id == id);
   this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code+ "-"+ this.objSubProject.code;
   this.selectedVoteDetail.code=this.VoteCode;
 }
@@ -213,7 +208,7 @@ onchangeSubTitle(id : any)
 {
 
   this.objIncomeSubTitle=null;
-  this.objIncomeSubTitle = this.APIIncomeSubTitleListByTitle.find(obj => obj.id == id);
+  this.objIncomeSubTitle = this.APIIncomeSubTitleListByTitle.find((obj:any) => obj.id == id);
   if(this.objProject!=null && this.objProject.id>0 )
   {
   this.VoteCode = localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code+ "-"+ this.objProject.code+ "-"+ this.objSubProject.code+ "-"+ this.objIncomeSubTitle.code;
@@ -246,7 +241,7 @@ async getAllIncomeTitlesByProgrammeId(id : any) {
 
 async getAllIncomeSubTitlesByIncomeTitleID(id : any) {
   this.objIncomeTitle=null;
-  this.objIncomeTitle = this.APIIncomeTitleListByProgramme.find(obj => obj.id == id);
+  this.objIncomeTitle = this.APIIncomeTitleListByProgramme.find((obj:any) => obj.id == id);
   this.httpProvider.getAllIncomeSubtitlebyTitleID(id).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
@@ -360,7 +355,7 @@ else {
       this.selectedVoteDetail.sabhaID = Number(localStorage.getItem('sabhaId'));
       this.selectedVoteDetail.status = 1;
       this.selectedVoteDetail.incomeOrExpense = 1;
-      this.selectedVoteDetail.sabhaCode = localStorage.getItem('sabhaCode');
+      this.selectedVoteDetail.sabhaCode = String(localStorage.getItem('sabhaCode'));
 
       this.selectedVoteDetail.programmeNameSinhala = this.objProgramme.nameSinhala;
       this.selectedVoteDetail.programmeNameSinhala = this.objProgramme.nameSinhala;
@@ -382,16 +377,16 @@ else {
       else
       {        
         this.selectedVoteDetail.projectID = 0;
-        this.selectedVoteDetail.projectCode = null;
-        this.selectedVoteDetail.projectNameSinhala = null
-        this.selectedVoteDetail.projectNameEnglish = null;
-        this.selectedVoteDetail.projectNameTamil = null;
+        this.selectedVoteDetail.projectCode = "-";
+        this.selectedVoteDetail.projectNameSinhala = "-"
+        this.selectedVoteDetail.projectNameEnglish = "-";
+        this.selectedVoteDetail.projectNameTamil = "-";
         
         this.selectedVoteDetail.subprojectID = 0;
-        this.selectedVoteDetail.subprojectCode = null;
-        this.selectedVoteDetail.subprojectNameSinhala = null;
-        this.selectedVoteDetail.subprojectNameEnglish = null;
-        this.selectedVoteDetail.subprojectNameTamil = null;
+        this.selectedVoteDetail.subprojectCode = "-";
+        this.selectedVoteDetail.subprojectNameSinhala = "-";
+        this.selectedVoteDetail.subprojectNameEnglish = "-";
+        this.selectedVoteDetail.subprojectNameTamil = "-";
         }
 
         if(this.objIncomeTitle!=null && this.objIncomeTitle.id>0){

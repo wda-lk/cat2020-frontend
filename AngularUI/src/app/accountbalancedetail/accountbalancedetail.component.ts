@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatTableModule, MatTableDataSource} from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
-import { AccountBalanceDetail } from '../models/Accountbalancedetail';
+import { AccountBalanceDetail } from '../models/AccountBalanceDetail';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
@@ -112,7 +112,7 @@ async getAllAccountbalancedetails() {
 async getAllAccountbalancedetailsByAccountId(id :any) {
 
   this.objSelectedAccountDetail=null;
-  this.objSelectedAccountDetail = this.APIAccountdetailsList.find(obj => obj.id == id);
+  this.objSelectedAccountDetail = this.APIAccountdetailsList.find((obj :any) => obj.id == id);
 
   this.httpProvider.getAllAccountbalancedetailsByAccountIdandSabhaId(id,localStorage.getItem('sabhaId')).subscribe({
     next: (data) => {

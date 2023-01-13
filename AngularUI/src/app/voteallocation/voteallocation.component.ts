@@ -1,12 +1,7 @@
   import { Component, OnInit } from '@angular/core';
-  import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-  import { MatDividerModule } from '@angular/material/divider';
-  import { VoteAllocation } from '../models/Voteallocation';
+  import { VoteAllocation } from '../models/VoteAllocation';
   import { HttpProviderService } from '../services/http-provider.service';
   import { Notify } from 'notiflix/build/notiflix-notify-aio';
-  import {Observable} from 'rxjs';
-  import {FormControl} from '@angular/forms';
-  import {map, startWith} from 'rxjs/operators';
 
   @Component({
     selector: 'app-voteallocation',
@@ -26,7 +21,7 @@
     SelectedLanguage : any;
     objSelectedVoteDetail : any;
     objSelectedVoteAllocation : any;
-    selectedYear :any;
+    selectedYear :any =0;
     isSinhala :boolean;
     isTamil :boolean;
     isEnglish :boolean;
@@ -253,7 +248,7 @@
   onchangeVoteDetail(id : any)
 {
   this.objSelectedVoteDetail=null;
-  this.objSelectedVoteDetail = this.APIVoteDetailsForProgrammeList.find(obj => obj.id == id);
+  this.objSelectedVoteDetail = this.APIVoteDetailsForProgrammeList.find((obj:any) => obj.id == id);
   this.GetAllVoteAllocationsForVoteDetailIdandSabhaIdandYear();
 }
 
@@ -288,7 +283,7 @@ onchangeYear(year : any)
         next: (result) => {
              var resultData = result.body;
              console.log(result);
-             Notify.success('Account balance detail Updated successfully..!');
+             Notify.success('Vote Allocations Updated successfully..!');
         },
         error: error => {
            Notify.failure('Error Occured..!');
@@ -317,7 +312,6 @@ onchangeYear(year : any)
   this.selectedVoteallocation = new VoteAllocation();
   this.selectedVoteallocation.voteDetailID=this.objSelectedVoteDetail.id;
   this.selectedVoteallocation.year=this.objSelectedVoteAllocation.year;
- console.log(this.selectedVoteallocation.year);
   this.GetAllVoteAllocationsForVoteDetailIdandSabhaIdandYear();
   }, 1000);
   }
