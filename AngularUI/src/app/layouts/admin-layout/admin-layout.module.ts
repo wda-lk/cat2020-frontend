@@ -22,6 +22,8 @@ import { AccountbalancedetailComponent } from '../../accountbalancedetail/accoun
 import { VoteallocationComponent } from '../../voteallocation/voteallocation.component'; 
 import { BalancesheetbalanceComponent } from '../../balancesheetbalance/balancesheetbalance.component'; 
 
+import { NewUserComponent } from '../../new-user/new-user.component';
+import { UserDetailComponent } from '../../user-detail/user-detail.component';
 
 // import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
@@ -80,6 +82,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
     BalancesheetbalanceComponent,
     
+    NewUserComponent,
+    UserDetailComponent,
     // TypographyComponent,
     IconsComponent,
     MapsComponent,

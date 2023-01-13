@@ -1,0 +1,63 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card">
+          <div class="card-header card-header-primary">
+              <h4 class="card-title">Create User</h4>
+              <p class="card-category">New User Registration</p>
+          </div>
+          <div class="card-body">
+              <div id="typography">
+                  <form #simpleForm="ngForm">
+                      <input  [(ngModel)]="model.username" placeholder="USER ID(email)" class="form-control" />
+                      <div class="form-group">
+                          <input Value="CREATE" (click)="saveUser()" class="btn btn-success col-2">&nbsp;
+                          <input type="reset" Value="Clear" class="btn btn-danger col-2">
+                      </div>
+                  </form>
+              </div>
+          </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-tabs card-header-primary">
+                       
+                            <h4 class="card-title">User List</h4>
+              <p class="card-category">Registerd Users</p>
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            
+                            <div class="tab-pane active" >
+                                <table class="table">
+                                  <tbody>
+                                      <tr>
+                                          <th>#</th>
+                                          <th>User ID</th>
+                                          <th>User Full Name</th>
+                                      </tr>
+                                      <tr *ngFor="let user of UserList; index as i">
+                                          <td>{{ i+1 }}</td>
+                                          <td>{{ user.username }}</td>
+                                          <td>{{ user.nameWithInitials }}</td>
+                                          <td class="td-actions text-right">
+                                              <!-- <button (click)="deleteProgramme(programme)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                  <i class="material-icons">close</i>
+                                              </button> -->
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

@@ -19,6 +19,10 @@ import { AccountbalancedetailComponent } from '../../accountbalancedetail/accoun
 import { VoteallocationComponent } from '../../voteallocation/voteallocation.component';
 import { BalancesheetbalanceComponent } from '../../balancesheetbalance/balancesheetbalance.component'; 
 
+import { NewUserComponent } from '../../new-user/new-user.component';
+import { UserDetailComponent } from '../../user-detail/user-detail.component';
+
+
 import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
@@ -45,7 +49,10 @@ export const AdminLayoutRoutes: Routes = [
 
     { path: 'voteallocation',   component: VoteallocationComponent, canActivate: [AuthGuard]  }, //edit  
     { path: 'balancesheetbalance',   component: BalancesheetbalanceComponent, canActivate: [AuthGuard]  }, //edit 
-
+    
+    { path: 'new-user',   component: NewUserComponent, canActivate: [AuthGuard]  },
+    { path: 'user-detail',   component: UserDetailComponent, canActivate: [AuthGuard]  },
+    
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },

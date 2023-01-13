@@ -115,6 +115,11 @@ updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail"  //ok
 
 //years
 getAllYears: apiUrl + "/api/Years",
+
+//User
+getAllUsers:apiUrl+"/api/Users/getAllUsers",
+saveUser:apiUrl+"/api/Users/saveUser",
+updateUser:apiUrl+"/api/Users/updateUser",
 }
 
 @Injectable({
@@ -151,6 +156,19 @@ export class HttpProviderService {
   //   return this.webApiService.post(httpLink.updateProgramme+id, model);
   // }
  
+//User
+
+public getAllUsers(sabhaID : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllUsers+ '/'+sabhaID);
+}
+ 
+public saveUser(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveUser, model);
+}
+
+public updateUser(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.updateUser, model);
+}
 //project
 public getAllProject(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllProject+ '/'+model);
@@ -174,7 +192,6 @@ public updateProject(model: any): Observable<any> {
 public getAllProjectsForProgrammeId(model: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllProjectsForProgramme + '/' + model);
 }
-
 
 //subproject
 public getAllSubproject(model : any): Observable<any> {

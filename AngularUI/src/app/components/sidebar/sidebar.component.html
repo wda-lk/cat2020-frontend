@@ -80,6 +80,21 @@
             </ul>
             <!-- End of 1st Sub Menu Item-->
         </li>
+
+        
+        <li routerLinkActive="active" class="nav-item dropdown"> <a class="nav-link" data-toggle="dropdown" ><i class="material-icons">assignment_turned_in</i><p>User Management</p> </a> 
+            <!-- 1st Submenu Item -->
+            <!-- <ul class="dropdown-menu" >
+                <li routerLinkActive="active" class="nav-item">
+                    <a href="#" data-toggle="dropdown" class="nav-link"><i class="material-icons">assignment_turned_in</i><p>Main Forms</p><span class="caret"></span></a> -->
+                    <ul class="dropdown-menu">
+                        <li routerLinkActive="active" *ngFor="let submenuItem of userManagementAllocationFormsMenuItems"  class="{{submenuItem.class}} nav-item">
+                            <a class="nav-link" [routerLink]="[submenuItem.path]"><i class="material-icons">{{submenuItem.icon}}</i><p>{{submenuItem.title}}</p> </a> </li>
+                    </ul>
+                <!-- </li>
+            </ul> -->
+            <!-- End of 1st Sub Menu Item-->
+        </li>
         <!-- End of Main Menu Item-->
     </ul>
 

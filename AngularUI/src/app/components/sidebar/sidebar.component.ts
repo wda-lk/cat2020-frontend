@@ -16,6 +16,13 @@ declare interface VoteManagementMainFromsRouteInfo {
   class: string;
 }
 
+declare interface UserManagementMainFromsRouteInfo {
+  path: string;
+  title: string;
+  icon: string;
+  class: string;
+}
+
 declare interface VoteManagementAllocaionFromsRouteInfo {
   path: string;
   title: string;
@@ -57,6 +64,12 @@ export const VOTEMANAGEMENTALLOCATIONFORMSROUTES: VoteManagementMainFromsRouteIn
   { path: '/voteallocation', title: 'Vote Allocations',  icon:'attach_money', class: '' }, 
   { path: '/balancesheetbalance', title: 'Balancesheet Balances',  icon:'attach_money', class: '' }
 ]
+export const USERMANAGEMENTALLOCATIONFORMSROUTES: UserManagementMainFromsRouteInfo[] = [
+
+  { path: '/new-user', title: 'Users',  icon:'person', class: '' }, 
+  { path: '/user-detail', title: 'User Details',  icon:'person', class: '' }, 
+  
+]
 //end of Vote Managament Sub Menus
 
 
@@ -69,6 +82,7 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   voteManagementMainFormsMenuItems: any[];
   voteManagementAllocationFormsMenuItems: any[];
+  userManagementAllocationFormsMenuItems: any[];
 
   constructor(private authenticationService: AuthenticationService) { }
 
@@ -78,6 +92,7 @@ export class SidebarComponent implements OnInit {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.voteManagementMainFormsMenuItems = VOTEMANAGEMENTMAINFORMSROUTES.filter(menuItem => menuItem);
     this.voteManagementAllocationFormsMenuItems = VOTEMANAGEMENTALLOCATIONFORMSROUTES.filter(menuItem => menuItem);
+    this.userManagementAllocationFormsMenuItems = USERMANAGEMENTALLOCATIONFORMSROUTES.filter(menuItem => menuItem);
 
     (function($){
 	$(document).ready(function(){
