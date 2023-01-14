@@ -43,6 +43,8 @@ async getAllUsers() {
 async saveUser() {
   console.log(this.model.id)
   // this.isSubmitted = true;
+
+  this.model.sabhaID=Number(localStorage.getItem('sabhaId'));
   
 this.httpProvider.saveUser(this.model)
 .subscribe({
