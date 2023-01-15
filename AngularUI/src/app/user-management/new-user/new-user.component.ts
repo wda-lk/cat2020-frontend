@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NewUser } from '../models/newUser';
-import { HttpProviderService } from '../../services/http-provider.service';
+import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 @Component({
@@ -41,7 +41,11 @@ async getAllUsers() {
     });
 }
 async saveUser() {
-this.model.sabhaID=Number(localStorage.getItem('sabhaId'));
+  console.log(this.model.id)
+  // this.isSubmitted = true;
+
+  this.model.sabhaID=Number(localStorage.getItem('sabhaId'));
+  
 this.httpProvider.saveUser(this.model)
 .subscribe({
   next: (result) => {
