@@ -1,21 +1,21 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from '../../_helpers';
+import { AuthGuard } from '../../system-security/_helpers';
 
 import { DashboardComponent } from '../../dashboard/dashboard.component';
-import { ProgrammesComponent } from '../../programmes/programmes.component'; 
-import { VoteincometitleComponent } from '../../voteincometitle/voteincometitle.component'; 
-import { VoteincomesubtitleComponent } from '../../voteincomesubtitle/voteincomesubtitle.component'; 
-import { VoteincomeprojectComponent } from '../../voteincomeproject/voteincomeproject.component'; 
-import { VoteincomesubprojectComponent } from '../../voteincomesubproject/voteincomesubproject.component'; 
-import { BalancesheettitleComponent } from '../../balancesheettitle/balancesheettitle.component'; 
-import { BalancesheetsubtitleComponent } from '../../balancesheetsubtitle/balancesheetsubtitle.component'; 
-import { VotedetailComponent } from '../../votedetail/votedetail.component'; 
-import { AccountdetailComponent } from '../../accountdetail/accountdetail.component'; 
-import { AccountbalancedetailComponent } from '../../accountbalancedetail/accountbalancedetail.component'; 
-import { VoteallocationComponent } from '../../voteallocation/voteallocation.component';
-import { BalancesheetbalanceComponent } from '../../balancesheetbalance/balancesheetbalance.component'; 
-import { UserDetailComponent } from '../../user-detail/user-detail.component'; 
-import { NewUserComponent } from '../../new-user/new-user.component'; 
+import { ProgrammesComponent } from '../../vote-management/programmes/programmes.component'; 
+import { VoteincometitleComponent } from '../../vote-management/voteincometitle/voteincometitle.component'; 
+import { VoteincomesubtitleComponent } from '../../vote-management/voteincomesubtitle/voteincomesubtitle.component'; 
+import { VoteincomeprojectComponent } from '../../vote-management/voteincomeproject/voteincomeproject.component'; 
+import { VoteincomesubprojectComponent } from '../../vote-management/voteincomesubproject/voteincomesubproject.component'; 
+import { BalancesheettitleComponent } from '../../vote-management/balancesheettitle/balancesheettitle.component'; 
+import { BalancesheetsubtitleComponent } from '../../vote-management/balancesheetsubtitle/balancesheetsubtitle.component'; 
+import { VotedetailComponent } from '../../vote-management/votedetail/votedetail.component'; 
+import { AccountdetailComponent } from '../../vote-management/accountdetail/accountdetail.component'; 
+import { AccountbalancedetailComponent } from '../../vote-management/accountbalancedetail/accountbalancedetail.component'; 
+import { VoteallocationComponent } from '../../vote-management/voteallocation/voteallocation.component';
+import { BalancesheetbalanceComponent } from '../../vote-management/balancesheetbalance/balancesheetbalance.component'; 
+import { UserDetailComponent } from '../../user-management/user-detail/user-detail.component'; 
+import { NewUserComponent } from '../../user-management/new-user/new-user.component'; 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },

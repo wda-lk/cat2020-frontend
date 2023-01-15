@@ -8,19 +8,19 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 
 //forlogin
 // import { HomeComponent } from './home';
-import { LoginComponent } from './login';
-import { AuthGuard } from './_helpers';
+import { LoginComponent } from './system-security/login';
+import { AuthGuard } from './system-security/_helpers';
 
 
 const routes: Routes =[
    { path: '', component: AdminLayoutComponent, canActivate: [AuthGuard] },
-  //  { path: '', redirectTo: 'dashboard', canActivate: [AuthGuard] },
-    { path: 'login', component: LoginComponent },
-  {
+   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
+    { path: 'login', component: LoginComponent },
+ 
   {
     path: '',
     component: AdminLayoutComponent,

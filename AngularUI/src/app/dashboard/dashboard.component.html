@@ -5,12 +5,20 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 *ngIf="!isNewUser" class="m-0">Dashboard</h1>
+            <h1 *ngIf="isNewUser" style="float: none;  margin: 0 auto;">Welcome to CAT20 Automation System !!!</h1>
+            <div *ngIf="isNewUser"  style="float: none;  margin: 0 auto;"> Please complete your profile to continue.</div>
           </div><!-- /.col -->
-          <div class="col-sm-6">
+          <div *ngIf="!isNewUser" class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#/dashboard">Home</a></li>
               <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+          <div *ngIf="isNewUser" class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#/dashboard">CAT20</a></li>
+              <li class="breadcrumb-item active">New User Details</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -76,6 +84,89 @@
           </div>
         </div>
       </div> -->
+
+
+
+      <div *ngIf="isNewUser"   class="col-lg-6" style="float: none;  margin: 0 auto;">
+        <div class="card card-primary">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title ">User Details</h4>
+                <!-- <p class="card-category">Create Vote Programme</p> -->
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+            <div class="card-body">
+                    <label>Name in Full</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.nameInFull" placeholder="Type Full Name" class="form-control" required/>
+                    <br>
+                    <label>Name with Initials</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.nameWithInitials" placeholder="Type Name with Initials" class="form-control"required/>
+                    <br>
+                    <label>NIC</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.nic" placeholder="Type NIC" class="form-control" required/>
+                    <br>
+                    <label>Date of Birth</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.birthday" placeholder="Type Date of Birth" class="form-control" required/>
+                    <br>
+                    <label>Contact No</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.contactNo" placeholder="Type Contact Number" class="form-control" required/>
+                    <br>
+                    <label>Gender</label>
+                      <select class="form-control" [(ngModel)]="selectedUserDetail.genderID">
+                          <option value="0" > --Select Gender-- </option>
+                          <option *ngFor=" let gender of APIGenderList" [value]="gender.id" > {{gender.description}} </option>
+                      </select>
+                    <br>
+                    <label>Email (Username)</label>
+                    <input type="text" [(ngModel)]="selectedUserDetail.username" placeholder="Email" class="form-control" readonly/>
+                    <br>
+                      
+                    <!-- <br>
+                    <label>Password</label>
+                    <input type="password" [(ngModel)]="selectedUserDetail.password" placeholder="Enter Password" class="form-control"required/>
+                    <br>
+                    <label>Confirm Password</label>
+                    <input type="password" [(ngModel)]="confirmpassword" placeholder="Re enter Password" class="form-control"required/>
+                    <br> -->
+                    <!-- <div class="form-group">
+                      <label for="picture">Picture</label>
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile"
+                               (change)="onFileChanged($event)" accept=".jpg,.png">
+                        <label class="custom-file-label" #labelImport for="customFile">Choose Photo</label>
+                      </div>
+                    </div> -->
+                    <!-- <label>Profile Photo</label>
+                      <input type="file" [(ngModel)]="selectedUserDetail.profilePicPath" placeholder="Profile Photo" class="form-control" required (ngModelChange)="onFileChange($event);"/>
+                    <img [src]="imageSrc" *ngIf="imageSrc" style="height: 300px; width:500px">
+                    <br> -->
+                    <label>Security Question 1</label>
+                      <select class="form-control" [(ngModel)]="selectedUserDetail.q1Id">
+                          <option value="0" > --Select Question 1-- </option>
+                          <option *ngFor=" let question of APIQuestionsList" [value]="question.id" > {{( question.question)}} </option>
+                      </select>
+                      <br>
+                    <input type="text" [(ngModel)]="selectedUserDetail.answer1" placeholder="Type Answer for question 1" class="form-control"required/>
+                    <br>
+                      <label>Security Question 2</label>
+                      <select class="form-control" [(ngModel)]="selectedUserDetail.q2Id">
+                          <option value="0" > --Select Question 2-- </option>
+                          <option *ngFor=" let question of APIQuestionsList" [value]="question.id" > {{( question.question)}} </option>
+                      </select>
+                      <br>
+                      <input type="text" [(ngModel)]="selectedUserDetail.answer2" placeholder="Type Answer for question 2" class="form-control"required/>
+                      <br>
+                    <div class="form-group">
+                      <button class="btn btn-success" (click)="updateRecord()" ng-disabled="selectedUserDetail.id!==undefined"> UPDATE </button>
+                   </div> 
+        </div>
+  </div>
+</div>
+
+
     </section>
     <!-- /.content -->
 	

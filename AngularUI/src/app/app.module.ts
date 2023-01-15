@@ -6,14 +6,14 @@ import { MatTooltipModule} from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppheaderComponent } from './appheader/appheader.component';
-import { AppmenuComponent } from './appmenu/appmenu.component';
-import { AppfooterComponent } from './appfooter/appfooter.component';
-import { AppsettingComponent } from './appsetting/appsetting.component';
+import { AppheaderComponent } from './layouts/components/appheader/appheader.component';
+import { AppmenuComponent } from './layouts/components/appmenu/appmenu.component';
+import { AppfooterComponent } from './layouts/components/appfooter/appfooter.component';
+import { AppsettingComponent } from './layouts/components/appsetting/appsetting.component';
 
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './system-security/login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+import { JwtInterceptor, ErrorInterceptor } from './system-security/_helpers';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 

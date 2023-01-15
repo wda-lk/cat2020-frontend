@@ -3,20 +3,19 @@ import { Observable } from 'rxjs';
 import { WebApiService } from './web-api.service';
 import { environment } from '../../environments/environment';
 
- var apiUrl = environment.apiUrl;
- localStorage.setItem('apiUrl', apiUrl);
-var sabhaID :any;
-sabhaID = localStorage.getItem('sabhaId');
+var apiUrl = environment.apiUrl;
+localStorage.setItem('apiUrl', apiUrl);
 
 var httpLink = {
 
+//Begin Vote Management APIs
+
 //programme
-  getAllProgramme: apiUrl + "/api/vote/programmes/getAllProgrammesForSabhaId", 
-  deleteProgrammeById: apiUrl + "/api/vote/programmes/deleteProgramme",
-  getProgrammeDetailById: apiUrl + "/api/vote/programmes/getProgrammeById",
-  saveProgramme: apiUrl + "/api/vote/programmes/saveProgramme",
-  updateProgramme: apiUrl + "/api/vote/programmes/updateProgramme",
-  // updateProgrammewithid: apiUrl + "/api/vote/programmes/updateProgrammewithid",
+getAllProgramme: apiUrl + "/api/vote/programmes/getAllProgrammesForSabhaId", 
+deleteProgrammeById: apiUrl + "/api/vote/programmes/deleteProgramme",
+getProgrammeDetailById: apiUrl + "/api/vote/programmes/getProgrammeById",
+saveProgramme: apiUrl + "/api/vote/programmes/saveProgramme",
+updateProgramme: apiUrl + "/api/vote/programmes/updateProgramme",
 
 //project
 getAllProject: apiUrl + "/api/vote/projects/getAllProjectsForSabhaId",
@@ -26,8 +25,6 @@ saveProject: apiUrl + "/api/vote/projects/saveProject",
 updateProject: apiUrl + "/api/vote/projects/updateProject",
 getAllProjectsForProgramme: apiUrl + "/api/vote/projects/GetAllProjectsForProgrammeId",  //OK
 
-
-
 //subproject
 getAllsubproject: apiUrl + "/api/vote/subProject/getAllSubProjectsForSabhaId", 
 deletesubprojectById: apiUrl + "/api/vote/subProject/deletesubproject",
@@ -36,7 +33,6 @@ savesubproject: apiUrl + "/api/vote/subProject/savesubproject",
 updatesubproject: apiUrl + "/api/vote/subProject/updatesubproject",
 getAllsubprojectforprojectID: apiUrl + "/api/vote/subProject/getAllSubProjectsForProjectId", 
 getAllsubprojectforProgrammeID: apiUrl + "/api/vote/subProject/getAllSubProjectsForProgrammeId", 
-
 
 //incometitle 
 getAllIncometitle: apiUrl + "/api/vote/incomeTitle/getAllIncomeTitlesForSabhaId",//OK
@@ -54,7 +50,6 @@ saveAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/saveAccountBalanceD
 updateAccountBalanceDetail: apiUrl + "/api/vote/accountBalance/updateAccountBalanceDetail",
 getAllAccountbalancedetailsByAccountIdandSabhaId: apiUrl + "/api/vote/accountBalance/getAllAccountBalanceDetailsForAccountDetailIdandSabhaId"
 
-
 //balancesheetbalance
 ,getAllBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/getAllBalancesheetBalancesForSabhaId",
 deleteBalancesheetBalanceById: apiUrl + "/api/vote/balancesheetbalances/deleteBalancesheetBalance",
@@ -62,7 +57,6 @@ getBalancesheetBalanceDetailById: apiUrl + "/api/vote/balancesheetbalances/getBa
 GetAllBalancesheetBalancesForVoteDetailIdandYear: apiUrl + "/api/vote/balancesheetbalances/GetAllBalancesheetBalancesForVoteDetailIdandYear",
 saveBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/saveBalancesheetBalance",
 updateBalancesheetBalance: apiUrl + "/api/vote/balancesheetbalances/updateBalancesheetBalance"
-
 
 //accountdetail
 ,getAllAccountDetail: apiUrl + "/api/vote/AccountDetails/getAllAccountDetailsForOfficeId",
@@ -84,39 +78,52 @@ getAllBalancesheetSubtitleByTitleID: apiUrl + "/api/vote/balancesheetSubtitles/g
 deleteBalancesheetTitleById: apiUrl + "/api/vote/balancesheettitles/deleteBalancesheetTitle",
 getBalancesheetTitleDetailById: apiUrl + "/api/vote/balancesheettitles/getBalancesheetTitleById",
 saveBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/saveBalancesheetTitle",
-updateBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/updateBalancesheetTitle"
+updateBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/updateBalancesheetTitle",
 
 //incomesubtitle
-,getAllIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForSabhaId",  //OK
+getAllIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForSabhaId",  //OK
 deleteIncomeSubtitleById: apiUrl + "/api/vote/incomeSubtitle/deleteIncomeSubtitle",
 getIncomeSubtitleDetailById: apiUrl + "/api/vote/incomeSubtitle/getIncomeSubtitleById",     
 saveIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/saveIncomeSubtitle",    
-updateIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/updateIncomeSubtitle"
-,getAllIncomeSubtitlebyTitleID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForTitleId"  //OK
-,getAllIncomeSubtitlebyProgrammeID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForProgrammeId"  //OK
+updateIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/updateIncomeSubtitle",
+getAllIncomeSubtitlebyTitleID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForTitleId",  //OK
+getAllIncomeSubtitlebyProgrammeID: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForProgrammeId",  //OK
 
 //voteallocation
-,getAllVoteAllocation: apiUrl + "/api/vote/voteAllocations/getAllWithVoteAllocationBySabhaId",
+getAllVoteAllocation: apiUrl + "/api/vote/voteAllocations/getAllWithVoteAllocationBySabhaId",
 deleteVoteAllocationById: apiUrl + "/api/vote/voteallocations/deleteVoteAllocation",
 getVoteAllocationDetailById: apiUrl + "/api/vote/voteallocations/getVoteAllocationById",
 saveVoteAllocation: apiUrl + "/api/vote/voteallocations/saveVoteAllocation",
 updateVoteAllocation: apiUrl + "/api/vote/voteallocations/updateVoteAllocation",
 getAllVoteAllocationbyVoteDetailIdandSabhaId: apiUrl + "/api/vote/voteAllocations/getAllVoteAllocationsForVoteDetailIdandSabhaId",
-getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear: apiUrl + "/api/vote/voteAllocations/getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear"
+getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear: apiUrl + "/api/vote/voteAllocations/getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear",
 
 //votedetails
-,getAllVoteDetails: apiUrl + "/api/vote/voteDetail/getAllVoteDetailBySabhaId",
+getAllVoteDetails: apiUrl + "/api/vote/voteDetail/getAllVoteDetailBySabhaId",
 deleteVoteDetailsById: apiUrl + "/api/vote/voteDetail/deleteVoteDetail",
 getVoteDetailsDetailById: apiUrl + "/api/vote/voteDetail/getVoteDetailsById",
 saveVoteDetails: apiUrl + "/api/vote/voteDetail/saveVoteDetail",
-updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail"  //ok
-,getAllVoteDetailsForProgrammeId: apiUrl + "/api/vote/voteDetail/getAllVoteDetailForProgrammeId"
+updateVoteDetails: apiUrl + "/api/vote/voteDetail/updateVoteDetail",  //ok
+getAllVoteDetailsForProgrammeId: apiUrl + "/api/vote/voteDetail/getAllVoteDetailForProgrammeId"
+
+//End of Vote Management APIs
+
+
+//Begin of Common APIs
 
 //banks
 ,getAllBankDetails: apiUrl + "/api/BankDetails",
 
 //years
 getAllYears: apiUrl + "/api/Years",
+
+//Genders
+getAllGenders: apiUrl + "/api/Genders",
+
+//End of Common APIs
+
+
+//Begin of User Managenet APIs
 
 //security Questions
 getAllSecurityQuestions: apiUrl + "/api/UserRecoverQuestions",
@@ -125,11 +132,9 @@ getAllSecurityQuestions: apiUrl + "/api/UserRecoverQuestions",
 getUserById: apiUrl + "/api/Users/getUserById",
 updateUserDetails: apiUrl + "/api/Users/updateUser",
 getAllUsers:apiUrl+"/api/Users/getAllUsers",
-saveUser:apiUrl+"/api/Users/saveUser",
+saveUser:apiUrl+"/api/Users/saveUser"
 
-//Genders
-getAllGenders: apiUrl + "/api/Genders"
-
+//End of User Managenet APIs
 
 }
 
@@ -140,12 +145,11 @@ export class HttpProviderService {
 
   constructor(private webApiService: WebApiService) { }
  
+  //Begin of Vote Managenet Functions
   //programme
   public getAllProgramme(model : any): Observable<any> {
-    //console.log(sabhaID);
     return this.webApiService.get(httpLink.getAllProgramme+ '/'+model);
   }
-  
 
   public deleteProgrammeById(model: any): Observable<any> {
     return this.webApiService.post(httpLink.deleteProgrammeById + '/' + model, "");
@@ -162,10 +166,6 @@ export class HttpProviderService {
   public updateProgramme(model: any): Observable<any> {
     return this.webApiService.post(httpLink.updateProgramme, model);
   }
-
-  // public updateProgrammewithid(id : any, model: any): Observable<any> {
-  //   return this.webApiService.post(httpLink.updateProgramme+id, model);
-  // }
  
 //project
 public getAllProject(model : any): Observable<any> {
@@ -190,7 +190,6 @@ public updateProject(model: any): Observable<any> {
 public getAllProjectsForProgrammeId(model: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllProjectsForProgramme + '/' + model);
 }
-
 
 //subproject
 public getAllSubproject(model : any): Observable<any> {
@@ -270,7 +269,6 @@ public updateAccountBalanceDetail(model: any): Observable<any> {
 public getAllAccountbalancedetailsByAccountIdandSabhaId(accountdetail: any,sabha: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllAccountbalancedetailsByAccountIdandSabhaId + '/' + accountdetail + '/' + sabha);
 }
-
 
 //balancesheetbalance
 public getAllBalancesheetBalance(model : any): Observable<any> {
@@ -422,7 +420,6 @@ public getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear(vote: any,sabha: an
   return this.webApiService.get(httpLink.getAllVoteAllocationsForVoteDetailIdandSabhaIdandYear + '/' + vote + '/' + sabha + '/' + year);
 }
 
-
 //votedetails
 public getAllVoteDetails(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteDetails  + '/'+model);
@@ -447,16 +444,32 @@ public getAllVoteDetailsForProgrammeId(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteDetailsForProgrammeId  + '/'+model);
 }
 
+//End of Vote Managenet Functions
+
+
+
+//Begin of Common Functions
+
 //bank details
 public getAllBankDetails(): Observable<any> {
   return this.webApiService.get(httpLink.getAllBankDetails);
 }
 
-
 //Years details
 public getAllYears(): Observable<any> {
   return this.webApiService.get(httpLink.getAllYears);
 }
+
+//Gender
+public getAllGenders(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllGenders);
+}
+
+//Begin of Common Functions
+
+
+
+//Begin of User Managenet Functions
 
 //Security Questions
 public getAllSecurityQuestions(): Observable<any> {
@@ -478,10 +491,6 @@ public saveUser(model: any): Observable<any> {
   return this.webApiService.post(httpLink.saveUser, model);
 }
 
-
-//Gender
-public getAllGenders(): Observable<any> {
-  return this.webApiService.get(httpLink.getAllGenders);
-}
+//Begin of User Managenet Functions
 
 }

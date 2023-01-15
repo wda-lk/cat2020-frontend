@@ -1,14 +1,16 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NewUser } from '../user-management/models/newUser';
-import { HttpProviderService } from '../services/http-provider.service';
+import { NewUser } from '../models/newUser';
+import { HttpProviderService } from '../../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-user-detail',
+  templateUrl: './user-detail.component.html',
+  styleUrls: ['./user-detail.component.css']
 })
-export class DashboardComponent {
+export class UserDetailComponent implements OnInit {
+  
   selectedUserDetail: NewUser = new NewUser();
   loading = false;
   APIUserDetailsList:any;
@@ -23,11 +25,9 @@ export class DashboardComponent {
   isSinhala :boolean;
   isTamil :boolean;
   isEnglish :boolean;
-  isNewUser:boolean=true;
    
   constructor(private httpProvider: HttpProviderService) {
   }
-
 
   ngOnInit() {
     this.refresh();
@@ -35,12 +35,6 @@ export class DashboardComponent {
 
 
   async refresh() {
-    if (String(localStorage.getItem('CurrentUserNamewithinitials')).length>4) {
-    this.isNewUser =false;
-    } else
-    {
-      this.isNewUser =true;
-    }
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
     if (this.SelectedLanguage=="Sinhala")
     {this.isSinhala=true;}
@@ -99,6 +93,7 @@ export class DashboardComponent {
       });
   }
 
+  
 
 async getUserDetailbyId() {
   this.httpProvider.getUserById(localStorage.getItem('Currentuserid')).subscribe({
@@ -124,18 +119,17 @@ async getUserDetailbyId() {
 
   async updateRecord() {
 
-    if (this.selectedUserDetail.nameInFull != null && this.selectedUserDetail.nameInFull != "" ){
-      this.isValid=true;
-    } else{
-      this.isValid=false; Notify.warning('Full Name is Required.');}
+    if (this.selectedUserDetail.nameInFull == null){
+      this.isValid=false; Notify.warning('Full Name is Required.');
+    } else{this.isValid=true;}
 
-    if (this.selectedUserDetail.nameWithInitials != null && this.selectedUserDetail.nameWithInitials != ""){
-      this.isValid=true;
-    } else{this.isValid=false; Notify.warning('Name with Initials is Required.');}
+    if (this.selectedUserDetail.nameWithInitials == null){
+      this.isValid=false; Notify.warning('Name with Initials is Required.');
+    } else{this.isValid=true;}
 
-    if (this.selectedUserDetail.nic != null && this.selectedUserDetail.nic != "") {
-      this.isValid=true;
-    } else{this.isValid=false; Notify.warning('NIC is Required.');}
+    if (this.selectedUserDetail.nic == null){
+      this.isValid=false; Notify.warning('NIC is Required.');
+    } else{this.isValid=true;}
 
     if (this.selectedUserDetail.birthday == null){
       this.isValid=false; Notify.warning('Date of Birth is Required.');
@@ -144,6 +138,16 @@ async getUserDetailbyId() {
     if (this.selectedUserDetail.contactNo == null){
       this.isValid=false; Notify.warning('Contact Number is Required.');
     } else{this.isValid=true;}
+
+    if (this.selectedUserDetail.username == null){
+      this.isValid=false; Notify.warning('Email is Required.');
+    } else{this.isValid=true;}
+
+    if (this.selectedUserDetail.password != this.confirmpassword){
+      this.isValid=false; Notify.warning('Passwords does not match.');
+    } else
+    
+    {
 
     if (this.selectedUserDetail.q1Id == null){
       this.isValid=false; Notify.warning('Please select Question 1.');
@@ -159,7 +163,7 @@ async getUserDetailbyId() {
 
     if (this.selectedUserDetail.answer2 == null){
       this.isValid=false; Notify.warning('Question 2 Answer is Required.');
-    } else{
+    } else{this.isValid=true;}
 
     if (this.isValid==true) {
       this.httpProvider.saveUser(this.selectedUserDetail)
@@ -179,7 +183,9 @@ this.refresh();
 }
 }
 }
+
 editUserDetail(userDetail: NewUser) {
   this.selectedUserDetail = userDetail;
 }
+
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 //forlogin
-import { AuthenticationService } from './_services';
-import { User } from './_models';
+import { AuthenticationService } from './system-security/_services';
+import { SystemUser } from './system-security/_models';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ import { User } from './_models';
 export class AppComponent {
   title = 'CAT2020';
 
-  user?: User | null;
+  user?: SystemUser | null;
 
   constructor(private authenticationService: AuthenticationService) {
       this.authenticationService.user.subscribe(x => this.user = x);
