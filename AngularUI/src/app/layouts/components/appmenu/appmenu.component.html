@@ -183,6 +183,31 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#/dashboard" class="nav-link">
+              <i class="nav-icon fas fa-money-check-alt"></i>
+              <p>
+               MIX INCOME
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul *ngIf="isAllowed" class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#/voteassignment" class="nav-link">
+                  <i class="far fa-dot-circle nav-icon"></i>
+                  <p>Vote Assignment</p>
+                </a>
+              </li>
+            </ul>
+            <!-- <ul *ngIf="isAllowed" class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#/assignedvotes" class="nav-link">
+                  <i class="far fa-dot-circle nav-icon"></i>
+                  <p>Assigned Votes</p>
+                </a>
+              </li>
+            </ul> -->
+        </li>
            <li class="nav-item">
               <a href="#/dashboard" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
@@ -193,15 +218,27 @@
               </a>
               <ul *ngIf="isAllowed" class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="#/userdetail" class="nav-link">
+                    <i class="far fa-user nav-icon"></i>
+                    <p>User Details</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#/changepassword" class="nav-link">
+                    <i class="far fa-user nav-icon"></i>
+                    <p>Change Password</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="#/newuser" class="nav-link">
                     <i class="far fa-user nav-icon"></i>
                     <p>Create New User</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#/userdetail" class="nav-link">
+                  <a href="#/groups" class="nav-link">
                     <i class="far fa-user nav-icon"></i>
-                    <p>User Detail</p>
+                    <p>Groups</p>
                   </a>
                 </li>
               </ul>

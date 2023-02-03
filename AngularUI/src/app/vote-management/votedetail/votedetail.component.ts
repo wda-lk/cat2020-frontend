@@ -140,8 +140,6 @@ async getAllVoteDetailsForProgrammeId(id : any) {
 }
 
 async LoadProjectsandIncomeTitles(id : any) {
-  // this.ProgrammeID=id;
-  // console.log(id);
   this.objProgramme=null;
   this.objProgramme = this.APIProgrammesList.find((obj:any) => obj.id == id);
   this.VoteCode =localStorage.getItem('sabhaCode')+ "-"+ this.objProgramme.code;
@@ -400,7 +398,6 @@ else {
       this.selectedVoteDetail.incomeSubtitleNameTamil = this.objIncomeSubTitle.nameTamil;
       this.selectedVoteDetail.incomeSubtitleCode = this.objIncomeSubTitle.code;
         }
-  console.log(this.selectedVoteDetail);
   this.httpProvider.saveVoteDetails(this.selectedVoteDetail)
   .subscribe({
     next: (result) => {

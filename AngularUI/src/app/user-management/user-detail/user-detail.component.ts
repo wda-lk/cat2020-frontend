@@ -116,6 +116,10 @@ async getUserDetailbyId() {
     });
 }
 
+resetForm() {
+  this.selectedUserDetail = new NewUser();
+  this.getUserDetailbyId();
+}
 
   async updateRecord() {
 
@@ -141,12 +145,7 @@ async getUserDetailbyId() {
 
     if (this.selectedUserDetail.username == null){
       this.isValid=false; Notify.warning('Email is Required.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.password != this.confirmpassword){
-      this.isValid=false; Notify.warning('Passwords does not match.');
     } else
-    
     {
 
     if (this.selectedUserDetail.q1Id == null){
@@ -166,7 +165,7 @@ async getUserDetailbyId() {
     } else{this.isValid=true;}
 
     if (this.isValid==true) {
-      this.httpProvider.saveUser(this.selectedUserDetail)
+      this.httpProvider.updateUserDetails(this.selectedUserDetail)
     .subscribe({
       next: (result) => {
            var resultData = result.body;

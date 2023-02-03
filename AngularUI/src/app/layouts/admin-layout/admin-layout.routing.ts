@@ -15,7 +15,11 @@ import { AccountbalancedetailComponent } from '../../vote-management/accountbala
 import { VoteallocationComponent } from '../../vote-management/voteallocation/voteallocation.component';
 import { BalancesheetbalanceComponent } from '../../vote-management/balancesheetbalance/balancesheetbalance.component'; 
 import { UserDetailComponent } from '../../user-management/user-detail/user-detail.component'; 
+import { ChangePasswordComponent } from '../../user-management/change-password/change-password.component'; 
 import { NewUserComponent } from '../../user-management/new-user/new-user.component'; 
+import { GroupsComponent } from '../../user-management/groups/groups.component'; 
+import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
+import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },
@@ -32,5 +36,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'voteallocation',   component: VoteallocationComponent, canActivate: [AuthGuard]  },   
     { path: 'balancesheetbalance',   component: BalancesheetbalanceComponent, canActivate: [AuthGuard]  },
     { path: 'userdetail',   component: UserDetailComponent, canActivate: [AuthGuard]  },
-    { path: 'newuser',   component: NewUserComponent, canActivate: [AuthGuard]  }
+    { path: 'changepassword',   component: ChangePasswordComponent, canActivate: [AuthGuard]  },
+    { path: 'newuser',   component: NewUserComponent, canActivate: [AuthGuard]  },
+    { path: 'groups',   component: GroupsComponent, canActivate: [AuthGuard]  },
+    { path: 'voteassignment',   component: VoteAssignmentComponent, canActivate: [AuthGuard]  },
+    { path: 'assignedvotes',   component: AssignedVotesComponent, canActivate: [AuthGuard]  },
 ];

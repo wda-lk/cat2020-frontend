@@ -90,7 +90,7 @@
                                 </select>
                             </div>
                               <br>
-                              <input type="text" [(ngModel)]="selectedBalancesheetBalance.balance" placeholder="Type Balance" class="form-control"required/>
+                              <input type="float" [(ngModel)]="selectedBalancesheetBalance.balance" placeholder="Type Balance" class="form-control"required/>
                               <br>
                               <input type="text" [(ngModel)]="selectedBalancesheetBalance.comment" placeholder="Type Comment Here" class="form-control" required/>
                               <br>
@@ -136,7 +136,7 @@
                                             <!-- <td> Title</td>
                                             <td> SubTitle</td> -->
                                             <td>{{ balancesheetalance.year }}</td>
-                                            <td>{{ balancesheetalance.balance }}</td>
+                                            <td>{{ balancesheetalance.balance | number:'1.2-2'}}</td>
                                             <td>{{ balancesheetalance.comment }}</td>
                                             <td class="td-actions">
                                                 <button mat-raised-button (click)="editBalancesheetBalance(balancesheetalance)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">

@@ -134,7 +134,6 @@ async getAllAccountDetails() {
     .subscribe({
       next: (result) => {
            var resultData = result.body;
-           console.log(result);
            Notify.success('AccountDetail Updated successfully..!');
       },
       error: error => {
@@ -149,7 +148,6 @@ else {
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         console.log(result);
          setTimeout(() => {this.refresh();}, 2000);
          Notify.success('Income Title Created successfully..!');
     },

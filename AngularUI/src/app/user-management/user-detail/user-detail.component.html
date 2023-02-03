@@ -36,22 +36,22 @@
                       </div>
                     <div class="card-body">
                             <label>Name in Full</label>
-                            <input type="text" [(ngModel)]="selectedUserDetail.nameInFull" placeholder="Type Full Name" class="form-control" required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.nameInFull" placeholder="Type Full Name" class="form-control"  />
                             <br>
                             <label>Name with Initials</label>
-                            <input type="text" [(ngModel)]="selectedUserDetail.nameWithInitials" placeholder="Type Name with Initials" class="form-control"required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.nameWithInitials" placeholder="Type Name with Initials" class="form-control"  />
                             <br>
                             <label>NIC</label>
-                            <input type="text" [(ngModel)]="selectedUserDetail.nic" placeholder="Type NIC" class="form-control" required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.nic" placeholder="Type NIC" class="form-control"  />
                             <br>
                             <label>Date of Birth</label>
-                            <input type="text" [(ngModel)]="selectedUserDetail.birthday" placeholder="Type Date of Birth" class="form-control" required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.birthday" placeholder="Type Date of Birth" class="form-control" />
                             <br>
                             <label>Contact No</label>
-                            <input type="text" [(ngModel)]="selectedUserDetail.contactNo" placeholder="Type Contact Number" class="form-control" required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.contactNo" placeholder="Type Contact Number" class="form-control" readonly />
                             <br>
                             <label>Gender</label>
-                              <select class="form-control" [(ngModel)]="selectedUserDetail.genderID">
+                              <select class="form-control" [(ngModel)]="selectedUserDetail.genderID" >
                                   <option value="0" > --Select Gender-- </option>
                                   <option *ngFor=" let gender of APIGenderList" [value]="gender.id" > {{gender.description}} </option>
                               </select>
@@ -61,12 +61,12 @@
                             <br>
                               
                             <br>
-                            <label>Password</label>
+                            <!-- <label>Password</label>
                             <input type="password" [(ngModel)]="selectedUserDetail.password" placeholder="Enter Password" class="form-control"required/>
                             <br>
                             <label>Confirm Password</label>
                             <input type="password" [(ngModel)]="confirmpassword" placeholder="Re enter Password" class="form-control"required/>
-                            <br>
+                            <br> -->
                             <!-- <div class="form-group">
                               <label for="picture">Picture</label>
                               <div class="custom-file">
@@ -80,23 +80,25 @@
                             <img [src]="imageSrc" *ngIf="imageSrc" style="height: 300px; width:500px">
                             <br> -->
                             <label>Security Question 1</label>
-                              <select class="form-control" [(ngModel)]="selectedUserDetail.q1Id">
+                              <select class="form-control" [(ngModel)]="selectedUserDetail.q1Id" >
                                   <option value="0" > --Select Question 1-- </option>
                                   <option *ngFor=" let question of APIQuestionsList" [value]="question.id" > {{( question.question)}} </option>
                               </select>
                               <br>
-                            <input type="text" [(ngModel)]="selectedUserDetail.answer1" placeholder="Type Answer for question 1" class="form-control"required/>
+                            <input type="text" [(ngModel)]="selectedUserDetail.answer1" placeholder="Type Answer for question 1" class="form-control"required />
                             <br>
                               <label>Security Question 2</label>
-                              <select class="form-control" [(ngModel)]="selectedUserDetail.q2Id">
+                              <select class="form-control" [(ngModel)]="selectedUserDetail.q2Id" >
                                   <option value="0" > --Select Question 2-- </option>
                                   <option *ngFor=" let question of APIQuestionsList" [value]="question.id" > {{( question.question)}} </option>
                               </select>
                               <br>
-                              <input type="text" [(ngModel)]="selectedUserDetail.answer2" placeholder="Type Answer for question 2" class="form-control"required/>
+                              <input type="text" [(ngModel)]="selectedUserDetail.answer2" placeholder="Type Answer for question 2" class="form-control"required />
                               <br>
                             <div class="form-group">
-                              <button class="btn btn-success" (click)="updateRecord()" ng-disabled="selectedUserDetail.id!==undefined"> UPDATE </button>
+                              <button class="btn btn-success col-2" (click)="updateRecord()" ng-disabled="selectedUserDetail.id!==undefined"> Update </button>
+                              &nbsp;
+                              <button class="btn btn-danger col-2" (click)="resetForm()" > Reset </button>
                            </div> 
                 </div>
           </div>

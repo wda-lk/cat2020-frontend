@@ -89,7 +89,6 @@ async getAllProgrammes() {
 
     if (this.isValid==true) {
     if (this.selectedProgramme.id !== undefined) {
-      console.log(this.selectedProgramme);
     this.httpProvider.updateProgramme(this.selectedProgramme)
     .subscribe({
       next: (result) => {
@@ -107,7 +106,6 @@ else {
     // if (isValid) {
       this.selectedProgramme.sabhaID = Number(localStorage.getItem('sabhaId'));
       this.selectedProgramme.status = 1;
-      console.log(this.selectedProgramme);
   this.httpProvider.saveProgramme(this.selectedProgramme)
   .subscribe({
     next: (result) => {

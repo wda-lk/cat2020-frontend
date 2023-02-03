@@ -151,13 +151,11 @@ async getAllBalancesheetSubtitleByTitleID(id:any) {
     } else{this.isValid=true;}
 
     if (this.isValid==true) {
-      console.log(this.selectedBalancesheetsubtitle);
     if (this.selectedBalancesheetsubtitle.id !== undefined) {
     this.httpProvider.updateBalancesheetSubtitle(this.selectedBalancesheetsubtitle)
     .subscribe({
       next: (result) => {
            var resultData = result.body;
-           console.log(result);
            Notify.success('Balancesheetsubtitle Updated successfully..!');
       },
       error: error => {
@@ -172,7 +170,6 @@ else {
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         console.log(result);
          Notify.success('Income Title Created successfully..!');
     },
     error: error => {

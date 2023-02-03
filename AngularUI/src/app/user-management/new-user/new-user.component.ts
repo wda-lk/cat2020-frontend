@@ -26,8 +26,6 @@ async getAllUsers() {
       var resultData = data.body;
       if (resultData) {
         this.UserList = resultData;
-        console.log(resultData);
-      
       }
     }
   },
@@ -41,14 +39,11 @@ async getAllUsers() {
     });
 }
 async saveUser() {
-  console.log(this.model.id)
-  // this.isSubmitted = true;
   this.model.sabhaID=Number(localStorage.getItem('sabhaId'));
 this.httpProvider.saveUser(this.model)
 .subscribe({
   next: (result) => {
        var resultData = result.body;
-       console.log(result);
        Notify.success('User Created successfully..!');
   },
   error: error => {

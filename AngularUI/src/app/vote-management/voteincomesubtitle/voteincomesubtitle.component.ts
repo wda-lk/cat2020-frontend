@@ -69,7 +69,6 @@ export class VoteincomesubtitleComponent implements OnInit {
 
   getAllDataForProgrammeID(id:any)
   {
-    console.log(id);
     this.getAllIncomeTitlesByProgrammeId(id);
     this.getAllIncomeSubTitlesForProgramme(id);
   }

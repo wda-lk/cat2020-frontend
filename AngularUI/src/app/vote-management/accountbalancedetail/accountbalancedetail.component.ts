@@ -172,7 +172,6 @@ async getAllAccountbalancedetailsByAccountId(id :any) {
     .subscribe({
       next: (result) => {
            var resultData = result.body;
-           console.log(result);
            Notify.success('Account balance detail Updated successfully..!');
       },
       error: error => {
@@ -189,7 +188,6 @@ else {
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         console.log(result);
          Notify.success('Income Title Created successfully..!');
     },
     error: error => {

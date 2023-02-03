@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatTooltipModule} from '@angular/material/tooltip';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
@@ -23,19 +24,32 @@ import { VoteallocationComponent } from '../../vote-management/voteallocation/vo
 import { BalancesheetbalanceComponent } from '../../vote-management/balancesheetbalance/balancesheetbalance.component'; 
 
 import { UserDetailComponent } from '../../user-management/user-detail/user-detail.component'; 
+import { ChangePasswordComponent } from '../../user-management/change-password/change-password.component'; 
 import { NewUserComponent } from '../../user-management/new-user/new-user.component'; 
+import { GroupsComponent } from '../../user-management/groups/groups.component'; 
+
+import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
+import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
 
 import { MatRippleModule} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatTableModule, MatTableDataSource} from '@angular/material/table';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   imports: [
-    //NotificationsService ,
-    CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
+    NgMultiSelectDropDownModule.forRoot(),
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatRippleModule,
@@ -43,7 +57,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatTableModule,
     MatAutocompleteModule,
     NgxSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    AngularDualListBoxModule,
+    AutocompleteLibModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    NgxPaginationModule,
   ],
   declarations: [
     DashboardComponent,
@@ -60,7 +82,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     VoteallocationComponent,
     BalancesheetbalanceComponent,
     UserDetailComponent,
-    NewUserComponent
+    ChangePasswordComponent,
+    NewUserComponent,
+    GroupsComponent,
+    VoteAssignmentComponent,
+    AssignedVotesComponent,
   ]
 })
 export class AdminLayoutModule {}

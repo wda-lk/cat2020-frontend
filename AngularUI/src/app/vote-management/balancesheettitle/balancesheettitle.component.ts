@@ -89,7 +89,6 @@ async getAllBalancesheetTitles() {
     .subscribe({
       next: (result) => {
            var resultData = result.body;
-           console.log(result);
            Notify.success('BalancesheetTitle Updated successfully..!');
       },
       error: error => {
@@ -104,7 +103,6 @@ else {
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         console.log(result);
          setTimeout(() => {this.refresh();}, 2000);
          Notify.success('Income Title Created successfully..!');
     },

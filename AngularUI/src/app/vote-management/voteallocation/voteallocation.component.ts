@@ -45,41 +45,7 @@
     ngOnInit() {
       this.refresh();
       this.getAllProgrammes();
-      // this.getAllVoteDetails();
-
-      // this.filteredOptions = this.myControl.valueChanges.pipe(
-      //   startWith(''),
-      //   map(value => this._filter(value || '')),
-      // );
-
-    //   this.votedetaillist = [
-    //     { "id": "1", "nameSinhala": "Afghanistan", "code": "AF" },
-    //     { "id": "2", "nameSinhala": "Åland Islands", "code": "AX" },
-    //     { "id": "3", "nameSinhala": "Albania", "code": "AL" },
-    //     { "id": "4", "nameSinhala": "Algeria", "code": "DZ" },
-    //     { "id": "5", "nameSinhala": "American Samoa", "code": "AS" }
-    // ]
-      // this.filteredOptions = this.votecode.valueChanges.pipe(
-      //   startWith(''),
-      //   map(value => this._filter(value || '')),
-      // );
     }
-  //   selectCountryName(name) {
-  //     console.log(name);
-  //     console.log(this.selected);
-  // }
-
-  //  private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  // }
-
-    // private _filter(value: string): string[] {
-    //   const filterValue = value.toLowerCase();
-  
-    //   return this.APIVoteDetailsList.filter(option => option.toLowerCase().includes(filterValue));
-    // }
   
     async refresh() {    
       this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
@@ -92,8 +58,6 @@
   
       this.loading = true;
       this.isValid = false;
-     // this.getAllVoteallocations();
-      // this.getAllVoteDetails();
       this.getAllYears();
       this.loading = false;
     }
@@ -282,7 +246,6 @@ onchangeYear(year : any)
       .subscribe({
         next: (result) => {
              var resultData = result.body;
-             console.log(result);
              Notify.success('Vote Allocations Updated successfully..!');
         },
         error: error => {
@@ -299,7 +262,7 @@ onchangeYear(year : any)
     .subscribe({
       next: (result) => {
            var resultData = result.body;
-           console.log(result);
+           (result);
            Notify.success('Income Title Created successfully..!');
       },
       error: error => {

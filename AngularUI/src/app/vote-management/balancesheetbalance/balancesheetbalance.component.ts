@@ -182,6 +182,7 @@ async getAllYears() {
 
     if (this.isValid==true) {
     if (this.selectedBalancesheetBalance.id !== undefined) {
+      console.log(this.selectedBalancesheetBalance);
     this.httpProvider.updateBalancesheetBalance(this.selectedBalancesheetBalance)
     .subscribe({
       next: (result) => {

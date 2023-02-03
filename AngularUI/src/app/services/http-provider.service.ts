@@ -120,10 +120,13 @@ getAllYears: apiUrl + "/api/Years",
 //Genders
 getAllGenders: apiUrl + "/api/Genders",
 
+//Offices
+getAllSubOfficesForSabhaId: apiUrl + "/api/SubOffices/getAllSubOfficesForSabhaId",
+
 //End of Common APIs
 
 
-//Begin of User Managenet APIs
+//Begin of User Management APIs
 
 //security Questions
 getAllSecurityQuestions: apiUrl + "/api/UserRecoverQuestions",
@@ -132,9 +135,34 @@ getAllSecurityQuestions: apiUrl + "/api/UserRecoverQuestions",
 getUserById: apiUrl + "/api/Users/getUserById",
 updateUserDetails: apiUrl + "/api/Users/updateUser",
 getAllUsers:apiUrl+"/api/Users/getAllUsers",
-saveUser:apiUrl+"/api/Users/saveUser"
+saveUser:apiUrl+"/api/Users/saveUser",
 
-//End of User Managenet APIs
+//Groups
+getAllGroupsForSabhaId: apiUrl + "/api/Group/getAllForSabhaId",  
+saveGroup: apiUrl + "/api/Group/save",
+
+//End of User Management APIs
+
+
+//Begin of Mix Income Management APIs
+
+//voteAssignments
+getAllVoteAssignmentsForSabhaId:  apiUrl +"/api/mixin/voteAssignments/getAllForSabhaId",
+getVoteAssignmentById:  apiUrl +"/api/mixin/voteAssignments/getById",
+saveVoteAssignment: apiUrl +"/api/mixin/voteAssignments/save",
+deleteVoteAssignment: apiUrl +"/api/mixin/voteAssignments/delete",
+getAllVoteAssignmentsForSubOfficeId:  apiUrl +"/api/mixin/voteAssignments/GetAllForSubOfficeId",
+getAllVoteAssignmentsForVoteId: apiUrl +"/api/mixin/voteAssignments/GetAllForVoteId",
+
+//voteAssignmentDetails
+getAllVoteAssignmentDetails:  apiUrl +"/api/mixin/voteAssignmentDetails/getAll",
+getVoteAssignmentDetailById:  apiUrl +"/api/mixin/voteAssignmentDetails/getById",
+saveVoteAssignmentDetail: apiUrl +"/api/mixin/voteAssignmentDetails/save",
+deleteVoteAssignmentDetail: apiUrl +"/api/mixin/voteAssignmentDetails/delete",
+getAllVoteAssignmentDetailsForSubOfficeId:  apiUrl +"/api/mixin/voteAssignmentDetails/GetAllForSubOfficeId",
+getAllVoteAssignmentDetailsForVoteAssignmentId: apiUrl +"/api/mixin/voteAssignmentDetails/getAllVoteAssignmentDetailsForVoteAssignmentId",
+
+//End of Mix Income Management APIs
 
 }
 
@@ -145,7 +173,7 @@ export class HttpProviderService {
 
   constructor(private webApiService: WebApiService) { }
  
-  //Begin of Vote Managenet Functions
+  //Begin of Vote Management Functions
   //programme
   public getAllProgramme(model : any): Observable<any> {
     return this.webApiService.get(httpLink.getAllProgramme+ '/'+model);
@@ -444,7 +472,7 @@ public getAllVoteDetailsForProgrammeId(model : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteDetailsForProgrammeId  + '/'+model);
 }
 
-//End of Vote Managenet Functions
+//End of Vote Management Functions
 
 
 
@@ -465,11 +493,15 @@ public getAllGenders(): Observable<any> {
   return this.webApiService.get(httpLink.getAllGenders);
 }
 
+public getAllSubOfficesForSabhaId(id:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllSubOfficesForSabhaId+ '/'+ id);
+}
+
 //Begin of Common Functions
 
 
 
-//Begin of User Managenet Functions
+//Begin of User Management Functions
 
 //Security Questions
 public getAllSecurityQuestions(): Observable<any> {
@@ -491,6 +523,59 @@ public saveUser(model: any): Observable<any> {
   return this.webApiService.post(httpLink.saveUser, model);
 }
 
-//Begin of User Managenet Functions
+//groups
+public getAllGroupsForSabhaId(sabhaID:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllGroupsForSabhaId+ '/'+ sabhaID);
+}
+
+public saveGroup(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveGroup, model);
+}
+//End of User Management Functions
+
+
+
+//Begin of Mix Income Management Functions
+
+//VoteAssignment
+public getVoteAssignmentById(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getVoteAssignmentById  + '/'+ id);
+}
+public getAllVoteAssignmentsForSabhaId(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentsForSabhaId  + '/'+ id);
+}
+public saveVoteAssignment(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveVoteAssignment, model);
+}
+public deleteVoteAssignment(id: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteVoteAssignment + '/' + id, "");
+}
+public getAllVoteAssignmentsForSubOfficeId(id: any): Observable<any> {
+    return this.webApiService.get(httpLink.getAllVoteAssignmentsForSubOfficeId + '/'+ id);
+}
+public getAllVoteAssignmentsForVoteId(id: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentsForVoteId + '/'+ id);
+}
+
+//VoteAssignment Details
+public getVoteAssignmentDetailById(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getVoteAssignmentDetailById  + '/'+id);
+}
+public getAllVoteAssignmentDetails(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentDetails);
+}
+public saveVoteAssignmentDetail(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.saveVoteAssignmentDetail, model);
+}
+public deleteVoteAssignmentDetail(id: any): Observable<any> {
+  return this.webApiService.post(httpLink.deleteVoteAssignmentDetail + '/' + id, "");
+}
+public getAllVoteAssignmentDetailsForSubOfficeId(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentDetailsForSubOfficeId + '/'+ id);
+}
+public getAllVoteAssignmentDetailsForVoteAssignmentId(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentDetailsForVoteAssignmentId + '/'+ id);
+}
+//End of Mix Income Management Functions
 
 }
