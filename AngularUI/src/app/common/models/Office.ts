@@ -1,4 +1,4 @@
-export class SubOffice {
+export class Office {
     id?: string;
     nameSinhala: string;
     nameEnglish: string;

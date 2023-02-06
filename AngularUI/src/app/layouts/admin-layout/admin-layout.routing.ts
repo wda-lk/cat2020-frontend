@@ -20,6 +20,8 @@ import { NewUserComponent } from '../../user-management/new-user/new-user.compon
 import { GroupsComponent } from '../../user-management/groups/groups.component'; 
 import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
 import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
+import { VoteAssignmentDetailsComponent } from '../../mix-income-management/vote-assignmentdetails/voteassignmentdetails.component'; 
+
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },
@@ -41,4 +43,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'groups',   component: GroupsComponent, canActivate: [AuthGuard]  },
     { path: 'voteassignment',   component: VoteAssignmentComponent, canActivate: [AuthGuard]  },
     { path: 'assignedvotes',   component: AssignedVotesComponent, canActivate: [AuthGuard]  },
+    { path: 'voteassignmentdetails',   component: VoteAssignmentDetailsComponent, canActivate: [AuthGuard]  },
 ];

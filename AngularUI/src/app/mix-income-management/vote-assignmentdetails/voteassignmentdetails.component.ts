@@ -4,7 +4,7 @@ import { VoteAssignmentFullDataClass } from '../models/VoteAssignment';
 import { VoteDetail } from '../../vote-management/models/VoteDetail';
 import { HttpProviderService } from '../../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -23,25 +23,29 @@ export interface Post {
   userId: number;
 }
 @Component({
-  selector: 'app-voteassignment',
-  templateUrl: './voteassignment.component.html',
-  styleUrls: ['./voteassignment.component.scss']
+  selector: 'app-voteassignmentdetails',
+  templateUrl: './voteassignmentdetails.component.html',
+  styleUrls: ['./voteassignmentdetails.component.scss']
 })
 
-export class VoteAssignmentComponent implements OnInit {
+export class VoteAssignmentDetailsComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'voteId', 'voteName', 'bankAccountId', 'office', 'actions'];
+  displayedColumns: string[] = ['id', 'voteId', 'customVoteName', 'actions'];
   dataSource = new MatTableDataSource<VoteAssignment>([]);
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   
   @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
   @Output() paginated = new EventEmitter<PageEvent>();
-
   p: number = 1;
   
   APIVoteDetailsList :any;
+
+  voteAssignmentID:any;
+  selectedofficeId:any;
+
   selectedVoteDetailsItems :any=[];
+  formdata :any=[];
   VoteDetailsDropdownSettings:IDropdownSettings={};
 
   APIOfficesList : any;
@@ -57,9 +61,12 @@ export class VoteAssignmentComponent implements OnInit {
   selectedVoteAssignment: VoteAssignment = new VoteAssignment();
   voteAssignments!: VoteAssignment[];
 
+  selectedVoteAssignmentDetail:any=[];
+
 
   loading = false;
-  APIVoteAssignmentsList: any;
+  APIVoteAssignmentsForOfficeList: any=[];
+  APICustomVoteNamesForOfficeList: any=[];
   SelectedVoteName :any;
   SelectedVoteId : any;
   isValid : boolean;
@@ -72,9 +79,15 @@ export class VoteAssignmentComponent implements OnInit {
   isEditing:boolean = false;
 
   constructor(private httpProvider: HttpProviderService, private fb: FormBuilder) {
+    this.customVoteNameForm = this.fb.group({  
+      offices: '',  
+      assignedVotes: '',  
+      customVoteNames: this.fb.array([]) ,  
+    });  
   }
 
   ngOnInit() {
+
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
     if (this.SelectedLanguage=="Sinhala")
     {this.isSinhala=true;}
@@ -86,15 +99,14 @@ export class VoteAssignmentComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    this.getAllVoteDetails();
     this.getAllOffices();
-    this.getAllAccountdetails();
-    this.getAllVoteAssignmentsForSabhaId();
+    //this.getAllAccountdetails();
+    //this.getAllVoteAssignmentsForOfficeId();
 
     this.VoteDetailsDropdownSettings = {
       idField: 'id',
-      textField: 'code',
-      singleSelection: false,
+      textField: 'voteCode',
+      singleSelection: true,
       // selectAllText: 'Select All',
       // unSelectAllText: 'UnSelect All',
       // itemsShowLimit: 10,
@@ -110,7 +122,7 @@ export class VoteAssignmentComponent implements OnInit {
       this.OfficesDropdownSettings = {
       idField: 'id',
       textField: 'nameSinhala',
-      singleSelection: false,
+      singleSelection: true,
       // selectAllText: 'Select All',
       // unSelectAllText: 'UnSelect All',
       // itemsShowLimit: 10,
@@ -132,7 +144,7 @@ export class VoteAssignmentComponent implements OnInit {
       this.OfficesDropdownSettings = {
       idField: 'id',
       textField: 'nameTamil',
-      singleSelection: false,
+      singleSelection: true,
       // selectAllText: 'Select All',
       // unSelectAllText: 'UnSelect All',
       // itemsShowLimit: 10,
@@ -154,7 +166,7 @@ export class VoteAssignmentComponent implements OnInit {
       this.OfficesDropdownSettings = {
       idField: 'id',
       textField: 'nameEnglish',
-      singleSelection: false,
+      singleSelection: true,
       // selectAllText: 'Select All',
       // unSelectAllText: 'UnSelect All',
       // itemsShowLimit: 10,
@@ -173,6 +185,26 @@ export class VoteAssignmentComponent implements OnInit {
 
   }
 
+  customVoteNameForm: FormGroup;  
+     
+  customVoteNames() : FormArray {  
+    return this.customVoteNameForm.get("customVoteNames") as FormArray  
+  }  
+     
+  newCustomVoteName(): FormGroup {  
+    return this.fb.group({  
+      customvotename: ''
+    })  
+  }  
+     
+  addCustomVoteName() {  
+    this.customVoteNames().push(this.newCustomVoteName());  
+  }  
+     
+  removeCustomVoteName(i:number) {  
+    this.customVoteNames().removeAt(i);  
+  }  
+     
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -182,35 +214,46 @@ export class VoteAssignmentComponent implements OnInit {
     }
   }
 
-
-  async getAllVoteDetails() {
-    this.httpProvider.getAllVoteDetails(localStorage.getItem('sabhaId')).subscribe({
-      next: (data) => {
-      if (data != null && data.body != null) {
-        var resultData = data.body;
-        if (resultData) {
-          this.APIVoteDetailsList = resultData;
-        }
-      }
-    },
-    error: error => {
-          if (error.status == 404) {
-            if(error.error && error.error.message){
-              Notify.failure(error.error.message);
-              this.APIVoteDetailsList = [];
-            }
-        }}
-      });
+  getAllDataForOfficeID(id:any)
+  {
+    if(id!="undefined" && id!=null)
+    {
+    localStorage.setItem('officeId', id);
+    this.selectedofficeId=localStorage.getItem('officeId');
+    this.getAllVoteAssignmentsForOfficeId(id);
+  }
+  else{
+    this.APIVoteAssignmentsForOfficeList=[];
   }
 
-async getAllVoteAssignmentsForSabhaId() {
-  this.httpProvider.getAllVoteAssignmentsForSabhaId(localStorage.getItem('sabhaId')).subscribe({
+  }
+
+async getAllVoteAssignmentsForOfficeId(id:any) {
+  this.dataSource = new MatTableDataSource<VoteAssignment>([]);
+  this.APICustomVoteNamesForOfficeList =[];
+  this.httpProvider.getAllVoteAssignmentsForOfficeId(id).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
       if (resultData) {
-        this.APIVoteAssignmentsList = resultData;
-        this.dataSource.data=resultData;
+        this.APIVoteAssignmentsForOfficeList = resultData;
+        this.APIVoteAssignmentsForOfficeList.forEach((voteAssignment:any) => {
+          if(voteAssignment.voteAssignmentDetails.length>0)
+          {
+            voteAssignment.voteAssignmentDetails.forEach((voteAssignmentDetail:any) => {
+            this.APICustomVoteNamesForOfficeList.push({
+              id: voteAssignmentDetail.id,
+              customVoteName: voteAssignmentDetail.customVoteName,
+              voteAssignmentId:voteAssignmentDetail.voteAssignmentId,
+              voteCode: voteAssignment.voteCode,
+              isActive: voteAssignmentDetail.isActive,
+              dateCreated: null,
+              dateModified:null
+            });
+          });
+          }
+        });
+        this.dataSource.data=this.APICustomVoteNamesForOfficeList;
       }
     }
   },
@@ -218,7 +261,7 @@ async getAllVoteAssignmentsForSabhaId() {
         if (error.status == 404) {
           if(error.error && error.error.message){
             Notify.failure(error.error.message);
-            this.APIVoteAssignmentsList =[];
+            this.APIVoteAssignmentsForOfficeList =[];
           }
       }}
     });
@@ -265,57 +308,51 @@ async getAllOffices() {
 }
 
   async saveRecord() {
+    this.formdata=this.customVoteNameForm.value;
     if(this.isEditing==false){
-     if (this.selectedVoteDetailsItems.length==0|| this.selectedOfficesItems.length==0 || this.selectedBankAccountsItems.length==0 ){
-      this.isValid=false; Notify.warning('Please select at least one from each dropdown.');
-    } else{this.isValid=true;}
+     if (this.formdata.assignedVotes==null || this.formdata.assignedVotes==""){
+      this.isValid=false; Notify.warning('Please select a vote');
+     }
+     else if(this.formdata.customVoteNames.length==0 || this.formdata.customVoteNames[0].customvotename=="") {
+        this.isValid=false; Notify.warning('Please Enter a Custom Vote Name');
+    }
+    else{
+      this.isValid=true;
+    }
   }
   else{this.isValid=true;}
-
     if (this.isValid==true) {
       if (this.isValid==true && this.isEditing==false) {
-      this.selectedVotesandBankAccountsListwithOffices=[];
-      this.selectedOfficesItems.forEach((office:any) => {
-      this.selectedVoteDetailsItems.forEach((vote:any) => {
-          this.selectedVotesandBankAccountsListwithOffices.push({
+      this.formdata.customVoteNames.forEach((voteAssignDetail:any) => {
+        if(voteAssignDetail.customvotename!="")
+        {
+          this.selectedVoteDetailsItems.push({
             id: 0,
-            voteid: vote.id,
-            officeId: office.id,
-            bankAccountId: this.selectedBankAccountsItems[0].id,
+            voteAssignmentId: this.formdata.assignedVotes,
+            customVoteName: voteAssignDetail.customvotename,
             isActive: 1,
             dateCreated: null,
-            dateModified:null,
-            sabhaId:localStorage.getItem('sabhaId'),
-            voteAssignmentDetail:null,
+            dateModified:null
           });
+        }
         });
-      });
-  
     }
-    if (this.isValid==true && this.isEditing==true) {
-      this.selectedVotesandBankAccountsListwithOffices=[];
-      this.selectedOfficesItems.forEach((office:any) => {
-      this.selectedVoteDetailsItems.forEach((vote:any) => {
-          this.selectedVotesandBankAccountsListwithOffices.push({
-            id: this.selectedVoteAssignment.id,
-            voteid: vote.id,
-            officeId: office.id,
-            bankAccountId: this.selectedBankAccountsItems[0].id,
-            isActive: 1,
-            dateCreated: null,
-            dateModified:null,
-            sabhaId:localStorage.getItem('sabhaId'),
-            voteAssignmentDetail:null,
-          });
-        });
-      });
-    }
-  this.selectedVoteAssignment=this.selectedVotesandBankAccountsListwithOffices;
-  this.httpProvider.saveVoteAssignment(this.selectedVoteAssignment)
+    // if (this.isValid==true && this.isEditing==true) {
+    //   this.selectedVoteDetailsItems.forEach((vote:any) => {
+    //       this.selectedVotesandBankAccountsListwithOffices.push({
+    //         id: this.selectedVoteAssignmentDetail.id,
+    //         voteAssignmentId: this.selectedVoteAssignmentDetail.voteAssignmentId,
+    //         isActive: 1,
+    //         dateCreated: null,
+    //         dateModified:null,
+    //       });
+    //     });
+    // }
+  this.httpProvider.saveVoteAssignmentDetail(this.selectedVoteDetailsItems)
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         Notify.success('Vote Assigned successfully..!');
+         Notify.success('Vote Assignment Details added successfully..!');
     },
     error: error => {
       Notify.failure('Error Occured..!');
@@ -323,37 +360,41 @@ async getAllOffices() {
 });
 setTimeout(() => {
 this.clearRecord() ;
-this.getAllVoteAssignmentsForSabhaId();
+this.getAllVoteAssignmentsForOfficeId(this.selectedofficeId);
 }, 5000);
 }
 }
 
   clearRecord() {
-    this.selectedBankAccountsItems=[];
-    this.selectedOfficesItems=[];
+    this.customVoteNameForm.reset();  
+    this.customVoteNameForm.controls['offices'].setValue(this.selectedofficeId);
     this.selectedVoteDetailsItems=[];
+    this.voteAssignmentID=0;
 
-    this.selectedVoteAssignment = new VoteAssignment();
-    this.SelectedVoteName="";
-    this.isEditing=false;
+    // this.selectedBankAccountsItems=[];
+    // this.selectedOfficesItems=[];
+
+    // this.selectedVoteAssignment = new VoteAssignment();
+    // this.SelectedVoteName="";
+    // this.isEditing=false;
   }
 
-  async deleteVoteAssignment(voteAssignment: VoteAssignment) {
+  async deleteCustomVoteName(voteAssignment: VoteAssignment) {
     this.loading = true;
-    if (confirm(`Are you sure you want to delete the Vote Assignment ${voteAssignment.id}. This cannot be undone.`)) {
-      this.httpProvider.deleteVoteAssignment(voteAssignment.id)
+    if (confirm(`Are you sure you want to delete the Vote Assignment Detail ${voteAssignment.id}. This cannot be undone.`)) {
+      this.httpProvider.deleteVoteAssignmentDetail(voteAssignment.id)
       .subscribe({
         next: (data) => {
              var resultData = data.body;
-             Notify.success('VoteAssignment Deleted successfully..!');
+             Notify.success('VoteAssignment Detail Deleted successfully..!');
         },
         error: error => {
           Notify.failure('Error Occured..!');
         }
     });
     setTimeout(() => {
-       this.selectedVoteAssignment = new VoteAssignment();
-       this.getAllVoteAssignmentsForSabhaId();
+      //this.clearRecord() ;
+      this.getAllVoteAssignmentsForOfficeId(this.selectedofficeId);
       }, 1000);
   }
   }

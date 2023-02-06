@@ -22,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Create Vote Income Sub Project</h4>
@@ -101,7 +101,7 @@
                   </div>
                 </div>
             </div>
-    <div class="col-lg-6 col-md-12">
+    <div class="col-lg-8 col-md-12">
     <div class="card card-info">
         <div class="card-header">
           <h3 class="card-title">Vote Income Sub Projects List</h3>
@@ -123,7 +123,7 @@
                                 <!-- <th>Project</th> -->
                                 <th>Sub Project</th>
                                 <th>Code</th>
-                                <th>Options</th>
+                                <th class="text-center">Options</th>
                             </tr>
                             <tr>
                             <tr *ngFor="let subProjects of APISubProjectsListForProgrammeId; index as i">
@@ -131,13 +131,12 @@
                                 <!-- <td>Project</td> -->
                                   <td ><span *ngIf="isSinhala">{{subProjects.nameSinhala}}</span> <span *ngIf="isEnglish">{{subProjects.nameEnglish}}</span> <span *ngIf="isTamil">{{subProjects.nameTamil}}</span> </td> 
                                   <td>{{ subProjects.code }}</td>
-                                <td class="td-actions">
-                                    <button mat-raised-button (click)="editSubProject(subProjects)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                        <i class="fas fa-edit"></i>
+                                <td class="td-actions text-center">
+                                    <button mat-flat-button (click)="editSubProject(subProjects)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                        <i class="fas fa-edit text-primary"></i>
                                     </button>
-                                    &nbsp;
-                                    <button (click)="deleteSubProject(subProjects)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
+                                    <button (click)="deleteSubProject(subProjects)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                        <i class="fas fa-trash text-danger"></i>
                                     </button>
                                 </td>
                             </tr>

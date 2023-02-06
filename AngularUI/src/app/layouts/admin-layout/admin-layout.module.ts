@@ -30,6 +30,7 @@ import { GroupsComponent } from '../../user-management/groups/groups.component';
 
 import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
 import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
+import { VoteAssignmentDetailsComponent } from '../../mix-income-management/vote-assignmentdetails/voteassignmentdetails.component'; 
 
 import { MatRippleModule} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -87,6 +88,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     GroupsComponent,
     VoteAssignmentComponent,
     AssignedVotesComponent,
+    VoteAssignmentDetailsComponent,
   ]
 })
 export class AdminLayoutModule {}

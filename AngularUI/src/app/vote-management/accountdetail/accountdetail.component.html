@@ -22,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Create Account Detail</h4>
@@ -61,7 +61,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Account Details List</h3>
@@ -83,20 +83,20 @@
                                               <!-- <th>Bank</th> -->
                                               <th>Account Number</th>
                                               <th>Account Name</th>
-                                              <th>Options</th>
+                                              <th class="text-center">Options</th>
                                           </tr>
                                           <tr *ngFor="let accountDetail of APIAccountDetailsList; index as i">
                                               <td>{{ i+1 }}</td>
                                               <!-- <td>Bank</td> -->
                                               <td>{{ accountDetail.accountNo }}</td>
                                             <td ><span *ngIf="isSinhala">{{accountDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{accountDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{accountDetail.nameTamil}}</span> </td> 
-                                            <td class="td-actions">
-                                                <button mat-raised-button (click)="editAccountDetail(accountDetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                            <td class="td-actions text-center">
+                                                <button mat-flat-button (click)="editAccountDetail(accountDetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-edit text-primary"></i>
                                                 </button>
                                                 &nbsp;
-                                                <button (click)="deleteAccountDetail(accountDetail)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteAccountDetail(accountDetail)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -111,7 +111,7 @@
                                               <th>Bank</th>
                                               <th>Account Number</th>
                                               <th>Account Name</th>
-                                              <th>Options</th>
+                                              <th class="text-center">Options</th>
                                           </tr>
                                           <tr *ngFor="let accountDetail of APIAccountDetailsList; index as i">
                                               <td>{{ i+1 }}</td>
@@ -119,12 +119,11 @@
                                               <td>{{ accountDetail.accountNo }}</td>
                                               <td>{{ accountDetail.nameTamil }}</td>
                                             <td class="td-actions">
-                                                <button mat-raised-button (click)="editAccountDetail(accountDetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                                <button mat-flat-button (click)="editAccountDetail(accountDetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-edit text-primary"></i>
                                                 </button>
-                                                &nbsp;
-                                                <button (click)="deleteAccountDetail(accountDetail)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteAccountDetail(accountDetail)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>

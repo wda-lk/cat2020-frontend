@@ -22,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Create Vote Income Subtitle</h4>
@@ -103,7 +103,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Vote Income Subtitle List</h3>
@@ -125,20 +125,19 @@
                                             <!-- <th>Income Title</th> -->
                                             <th>Income Sub Title</th>
                                             <th>Code</th>
-                                            <th>Options</th>
+                                            <th class="text-center">Options</th>
                                         </tr>
                                         <tr *ngFor="let incomeSubTitile of APIIncomeSubTitlesForProgrammeList; index as i">
                                             <td>{{ i+1 }}</td>
                                             <!-- <td>Income Title</td> -->
                                               <td ><span *ngIf="isSinhala">{{incomeSubTitile.nameSinhala}}</span> <span *ngIf="isEnglish">{{incomeSubTitile.nameEnglish}}</span> <span *ngIf="isTamil">{{incomeSubTitile.nameTamil}}</span> </td> 
                                               <td>{{ incomeSubTitile.code }}</td>
-                                            <td class="td-actions ">
-                                                <button mat-raised-button (click)="editIncomeSubTitle(incomeSubTitile)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                            <td class="td-actions text-center">
+                                                <button mat-flat-button (click)="editIncomeSubTitle(incomeSubTitile)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-edit text-primary"></i>
                                                 </button>
-                                                &nbsp;
-                                                <button (click)="deleteIncomeSubTitle(incomeSubTitile)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteIncomeSubTitle(incomeSubTitile)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>

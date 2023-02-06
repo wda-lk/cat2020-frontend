@@ -1,0 +1,280 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h4 class="m-0">Groups</h4>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">User Management</li>
+              <li class="breadcrumb-item active">Groups</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Create Group</h4>
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    <div class="card-body">
+                          <input type="text" [(ngModel)]="selectedGroup.description" placeholder="Type Group Name" class="form-control"required/>
+                          <br>
+                            
+                            <br>
+                            <div class="form-group">
+                              <button class="btn btn-success" (click)="saveGroup()">{{(selectedGroup.id!==undefined)?'Update':'Create'}}</button>
+                              &nbsp;
+                              <button class="btn btn-danger" (click)="clearGroup()">Clear</button>
+                              <div class="loading" *ngIf="loading">
+                               <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+                          </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+              <div class="col-lg-6 col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 class="card-title">Groups List</h3>
+        
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                      </div>
+                    </div>
+                      <div class="card-body">
+                          <div class="tab-content">
+                              
+                              <div class="tab-pane active" id="inSinhala">
+                                  <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Group</th>
+                                            <th>Users</th>
+                                            <th>Rules</th>
+                                            <th>Audit Logs</th>
+                                            <th>Options</th>
+                                        </tr>
+                                        <tr *ngFor="let Group of APIGroupsList; index as i">
+                                            <td>{{ i+1 }}</td>
+                                            <td >{{Group.description}} </td> 
+
+                                            <td> 
+                                              <button mat-raised-button (click)="tab=1" type="button" matTooltip="Group Users" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                <i class="fas fa-user"></i>
+                                            </button>
+                                            </td> 
+                                            <td> 
+                                              <button mat-raised-button (click)="tab=2" type="button" matTooltip="Group Rules" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                <i class="fas fa-file"></i>
+                                            </button>
+                                            </td> 
+                                            <td> Audit Logs</td>
+                                            <td class="td-actions">
+                                                <button mat-raised-button (click)="editGroup(Group)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                &nbsp;
+                                                <button (click)="deleteGroup(Group)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger ">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+              </div>
+   
+          
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="card card-primary card-tabs">
+              <div class="card-header p-0 pt-1">
+                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                  <li class="pt-2 px-3"><h3 class="card-title">{{selectedGroup.description}} Group</h3></li>
+                  <li class="nav-item">
+                    <a class="nav-link active" id="group-users-tab" data-toggle="pill" href="#group-users" role="tab" aria-controls="group-users" aria-selected="true">Group Users</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="group-rules-tab" data-toggle="pill" href="#group-rules" role="tab" aria-controls="group-rules" aria-selected="false">Group Rules</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                  <div class="tab-pane fade show active" id="group-users" role="tabpanel" aria-labelledby="group-users-tab" [class.active]="tab===1">
+                    <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
+                    [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled"></dual-list>
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <form class="form-inline well">
+                          <button class="btn btn-default" (click)="doFilter()">{{filterBtn()}}</button>
+                          <!-- <button class="btn btn-default" (click)="doDisable()">{{disableBtn()}}</button> -->
+                          <button class="btn btn-primary" (click)="doReset()">Reset</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane show fade" id="group-rules" role="tabpanel" aria-labelledby="group-rules-tab" [class.active]="tab===2">
+                    Group Rules
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+        <div class="col-lg-6 col-md-12">
+          <div class="card card-primary">
+              <div class="card-header card-header-primary">
+                  <h4 class="card-title ">{{selectedGroup.description}} Group - Add/Remove Group Users</h4>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+              <div class="card-body">
+                
+
+
+
+
+                  <ul class="nav nav-tabs" style="margin-top:50px;">
+                    <li [class.active]="tab===1"><a (click)="tab=1">Arrays</a><li>
+                    <li [class.active]="tab===2"><a (click)="tab=2">Format</a></li>
+                    <li [class.active]="tab===3"><a (click)="tab=3">Programmatic changes</a></li>
+                  </ul>
+
+                  <div class="tab-content">
+                    <div class="tab-pane" [class.active]="tab===1">
+                      <div class="row">
+                        <div class="col-sm-6" style="margin-top:32px;"><h4>Source</h4><pre><small>{{source|json}}</small></pre></div>
+                        <div class="col-sm-6" style="margin-top:32px;"><h4>Confirmed</h4><pre><small>{{confirmed|json}}</small></pre></div>
+                      </div>
+                    </div>
+
+
+                    <div class="tab-pane" [class.active]="tab===2">
+                      <form class="form">
+                        <div class="form-group">
+                          <label style="display:block;">Direction</label>
+                          <div class="btn-group">
+                            <button type="button" class="btn" [ngClass]="{ 'btn-primary' : sourceLeft, 'btn-default' : !sourceLeft }"
+                              (click)="swapDirection()">left-to-right</button>
+                            <button type="button" class="btn" [ngClass]="{ 'btn-primary' : !sourceLeft, 'btn-default' : sourceLeft }"
+                              (click)="swapDirection()">right-to-left</button>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label>Enable drag-and-drop</label>
+                          <div class="checkbox">
+                            <label><input type="checkbox" [(ngModel)]="format.draggable" name="drag">draggable</label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label>Locale</label>
+                          <input class="form-control" [(ngModel)]="format.locale" name="locale">
+                        </div>
+                        <div class="form-group">
+                          <label>Add button</label>
+                          <input class="form-control" [(ngModel)]="format.add" name="addBtn">
+                        </div>
+                        <div class="form-group">
+                          <label>Remove button</label>
+                          <input class="form-control" [(ngModel)]="format.remove" name="rmBtn">
+                        </div>
+                        <div class="form-group">
+                          <label>All button</label>
+                          <input class="form-control" [(ngModel)]="format.all" name="allBtn">
+                        </div>
+                        <div class="form-group">
+                          <label>None button</label>
+                          <input class="form-control" [(ngModel)]="format.none" name="noneBtn">
+                        </div>
+                      </form>
+                    </div>
+
+                   
+
+
+                    <div class="tab-pane" [class.active]="tab===3">
+                      <div class="row" style="margin-top:20px;">
+                        <div class="col-sm-6">
+                          <label>Modify parent's source</label>
+                          <form class="form-inline well">
+                            <input class="form-control col-sm-1" style="margin-right:4px;" [(ngModel)]="userAdd" name="userAdd">
+                            <button class="btn btn-success" (click)="doCreate()" [disabled]="!userAdd.length">Create</button>
+                            <button class="btn btn-danger" (click)="doDelete()">Delete</button>
+                          </form>
+                        </div>
+                        <div class="col-sm-6">
+                          <label>Modify parent's confirmed</label>
+                          <form class="form-inline well">
+                          <button class="btn btn-default" (click)="doAdd()">Add</button>
+                          <button class="btn btn-default" (click)="doRemove()">Remove</button>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <label>Array source</label>
+                          <form class="form well">
+                            <div class="radio" *ngFor="let item of arrayType">
+                              <label>
+                                <input type="radio" name="sourceType" [value]="item.value" [(ngModel)]="type" (change)="swapSource()">
+                                {{item.name}} &mdash; {{item.detail}}
+                              </label>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+
+                      <br>
+                      <div class="form-group">
+                        <button class="btn btn-success" (click)="saveGroup()">{{(selectedGroup.id!==undefined)?'Update':'Create'}}</button>
+                        &nbsp;
+                        <button class="btn btn-danger" (click)="clearGroup()">Clear</button>
+                        <div class="loading" *ngIf="loading">
+                         <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+                    </div>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+    </div><!-- /.container-fluid -->
+</section>
+</div>
+  

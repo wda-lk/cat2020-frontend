@@ -22,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Create Balancesheet Sub Title</h4>
@@ -81,7 +81,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Balancesheet Sub Titles List</h3>
@@ -103,20 +103,19 @@
                                               <!-- <th>Balancesheet Title</th> -->
                                               <th>Balancesheet Subtitle</th>
                                               <th>Code</th>
-                                              <th>Options</th>
+                                              <th class="text-center">Options</th>
                                           </tr>
                                           <tr *ngFor="let balancesheetsubtitle of APIBalancesheetsubtitlesList; index as i">
                                               <td>{{ i+1 }}</td>
                                               <!-- <td>Balancesheettitle</td> -->
                                               <td ><span *ngIf="isSinhala">{{balancesheetsubtitle.nameSinhala}}</span> <span *ngIf="isEnglish">{{balancesheetsubtitle.nameEnglish}}</span> <span *ngIf="isTamil">{{balancesheetsubtitle.nameTamil}}</span> </td> 
                                               <td>{{ balancesheetsubtitle.code }}</td>
-                                            <td class="td-actions">
-                                                <button mat-raised-button (click)="editBalancesheetsubtitle(balancesheetsubtitle)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                            <td class="td-actions text-center">
+                                                <button mat-flat-button (click)="editBalancesheetsubtitle(balancesheetsubtitle)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-edit text-primary"></i>
                                                 </button>
-                                                &nbsp;
-                                                <button (click)="deleteBalancesheetsubtitle(balancesheetsubtitle)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteBalancesheetsubtitle(balancesheetsubtitle)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>

@@ -2,13 +2,13 @@
 import { VoteAssignmentDetail } from '../models/VoteAssignmentDetail';
 import { VoteDetail } from '../../vote-management/models/VoteDetail';
 import { AccountDetail } from '../../vote-management/models/AccountDetail';
-import { SubOffice } from '../../common/models/SubOffice';
+import { Office } from '../../common/models/Office';
 
 export class VoteAssignment {
     id?: string;
     isActive: number;
     voteId: number;
-    subOfficeId: number;
+    officeId: number;
     bankAccountId: number;
     dateCreated?: Date;
     dateModified?: Date;
@@ -21,8 +21,8 @@ export class VoteAssignmentFullDataClass {
     isActive: number;
     voteDetail : VoteDetail;
     voteId: number;
-    subOffice : SubOffice
-    subOfficeId: number;
+    office : Office
+    officeId: number;
     accountDetail : AccountDetail;
     bankAccountId: number;
     dateCreated?: Date;

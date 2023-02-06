@@ -22,23 +22,19 @@
   <section class="content">
     <div class="container-fluid">
           <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="card card-primary">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Create Vote Assignment</h4>
-                        <!-- <p class="card-category">Create Vote Programme</p> -->
-                        <div class="card-tools">
-                          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i>
-                          </button>
-                        </div>
+            <div class="col-lg-12 col-md-12">
+              <div class="card card-primary">
+                  <div class="card-header card-header-primary">
+                      <h4 class="card-title ">Create Vote Assignment</h4>
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
                       </div>
-                    <div class="card-body">
-                      <!-- <form [formGroup]="voteAssignmentForm"> -->
-                          <div class="form-group">
-
-                            <label>Select Votes</label>
-                        <ng-multiselect-dropdown
+                    </div>
+                  <div class="card-body">
+                    <div class="row">
+                        <ng-multiselect-dropdown class="col-md-5"
                             [placeholder]="'Select Votes'"
                             [settings]="VoteDetailsDropdownSettings"
                             [data]="APIVoteDetailsList"
@@ -46,157 +42,33 @@
                             >
                         </ng-multiselect-dropdown>
                         <br>
-                        <label>Select Sub Office</label>
-                        <ng-multiselect-dropdown
+                        <ng-multiselect-dropdown class="col-md-3"
                             [placeholder]="'Select Sub Office'"
-                            [settings]="SubOfficesDropdownSettings"
-                            [data]="APISubOfficesList"
-                            [(ngModel)]="selectedSubOfficesItems"
+                            [settings]="OfficesDropdownSettings"
+                            [data]="APIOfficesList"
+                            [(ngModel)]="selectedOfficesItems"
                             >
                         </ng-multiselect-dropdown>
                         <br>
-                        <label>Select Bank Account</label>
-                        <ng-multiselect-dropdown
+                        <ng-multiselect-dropdown class="col-md-4"
                             [placeholder]="'Select Bank Account'"
                             [settings]="BankAccountsDropdownSettings"
                             [data]="APIBankAccountsList"
                             [(ngModel)]="selectedBankAccountsItems"
                             >
                         </ng-multiselect-dropdown>
-
-                            <!-- <label>Select Votes</label>
-                        <ng-multiselect-dropdown
-                            [placeholder]="'Select Votes'"
-                            [settings]="VoteDetailsDropdownSettings"
-                            [data]="APIVoteDetailsList"
-                            formControlName="votesDropdown"
-                            (onSelect)="onVoteSelect($event)"
-                            (onSelectAll)="onVoteSelectAll($event)"
-                            (onDeSelect)="onVoteDeSelect($event)"
-                            (onDeSelectAll)="onVoteUnSelectAll()"
-                            [(ngModel)]="selectedVoteDetailsItems"
-                            >
-                        </ng-multiselect-dropdown>
-                      <br> -->
-                        <!-- <label>Select Sub Office</label>
-                        <ng-multiselect-dropdown
-                            [placeholder]="'Select Sub Office'"
-                            [settings]="SubOfficesDropdownSettings"
-                            [data]="APISubOfficesList"
-                            formControlName="subOfficesDropdown"
-                            (onSelect)="onSubOfficeSelect($event)"
-                            (onSelectAll)="onSubOfficeSelectAll($event)"
-                            (onDeSelect)="onSubOfficeDeSelect($event)"
-                            (onDeSelectAll)="onSubOfficeUnSelectAll()"
-                            >
-                        </ng-multiselect-dropdown>
                         <br>
-                        <label>Select Bank Account</label>
-                        <ng-multiselect-dropdown
-                            [placeholder]="'Select Bank Account'"
-                            [settings]="BankAccountsDropdownSettings"
-                            [data]="APIBankAccountsList"
-                            formControlName="subOfficesDropdown"
-                            (onSelect)="onBankAccountSelect($event)"
-                            (onSelectAll)="onBankAccountSelectAll($event)"
-                            (onDeSelect)="onBankAccountDeSelect($event)"
-                            (onDeSelectAll)="onBankAccountUnSelectAll()"
-                            >
-                        </ng-multiselect-dropdown> -->
-                    </div>
-                    <div class="form-group">
+                        <br>
+                    <div class="form-group col-md-5">
                       <button class="btn btn-success" (click)="saveRecord()">{{(selectedVoteAssignment.id!==undefined)?'Update':'Create'}}</button>
                       &nbsp;
                       <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
                     </div>
-                    <!-- </form> -->
-                   
-                    
-<!-- 
-                      <div *ngIf="isSinhala;">
-                        <label>Select a Vote</label>
-                        <div class="form-group">
-                        <ng-autocomplete
-                          [id]="selectedVoteAssignment.voteId"
-                          [(ngModel)]="selectedVoteAssignment.voteId"
-                          [data]="APIVoteDetailsList"
-                          [searchKeyword]="voteSearchKeyword"
-                          placeholder="Enter the Vote Code"
-                          (selected)='onChangeVote($event)'
-                          (inputChanged)='onChangeSearch($event)'
-                          (inputFocused)='onFocused($event)'
-                          [itemTemplate]="voteTemplate"
-                          [notFoundTemplate]="notFoundTemplate">
-                        </ng-autocomplete>
-
-                        <ng-template #voteTemplate let-vote>
-                        <a [innerHTML]="vote.code"></a>
-                        </ng-template>
-
-                        <ng-template #notFoundTemplate let-notFound>
-                        <div [innerHTML]="notFound"></div>
-                        </ng-template>
-                        </div>
-                    </div>
-                          <label>Custom Vote Name</label>
-                            <input type="text" [(ngModel)]="SelectedVoteName" placeholder="Vote Name" class="form-control"/>
-                            <br>
-
-                          <div *ngIf="isSinhala;">
-                            <label>Select a Sub Office</label>
-                            <select class="form-control" [(ngModel)]="selectedVoteAssignment.subOfficeId">
-                                <option value="0" > --Select Sub Office-- </option>
-                                <option *ngFor=" let suboffice of APISubOfficesList" [value]="suboffice.id" > {{(suboffice.nameSinhala)}} </option>
-                            </select>
-                        </div>
-                        <div *ngIf="isEnglish;">
-                          <label>Select a Sub Office</label>
-                            <select class="form-control" [(ngModel)]="selectedVoteAssignment.subOfficeId">
-                                <option value="0" > --Select Sub Office-- </option>
-                                <option *ngFor=" let suboffice of APISubOfficesList" [value]="suboffice.id" > {{(suboffice.nameEnglish)}} </option>
-                            </select>
-                        </div>
-                        <div *ngIf="isTamil;">
-                          <label>Select a Sub Office</label>
-                            <select class="form-control" [(ngModel)]="selectedVoteAssignment.subOfficeId" >
-                                <option value="0" > --Select Sub Office-- </option>
-                                <option *ngFor=" let suboffice of APISubOfficesList" [value]="suboffice.id" > {{(suboffice.nameTamil)}} </option>
-                            </select>
-                        </div>
-
-                            
-
-                            <div *ngIf="isSinhala;">
-                              <label>Select Bank Account</label>
-                              <select class="form-control" [(ngModel)]="selectedVoteAssignment.bankAccountId">
-                                  <option value="0" > --Select Bank Account-- </option>
-                                  <option *ngFor=" let bankAccountId of APIAccountdetailsList" [value]="bankAccountId.id" > {{(bankAccountId.nameSinhala)}} </option>
-                              </select>
-                          </div>
-                          <div *ngIf="isEnglish;">
-                            <label>Select Bank Account</label>
-                              <select class="form-control" [(ngModel)]="selectedVoteAssignment.bankAccountId">
-                                  <option value="0" > --Select Bank Account-- </option>
-                                  <option *ngFor=" let bankAccountId of APIAccountdetailsList" [value]="bankAccountId.id" > {{(bankAccountId.nameEnglish)}} </option>
-                              </select>
-                          </div>
-                          <div *ngIf="isTamil;">
-                            <label>Select Bank Account</label>
-                              <select class="form-control" [(ngModel)]="selectedVoteAssignment.bankAccountId" >
-                                  <option value="0" > --Select Bank Account-- </option>
-                                  <option *ngFor=" let bankAccountId of APIAccountdetailsList" [value]="bankAccountId.id" > {{(bankAccountId.nameTamil)}} </option>
-                              </select>
-                          </div>
-
-                            <br>
-                            <div class="form-group">
-                              <button class="btn btn-success" (click)="saveRecord()">{{(selectedVoteAssignment.id!==undefined)?'Update':'Create'}}</button>
-                              &nbsp;
-                              <button class="btn btn-danger" (click)="clearRecord()">Clear</button>
-                   </div> -->
+                  </div>
+                  </div>
                 </div>
-          </div>
-      </div>
+            </div>
+
           <div class="col-lg-12 col-md-12">
               <div class="card card-info">
                   <div class="card-header">
@@ -209,73 +81,63 @@
                     </div>
                   </div>
                     <div class="card-body">
-                    <!--   <div class="container">
-                                <mat-form-field appearance="fill">
-                                  <mat-label>Search</mat-label>
-                                  <input matInput (keyup)="applyFilter($event)" placeholder="Type Here" #input>
-                                </mat-form-field>
+                       <div class="table-responsive">
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                          </div>
+                          <input type="text" placeholder="Type here to filter data" (keyup)="applyFilter($event)" class="form-control"required/>
+                        </div>
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
                                   <ng-container matColumnDef="id">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-                                    <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.id}} </td>
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                                    <td mat-cell *matCellDef="let i = index">
+                                    {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}</td>
                                   </ng-container>
                                   <ng-container matColumnDef="voteId">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Vote </th>
                                     <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.voteDetail.code}} </td>
                                   </ng-container>
-                                  <ng-container matColumnDef="subOfficeId">
+                                  <ng-container matColumnDef="voteName">
                                     <th mat-header-cell *matHeaderCellDef> Vote Name </th>
-                                    <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.voteDetail.nameSinhala}}</td>
+                                    <td mat-cell *matCellDef="let voteAssignment"> 
+                                      <span *ngIf="isSinhala">{{voteAssignment.voteDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.voteDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.voteDetail.nameTamil}}</span> 
+                                    </td>
                                   </ng-container>
                                   <ng-container matColumnDef="bankAccountId">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Account No. </th>
                                     <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.accountDetail.accountNo}} </td>
                                   </ng-container>
-                                  <ng-container matColumnDef="actions">
-                                    <th mat-header-cell *matHeaderCellDef style="text-align: left;"> Actions </th>
+                                  <ng-container matColumnDef="office">
+                                    <th mat-header-cell *matHeaderCellDef> Office </th>
                                     <td mat-cell *matCellDef="let voteAssignment">
-                                      <div style="display: flex;align-items: center;justify-content: flex-end;">
-                                        <button mat-flat-button color="primary" (click)="editVoteAssignment(voteAssignment)" style="margin-right: 5px;"><i class="fas fa-edit"></i></button>
-                                        <button mat-flat-button color="warn"  (click)="deleteVoteAssignment(voteAssignment)"> <i class="fas fa-trash"></i></button>
+                                      <span *ngIf="isSinhala">{{voteAssignment.office.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.office.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.office.nameTamil}}</span> 
+                                    </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+                                    <td mat-cell *matCellDef="let voteAssignment">
+                                      <div class="text-center">
+                                        <button mat-flat-button color="" (click)="editVoteAssignment(voteAssignment)"  matTooltip="Edit" [matTooltipPosition]="'above'"  style="margin-right: 5px;"><i class="fas fa-edit text-primary"></i></button>
+                                        <button mat-flat-button color=""  (click)="deleteVoteAssignment(voteAssignment)"  matTooltip="Remove" [matTooltipPosition]="'above'" > <i class="fas fa-trash text-danger"></i></button>
                                       </div>
                                     </td>
                                   </ng-container>
                                   <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
                                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                 </table>
-                                <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator> -->
-
-                                <table class="table">
-                                  <tbody>
-                                      <tr>
-                                            <th>#</th>
-                                            <th>Vote</th>
-                                            <th>Vote Name</th>
-                                            <th>Account No</th>
-                                            <th>Options</th>
-                                        </tr>
-                                        <tr *ngFor="let voteAssignment of APIVoteAssignmentsList | paginate: { itemsPerPage: 5, currentPage: p } ; index as i">
-                                          <!-- <tr *ngFor="let voteAssignment of APIVoteAssignmentsList; index as i"> -->
-                                            <td>{{ i+1 }}</td>
-                                            <td>{{ voteAssignment.voteDetail.code }}</td>
-                                            <td ><span *ngIf="isSinhala">{{voteAssignment.voteDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.voteDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.voteDetail.nameTamil}}</span> </td>
-                                            <td>{{ voteAssignment.accountDetail.accountNo}}</td>
-                                          <td class="td-actions text-right">
-                                              <button mat-raised-button (click)="editVoteAssignment(voteAssignment)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                  <i class="fas fa-edit"></i>
-                                              </button>
-                                              &nbsp;
-                                              <button (click)="deleteVoteAssignment(voteAssignment)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger ">
-                                                  <i class="fas fa-trash"></i>
-                                              </button>
-                                          </td>
-                                      </tr>
-                                  </tbody>
-                                </table>
-                                <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                            </div>
+                                <mat-paginator
+                                [length]="pagination.total"
+                                [pageIndex]="pagination.pageIndex - 1"
+                                [pageSize]="pagination.pageSize"
+                                [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                                (page)="paginated.emit($event)"
+                                showFirstLastButtons>
+                              </mat-paginator>
+                            </div> 
                           </div>
             </div>
+          </div>
 
       </div>
   </div><!-- /.container-fluid -->

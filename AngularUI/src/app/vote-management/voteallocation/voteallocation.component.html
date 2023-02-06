@@ -22,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Estimate Estimated Income</h4>
@@ -136,7 +136,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Estimated Income List</h3>
@@ -159,7 +159,7 @@
                                               <!-- <th>Year</th> -->
                                               <th>Vote Allocation </th>
                                               <th>Estimated Total Income</th>
-                                              <th>Options</th>
+                                              <th class="text-center">Options</th>
                                           </tr>
                                           <tr *ngFor="let voteallocation of APIVoteallocationsListbyVoteDetailIdandSabhaId; index as i">
                                               <td>{{ i+1 }}</td>
@@ -167,13 +167,12 @@
                                               <!-- <td>{{ voteallocation.year }}</td> -->
                                               <td>{{ voteallocation.allocationAmount }}</td>
                                               <td>{{ voteallocation.incomeAmount }}</td>
-                                            <td class="td-actions">
-                                                <button mat-raised-button (click)="editVoteAllocation(voteallocation)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                            <td class="td-actions text-center text-primary">
+                                                <button mat-flat-button (click)="editVoteAllocation(voteallocation)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-edit text-primary"></i>
                                                 </button>
-                                                &nbsp;
-                                                <button (click)="deleteVoteAllocation(voteallocation)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteVoteAllocation(voteallocation)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>

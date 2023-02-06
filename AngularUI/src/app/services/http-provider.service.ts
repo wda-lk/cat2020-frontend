@@ -121,7 +121,7 @@ getAllYears: apiUrl + "/api/Years",
 getAllGenders: apiUrl + "/api/Genders",
 
 //Offices
-getAllSubOfficesForSabhaId: apiUrl + "/api/SubOffices/getAllSubOfficesForSabhaId",
+getAllOfficesForSabhaId: apiUrl + "/api/Offices/getAllOfficesForSabhaId",
 
 //End of Common APIs
 
@@ -151,15 +151,16 @@ getAllVoteAssignmentsForSabhaId:  apiUrl +"/api/mixin/voteAssignments/getAllForS
 getVoteAssignmentById:  apiUrl +"/api/mixin/voteAssignments/getById",
 saveVoteAssignment: apiUrl +"/api/mixin/voteAssignments/save",
 deleteVoteAssignment: apiUrl +"/api/mixin/voteAssignments/delete",
-getAllVoteAssignmentsForSubOfficeId:  apiUrl +"/api/mixin/voteAssignments/GetAllForSubOfficeId",
+getAllVoteAssignmentsForOfficeId:  apiUrl +"/api/mixin/voteAssignments/GetAllForOfficeId",
 getAllVoteAssignmentsForVoteId: apiUrl +"/api/mixin/voteAssignments/GetAllForVoteId",
+getAllOfficeGroupedForVoteAssignment: apiUrl +"/api/mixin/voteAssignments/getAllOfficeGroupedForVoteAssignment",
 
 //voteAssignmentDetails
 getAllVoteAssignmentDetails:  apiUrl +"/api/mixin/voteAssignmentDetails/getAll",
 getVoteAssignmentDetailById:  apiUrl +"/api/mixin/voteAssignmentDetails/getById",
 saveVoteAssignmentDetail: apiUrl +"/api/mixin/voteAssignmentDetails/save",
 deleteVoteAssignmentDetail: apiUrl +"/api/mixin/voteAssignmentDetails/delete",
-getAllVoteAssignmentDetailsForSubOfficeId:  apiUrl +"/api/mixin/voteAssignmentDetails/GetAllForSubOfficeId",
+getAllVoteAssignmentDetailsForOfficeId:  apiUrl +"/api/mixin/voteAssignmentDetails/GetAllForOfficeId",
 getAllVoteAssignmentDetailsForVoteAssignmentId: apiUrl +"/api/mixin/voteAssignmentDetails/getAllVoteAssignmentDetailsForVoteAssignmentId",
 
 //End of Mix Income Management APIs
@@ -493,8 +494,8 @@ public getAllGenders(): Observable<any> {
   return this.webApiService.get(httpLink.getAllGenders);
 }
 
-public getAllSubOfficesForSabhaId(id:any): Observable<any> {
-  return this.webApiService.get(httpLink.getAllSubOfficesForSabhaId+ '/'+ id);
+public getAllOfficesForSabhaId(id:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllOfficesForSabhaId+ '/'+ id);
 }
 
 //Begin of Common Functions
@@ -550,11 +551,14 @@ public saveVoteAssignment(model: any): Observable<any> {
 public deleteVoteAssignment(id: any): Observable<any> {
   return this.webApiService.post(httpLink.deleteVoteAssignment + '/' + id, "");
 }
-public getAllVoteAssignmentsForSubOfficeId(id: any): Observable<any> {
-    return this.webApiService.get(httpLink.getAllVoteAssignmentsForSubOfficeId + '/'+ id);
+public getAllVoteAssignmentsForOfficeId(id: any): Observable<any> {
+    return this.webApiService.get(httpLink.getAllVoteAssignmentsForOfficeId + '/'+ id);
 }
 public getAllVoteAssignmentsForVoteId(id: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteAssignmentsForVoteId + '/'+ id);
+}
+public getAllOfficeGroupedForVoteAssignment(id: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllOfficeGroupedForVoteAssignment + '/'+ id);
 }
 
 //VoteAssignment Details
@@ -570,8 +574,8 @@ public saveVoteAssignmentDetail(model: any): Observable<any> {
 public deleteVoteAssignmentDetail(id: any): Observable<any> {
   return this.webApiService.post(httpLink.deleteVoteAssignmentDetail + '/' + id, "");
 }
-public getAllVoteAssignmentDetailsForSubOfficeId(id : any): Observable<any> {
-  return this.webApiService.get(httpLink.getAllVoteAssignmentDetailsForSubOfficeId + '/'+ id);
+public getAllVoteAssignmentDetailsForOfficeId(id : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentDetailsForOfficeId + '/'+ id);
 }
 public getAllVoteAssignmentDetailsForVoteAssignmentId(id : any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteAssignmentDetailsForVoteAssignmentId + '/'+ id);

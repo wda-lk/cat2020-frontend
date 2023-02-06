@@ -55,7 +55,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
