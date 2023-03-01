@@ -1,5 +1,22 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
     <div class="container-fluid">
@@ -37,35 +54,36 @@
                     
                           <form [formGroup]="customVoteNameForm" (ngSubmit)="saveRecord()">  
                             <div class="row">
-
+                              <div hidden>
                               <div class="col-md-3">
                                 <div *ngIf="isSinhala;">
-                                  <label>Select Office</label>
-                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);">
+                                  <!-- <label>Select Office</label> -->
+                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);" readonly>
                                       <option value="0"> --Select an Office--</option>
                                       <option *ngFor=" let office of APIOfficesList" [value]="office.id" > {{(office.code +" :: " + office.nameSinhala)}} </option>
                                   </select>
                               </div>
                 
                               <div *ngIf="isEnglish;">
-                                  <label>Select Office</label>
-                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);">
+                                  <!-- <label>Select Office</label> -->
+                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);" readonly>
                                       <option value="0"> --Select an Office--</option>
                                       <option *ngFor=" let office of APIOfficesList" [value]="office.id" > {{(office.code +" :: " + office.nameEnglish)}} </option>
                                   </select>
                               </div>
                               
                               <div *ngIf="isTamil;">
-                                  <label>Select Office</label>
-                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);">
+                                  <!-- <label>Select Office</label> -->
+                                  <select class="form-control" formControlName="offices" placeholder="Select Office" (ngModelChange)="getAllDataForOfficeID($event);" readonly>
                                       <option value="0"> --Select an Office--</option>
                                       <option *ngFor=" let office of APIOfficesList" [value]="office.id" > {{(office.code +" :: " + office.nameTamil)}} </option>
                                   </select>
                               </div>
                             </div>
+                            </div>
 
                               <div class="col-lg-4 col-md-12">
-                              <div *ngIf="isSinhala;">
+                              <!-- <div *ngIf="isSinhala;">
                                 <label>Select Vote  </label>
                                 <select class="form-control" formControlName="assignedVotes" placeholder="Select Vote" >
                                     <option value="0"> --Select a Vote--</option>
@@ -86,23 +104,26 @@
                                     <option value="0"> --Select a Vote--</option>
                                     <option *ngFor=" let voteAssignment of APIVoteAssignmentsForOfficeList" [value]="voteAssignment.id"> {{(voteAssignment.voteCode +" :: " + voteAssignment.voteDetail.nameTamil)}} </option>
                                 </select>
-                            </div>
-                            <!-- <ng-multiselect-dropdown
+                            </div> -->
+                            <label>Select Vote  </label>
+                            <ng-multiselect-dropdown
                             [placeholder]="'Select a Vote'"
                             [settings]="VoteDetailsDropdownSettings"
                             [data]="APIVoteAssignmentsForOfficeList"
                             formControlName="assignedVotes"
+                            (onSelect)="onVoteSelect($event)"
+                            (onSelectAll)="onVoteSelectAll($event)"
+                            (onDeSelect)="onVoteDeSelect($event)"
+                            (onDeSelectAll)="onVoteUnSelectAll()"
                             >
-                           </ng-multiselect-dropdown> -->
-                          </div>
-                          <div class="col-md-5">
-                            <label>Custom Vote Name </label>
-                            <table formArrayName="customVoteNames">  
+                           </ng-multiselect-dropdown>
+                           <label> {{SelectedVoteName}}</label> <br>
+
+                            <div><table formArrayName="customVoteNames" >  
                               <tr>  
                                 <th colspan="2">
                                   <!-- Add Custom Vote Names: -->
-                                </th>  
-                                <th><button type="button" (click)="addCustomVoteName()" class="btn btn-primary">Add a Name</button></th>  
+                                </th>   
                               </tr>  
                               <tr *ngFor="let quantity of customVoteNames().controls; let i=index" [formGroupName]="i">  
                                 <td colspan="2">                                      
@@ -113,6 +134,12 @@
                                 </td>  
                               </tr>  
                             </table>  
+                          </div>
+                          
+                          </div>
+                          <div class="col-md-5">
+                            <label>Custom Vote Name </label><br>
+                            <button type="button" (click)="addCustomVoteName()" class="btn btn-primary">Add a Name</button>
                           </div>
                         </div>
                         <br>

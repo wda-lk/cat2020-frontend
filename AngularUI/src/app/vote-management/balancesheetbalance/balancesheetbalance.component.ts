@@ -28,9 +28,28 @@ export class BalancesheetbalanceComponent implements OnInit {
 
   constructor(private httpProvider: HttpProviderService) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("VTBALSHTBALADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
     this.refresh();
+  }
+
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
   }
 
   async refresh() {    
@@ -182,7 +201,6 @@ async getAllYears() {
 
     if (this.isValid==true) {
     if (this.selectedBalancesheetBalance.id !== undefined) {
-      console.log(this.selectedBalancesheetBalance);
     this.httpProvider.updateBalancesheetBalance(this.selectedBalancesheetBalance)
     .subscribe({
       next: (result) => {

@@ -1,5 +1,22 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -153,17 +170,17 @@
                             
                             
                               <br>
-                              <input type="text" [(ngModel)]="selectedVoteDetail.nameSinhala" placeholder="Type Vote Detail Name in Sinhala" class="form-control"required/>
+                              <input type="text" [(ngModel)]="selectedVoteDetail.nameSinhala" placeholder="Type Vote Name in Sinhala" class="form-control"required/>
                               
                               <br>
-                              <input type="text" [(ngModel)]="selectedVoteDetail.nameTamil" placeholder="Type Vote Detail Name in Tamil" class="form-control" required/>
+                              <input type="text" [(ngModel)]="selectedVoteDetail.nameTamil" placeholder="Type Vote Name in Tamil" class="form-control" required/>
                               <br>
-                              <input type="text" [(ngModel)]="selectedVoteDetail.nameEnglish" placeholder="Type Vote Detail Name in English" class="form-control"required/>
+                              <input type="text" [(ngModel)]="selectedVoteDetail.nameEnglish" placeholder="Type Vote Name in English" class="form-control"required/>
                               <br>
 
-                              <input type="text" [(ngModel)]="selectedVoteDetail.code" placeholder="Type Vote Detail Code" class="form-control" required/>
+                              <input type="text" [(ngModel)]="selectedVoteDetail.code" placeholder="Type Vote Code" class="form-control" required/>
                               <br>
-                              <input type="text" [(ngModel)]="selectedVoteDetail.voteOrder" placeholder="Type Vote Detail Order" class="form-control" required/>
+                              <input type="text" [(ngModel)]="selectedVoteDetail.voteOrder" placeholder="Type Vote Order" class="form-control" required/>
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateRecord()">{{(selectedVoteDetail.id!==undefined)?'Update':'Create'}}</button>

@@ -32,7 +32,12 @@ export class VoteAssignmentComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'voteId', 'voteName', 'bankAccountId', 'office', 'actions'];
   dataSource = new MatTableDataSource<VoteAssignment>([]);
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator) set _paginator(paginator: MatPaginator) {
+     this.paginator = paginator;
+     this.dataSource.paginator = this.paginator;
+   }
+
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   
   @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
@@ -73,8 +78,12 @@ export class VoteAssignmentComponent implements OnInit {
 
   constructor(private httpProvider: HttpProviderService, private fb: FormBuilder) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("VOTEASSIGNMNT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
+    
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
     if (this.SelectedLanguage=="Sinhala")
     {this.isSinhala=true;}
@@ -182,7 +191,21 @@ export class VoteAssignmentComponent implements OnInit {
     }
   }
 
+  haspermission :Boolean;
 
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
+  }
   async getAllVoteDetails() {
     this.httpProvider.getAllVoteDetails(localStorage.getItem('sabhaId')).subscribe({
       next: (data) => {
@@ -204,6 +227,7 @@ export class VoteAssignmentComponent implements OnInit {
   }
 
 async getAllVoteAssignmentsForSabhaId() {
+  this.APIVoteAssignmentsList =[];
   this.httpProvider.getAllVoteAssignmentsForSabhaId(localStorage.getItem('sabhaId')).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
@@ -389,5 +413,7 @@ editVoteAssignment(voteAssignment: VoteAssignmentFullDataClass) {
       { id: voteAssignment.bankAccountId, nameEnglish: voteAssignment.accountDetail.nameEnglish }
       ];
 }
+
+
 
 }

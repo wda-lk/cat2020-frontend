@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +31,10 @@ import { GroupsComponent } from '../../user-management/groups/groups.component';
 import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
 import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
 import { VoteAssignmentDetailsComponent } from '../../mix-income-management/vote-assignmentdetails/voteassignmentdetails.component'; 
+import { MixinOrderAddEditComponent } from '../../mix-income-management/mixinorder/mixinorderaddedit/mixinorderaddedit.component'; 
+import { MixinOrderListComponent } from '../../mix-income-management/mixinorder/mixinorderlist/mixinorderlist.component'; 
+import { MixinOrderViewComponent } from '../../mix-income-management/mixinorder/mixinorderview/mixinorderview.component'; 
+import { ReportViewerComponent } from '../../reports/reportviewer.component'; 
 
 import { MatRippleModule} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -45,6 +49,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MatSelectModule} from '@angular/material/select';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatRadioModule} from '@angular/material/radio';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { DpDatePickerModule } from 'ng2-date-picker';
+import {MatNativeDateModule} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -67,7 +79,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatButtonModule,
     MatIconModule,
     NgxPaginationModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    PdfViewerModule,
+    DpDatePickerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   declarations: [
     DashboardComponent,
     ProgrammesComponent,
@@ -89,6 +109,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
     VoteAssignmentComponent,
     AssignedVotesComponent,
     VoteAssignmentDetailsComponent,
-  ]
+    MixinOrderAddEditComponent,
+    MixinOrderListComponent,
+    MixinOrderViewComponent,
+    ReportViewerComponent
+  ],
+  providers: [  
+    MatDatepickerModule,  
+    DatePipe,
+  ],
 })
 export class AdminLayoutModule {}

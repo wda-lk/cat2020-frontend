@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VoteAssignmentDetailsComponent } from './voteassignment.component';
+import { VoteAssignmentDetailsComponent } from './voteassignmentdetails.component';
 
 describe('VoteAssignmentDetailsComponent', () => {
   let component: VoteAssignmentDetailsComponent;

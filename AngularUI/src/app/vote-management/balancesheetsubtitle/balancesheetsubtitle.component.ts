@@ -24,9 +24,28 @@ export class BalancesheetsubtitleComponent implements OnInit {
   
   constructor(private httpProvider: HttpProviderService) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("VTSSUBBALSHEETADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
     this.refresh();
+  }
+
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
   }
 
   async refresh() {    

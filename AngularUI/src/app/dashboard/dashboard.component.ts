@@ -122,63 +122,103 @@ async getUserDetailbyId() {
 }
 
 
-  async updateRecord() {
+//   async updateRecord() {
 
-    if (this.selectedUserDetail.nameInFull != null && this.selectedUserDetail.nameInFull != "" ){
-      this.isValid=true;
+//     if (this.selectedUserDetail.nameInFull != null && this.selectedUserDetail.nameInFull != "" ){
+//     } else{
+//       this.isValid=false; Notify.warning('Full Name is Required.');}
+
+//     if (this.selectedUserDetail.nameWithInitials != null && this.selectedUserDetail.nameWithInitials != ""){
+//     } else{this.isValid=false; Notify.warning('Name with Initials is Required.');}
+
+//     if (this.selectedUserDetail.nic != null && this.selectedUserDetail.nic != "") {
+//     } else{this.isValid=false; Notify.warning('NIC is Required.');}
+
+//     if (this.selectedUserDetail.birthday == null){
+//       this.isValid=false; Notify.warning('Date of Birth is Required.');
+//     } else if (this.selectedUserDetail.contactNo == null){
+//       this.isValid=false; Notify.warning('Contact Number is Required.');
+//     } else if (this.selectedUserDetail.q1Id == null){
+//       this.isValid=false; Notify.warning('Please select Question 1.');
+//     } else if (this.selectedUserDetail.answer1 == null){
+//       this.isValid=false; Notify.warning('Question 1 Answer is Required.');
+//     } else if (this.selectedUserDetail.q2Id == null){
+//       this.isValid=false; Notify.warning('Please select Question 2.');
+//     } else if (this.selectedUserDetail.answer2 == null){
+//       this.isValid=false; Notify.warning('Question 2 Answer is Required.');
+//     } else{
+//       this.isValid=true;
+//     }
+
+//     if (this.isValid==true) {
+//       this.httpProvider.updateUserDetails(this.selectedUserDetail)
+//     .subscribe({
+//       next: (result) => {
+//            var resultData = result.body;
+//            Notify.success('User detail Updated successfully..!');
+//       },
+//       error: error => {
+//          Notify.failure('Error Occured..!');
+//       }
+//   });
+// setTimeout(() => {
+// this.selectedUserDetail = new NewUser();
+// this.refresh();
+// }, 1000);
+// }
+// }
+
+
+async updateRecord() {
+
+      if (this.selectedUserDetail.nameInFull != null && this.selectedUserDetail.nameInFull != "" ){
     } else{
       this.isValid=false; Notify.warning('Full Name is Required.');}
 
     if (this.selectedUserDetail.nameWithInitials != null && this.selectedUserDetail.nameWithInitials != ""){
-      this.isValid=true;
     } else{this.isValid=false; Notify.warning('Name with Initials is Required.');}
 
     if (this.selectedUserDetail.nic != null && this.selectedUserDetail.nic != "") {
-      this.isValid=true;
     } else{this.isValid=false; Notify.warning('NIC is Required.');}
 
     if (this.selectedUserDetail.birthday == null){
       this.isValid=false; Notify.warning('Date of Birth is Required.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.contactNo == null){
+    } else if (this.selectedUserDetail.contactNo == null){
       this.isValid=false; Notify.warning('Contact Number is Required.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.q1Id == null){
+    } else if (this.selectedUserDetail.q1Id == null){
       this.isValid=false; Notify.warning('Please select Question 1.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.answer1 == null){
+    } else if (this.selectedUserDetail.answer1 == null){
       this.isValid=false; Notify.warning('Question 1 Answer is Required.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.q2Id == null){
+    } else if (this.selectedUserDetail.q2Id == null){
       this.isValid=false; Notify.warning('Please select Question 2.');
-    } else{this.isValid=true;}
-
-    if (this.selectedUserDetail.answer2 == null){
+    } else if (this.selectedUserDetail.answer2 == null){
       this.isValid=false; Notify.warning('Question 2 Answer is Required.');
     } else{
-
-    if (this.isValid==true) {
-      this.httpProvider.saveUser(this.selectedUserDetail)
-    .subscribe({
-      next: (result) => {
-           var resultData = result.body;
-           Notify.success('User detail Updated successfully..!');
-      },
-      error: error => {
-         Notify.failure('Error Occured..!');
-      }
-  });
+      this.isValid=true;
+    }
+  if (this.isValid==true) {
+    this.httpProvider.updateUserDetails(this.selectedUserDetail)
+  .subscribe({
+    next: (result) => {
+         var resultData = result.body;
+         Notify.success('User detail Updated successfully..!');
+    },
+    error: error => {
+       Notify.failure('Error Occured..!');
+    }
+});
 setTimeout(() => {
 this.selectedUserDetail = new NewUser();
 this.refresh();
 }, 1000);
 }
 }
+
+resetForm() {
+  this.selectedUserDetail = new NewUser();
+  this.getUserDetailbyId();
 }
+
 editUserDetail(userDetail: NewUser) {
   this.selectedUserDetail = userDetail;
 }

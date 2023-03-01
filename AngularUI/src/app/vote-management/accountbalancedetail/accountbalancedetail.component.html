@@ -1,5 +1,22 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission  && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -108,7 +125,7 @@
                                               <td>{{ i+1 }}</td>
                                               <td ><span *ngIf="isSinhala">{{objSelectedAccountDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{objSelectedAccountDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{objSelectedAccountDetail.nameTamil}}</span> </td> 
                                               <td>{{ accountbalancedetail.year }}</td>
-                                              <td>{{ accountbalancedetail.balanceAmount }}</td>
+                                              <td>{{ accountbalancedetail.balanceAmount | number:'1.2-2'}}</td>
                                             <td class="td-actions text-center">
                                                 <button mat-flat-button (click)="editAccountbalancedetail(accountbalancedetail)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
                                                     <i class="fas fa-edit text-primary"></i>

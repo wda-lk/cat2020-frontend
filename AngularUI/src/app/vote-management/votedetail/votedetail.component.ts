@@ -19,7 +19,11 @@ export class VotedetailComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'voteCode', 'voteName', 'voteOrder','actions'];
   dataSource = new MatTableDataSource<VoteDetail>([]);
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator) set _paginator(paginator: MatPaginator) {
+     this.paginator = paginator;
+     this.dataSource.paginator = this.paginator;
+   }
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
@@ -53,10 +57,30 @@ export class VotedetailComponent implements OnInit {
   
   constructor(private httpProvider: HttpProviderService) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("VTDETAILSADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
     this.refresh();
   }
+
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
+  }
+
 
   async refresh() {    
     this.dataSource.paginator = this.paginator;

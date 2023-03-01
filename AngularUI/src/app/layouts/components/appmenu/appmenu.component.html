@@ -95,55 +95,55 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTPRGMADDEDIT')" class="nav-item">
                     <a href="#/programmes" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Vote Programmes</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTTITLEADDEDIT')" class="nav-item">
                     <a href="#/voteincometitle" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Vote Income Titles</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTSUBTITLEADDEDIT')" class="nav-item">
                     <a href="#/voteincomesubtitle" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Vote Income Subtitles</p>
                     </a>
                   </li>
-                  <li>
+                  <li *ngIf="hasPermission('VTPROJECTADDEDIT')" >
                   <a href="#/voteincomeproject" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Vote Income Projects</p>
                   </a>
                 </li>
-                <li class="nav-item">
+                <li *ngIf="hasPermission('VTSUBPROJECTADDEDIT')"  class="nav-item">
                   <a href="#/voteincomesubproject" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Vote Income Sub Projects</p>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="hasPermission('VTBALSHEETADDEDIT')" >
                   <a href="#/balancesheettitle" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Balancesheet Titles</p>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="hasPermission('VTSSUBBALSHEETADDEDIT')" >
                   <a href="#/balancesheetsubtitle" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Balancesheet Subtitles</p>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="hasPermission('VTDETAILSADDEDIT')" >
                   <a href="#/votedetail" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Vote Details</p>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="hasPermission('VTACCDTLADDEDIT')" >
                   <a href="#/accountdetail" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
                     <p>Account Details</p>
@@ -161,19 +161,19 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTACCBALDTLADDEDIT')" class="nav-item">
                     <a href="#/accountbalancedetail" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Account Balance Details</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTESTDINCMADDEDIT')" class="nav-item">
                     <a href="#/voteallocation" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Estimated Income</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li *ngIf="hasPermission('VTBALSHTBALADDEDIT')" class="nav-item">
                     <a href="#/balancesheetbalance" class="nav-link">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Balancesheet Balances</p>
@@ -191,76 +191,66 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul *ngIf="isAllowed" class="nav nav-treeview">
+
+            <ul class="nav nav-treeview">
               <li class="nav-item">
+                <a href="#/dashboard" class="nav-link">
+                  <i class="nav-icon fas fa-folder"></i>
+                  <p>
+                    MASTER DATA
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+              <li *ngIf="hasPermission('VOTEASSIGNMNT')" class="nav-item">
                 <a href="#/voteassignment" class="nav-link">
                   <i class="far fa-dot-circle nav-icon"></i>
                   <p>Vote Assignment</p>
                 </a>
               </li>
-            </ul>
-            <ul *ngIf="isAllowed" class="nav nav-treeview">
-              <li class="nav-item">
+              <li *ngIf="hasPermission('ASGNEDVOTELIST')" class="nav-item">
                 <a href="#/assignedvotes" class="nav-link">
                   <i class="far fa-dot-circle nav-icon"></i>
                   <p>Assigned Votes List</p>
                 </a>
               </li>
-            </ul>
-            <ul *ngIf="isAllowed" class="nav nav-treeview">
-              <li class="nav-item">
+              <li *ngIf="hasPermission('CUSTOMVOTEASIGNADDEDIT')" class="nav-item">
                 <a href="#/voteassignmentdetails" class="nav-link">
                   <i class="far fa-dot-circle nav-icon"></i>
                   <p>Custom Vote Names</p>
                 </a>
               </li>
-            </ul>
-            <ul *ngIf="isAllowed" class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#/maixincomesessions" class="nav-link">
+              <!-- <li class="nav-item">
+                <a href="#/mixincomesessions" class="nav-link">
                   <i class="far fa-dot-circle nav-icon"></i>
                   <p>Manage Sessions</p>
                 </a>
+              </li> -->
+              </ul>
+            </li>
+
+              <li class="nav-item">
+                <a href="#/dashboard" class="nav-link">
+                  <i class="nav-icon fas fa-folder"></i>
+                  <p>
+                    TRANSACTIONS
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+              <li *ngIf="hasPermission('MXORDERVIEW')"  routerLinkActive="active" class="nav-item">
+                <a [routerLink]="['/mixinorderlist']" class="nav-link">
+                  <i class="far fa-dot-circle nav-icon"></i>
+                  <p>Mix Income Orders</p>
+                </a>
               </li>
             </ul>
-        </li>
-           <li class="nav-item">
-              <a href="#/dashboard" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p>
-                 USER MANAGEMENT
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul *ngIf="isAllowed" class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#/userdetail" class="nav-link">
-                    <i class="far fa-user nav-icon"></i>
-                    <p>User Details</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#/changepassword" class="nav-link">
-                    <i class="far fa-user nav-icon"></i>
-                    <p>Change Password</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#/newuser" class="nav-link">
-                    <i class="far fa-user nav-icon"></i>
-                    <p>Create New User</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#/groups" class="nav-link">
-                    <i class="far fa-user nav-icon"></i>
-                    <p>Groups</p>
-                  </a>
-                </li>
-              </ul>
           </li>
- <!-- 
-            <li class="nav-item">
+        </ul>
+      </li>
+           
+ 
+            <li  class="nav-item">
               <a href="#/dashboard" class="nav-link">
                 <i class="nav-icon fas fa-file"></i>
                 <p>
@@ -271,24 +261,65 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="#/dashboard" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Report 1</p>
+                    <i class="nav-icon fas fa-folder"></i>
+                    <p>
+                      MIX INCOME
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                <li *ngIf="hasPermission('RPTSARAPDAILY')" class="nav-item">
+                  <a href="#/reportviewer" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Sarap Receipts Daily</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="#/dashboard" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Report 2</p>
+                <!-- <li class="nav-item">
+                  <a href="#/reportviewernew" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>New Viewer</p>
                   </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#/dashboard" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Report 3</p>
-                  </a>
-                </li>
+                </li> -->
               </ul>
-          </li> -->
+            </li>
+              </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#/dashboard" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+               USER MANAGEMENT
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul *ngIf="isAllowed" class="nav nav-treeview">
+              <li *ngIf="hasPermission('USRPROFILEEDIT')" class="nav-item">
+                <a href="#/userdetail" class="nav-link">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>User Details</p>
+                </a>
+              </li>
+              <li *ngIf="hasPermission('USRCHNGPWD')" class="nav-item">
+                <a href="#/changepassword" class="nav-link">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>Change Password</p>
+                </a>
+              </li>
+              <li *ngIf="hasPermission('NEWUSERADDEDIT')" class="nav-item">
+                <a href="#/newuser" class="nav-link">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>Create New User</p>
+                </a>
+              </li>
+              <li *ngIf="hasPermission('USERGROUPSADDEDIT')" class="nav-item">
+                <a href="#/groups" class="nav-link">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>Groups</p>
+                </a>
+              </li>
+            </ul>
+        </li>
           
           <!-- <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">

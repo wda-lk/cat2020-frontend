@@ -1,0 +1,9 @@
+export class Vat {
+    id: number=0;
+    code:string;
+    name:string;
+    amountPercentage:number;
+    dateCreated:Date;
+    dateModified:Date;
+    isActive:number;
+}

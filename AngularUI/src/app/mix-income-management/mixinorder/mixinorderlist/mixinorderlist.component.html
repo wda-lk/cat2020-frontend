@@ -1,0 +1,148 @@
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <button class="btn btn-success"> <a href="#/mixinorderaddedit" style="color:white;"><i class="fa fa-plus"></i> New </a></button>
+          <!-- <h4 class="m-0">Mix Income Payment</h4> -->
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">Mix Income Management</li>
+            <li class="breadcrumb-item active">Mix Income Orders</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+          <div class="row">
+          <div class="col-lg-12 col-md-12">
+              <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title">Mix Income Orders List</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                    <div class="card-body">
+                       <div class="table-responsive">
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                          </div>
+                          <input type="text" placeholder="Type here to filter data" (keyup)="applyFilter($event)" class="form-control"required/>
+                          <select class="form-control col-md-2" [(ngModel)]="selectedOrderStatus" placeholder="Select Status" (ngModelChange)="getAllMixinOrdersForOfficeAndState($event);">
+                            <option value="0"> --Select Status--</option>
+                            <option value="1"> Draft  </option>
+                            <option value="2"> Paid  </option>
+                            <option value="3"> Posted  </option>
+                            <option value="4"> Cancel Pending  </option>
+                            <option value="5"> Cancel Approved  </option>
+                            <option value="6"> Cancel Disapproved  </option>
+                        </select>
+                        </div>
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover table-striped" matSort>
+                                  <ng-container matColumnDef="position">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                                    <td mat-cell *matCellDef="let i = index">
+                                    {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}</td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="code">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipt No.</th>
+                                    <td mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.code}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="customerName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Name</th>
+                                    <td mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.customerName}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="customerMobileNumber">
+                                    <th mat-header-cell *matHeaderCellDef> Mobile Number </th>
+                                    <td mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.customerMobileNumber}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="paymentMethodId">
+                                    <th  class="text-center"  mat-header-cell *matHeaderCellDef> Payment <br> Method </th>
+                                    <td  class="text-center"  mat-cell *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==1"> Cash </span> <span *ngIf="mixinOrder.paymentMethodId==2"> Cheque </span> <span *ngIf="mixinOrder.paymentMethodId==3"> Cross </span> <span *ngIf="mixinOrder.paymentMethodId==4"> Direct </span></td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="totalAmount">
+                                    <th  class="text-center" mat-header-cell *matHeaderCellDef > Total Amount </th>
+                                    <td class="text-right" mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.totalAmount | number:'1.2-2'}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="date">
+                                    <th  class="text-center" mat-header-cell *matHeaderCellDef > Date </th>
+                                    <td class="text-right" mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.createdAt | date  : 'YYYY-MM-dd HH:mm'  }} </td>
+                                  </ng-container>
+
+
+                                  <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+                                    <td mat-cell *matCellDef="let mixinOrder">
+                                      <div class="text-center">
+                                        <!-- <button mat-flat-button color="" (click)="editCustomVoteName(mixinOrder)" style="margin-right: 5px;"><i class="fas fa-edit text-primary"></i></button> -->
+                                        <!-- <button mat-flat-button color=""  (click)="cancelMixinOrder(mixinOrder)"  matTooltip="Cancel" [matTooltipPosition]="'above'" > <i class="fas fa-window-close text-danger"></i></button> -->
+                                        <!-- <button mat-flat-button color=""  (click)="viewMixinOrder(mixinOrder)"  matTooltip="View" [matTooltipPosition]="'above'" > <i class="fas fa-eye text-primary"></i></button> -->
+                                        <!-- <button mat-flat-button color=""  (click)="viewMixinOrder(mixinOrder)"  matTooltip="View" [matTooltipPosition]="'above'" > <a [routerLink]="['/mixinorderview',mixinOrder.id]"><i class="fas fa-eye text-primary"></i></a></button> -->
+                                        <!-- <button mat-flat-button color=""  (click)="printMixinOrder(mixinOrder)"  matTooltip="Print" [matTooltipPosition]="'above'" > <i class="fas fa-print text-info"></i></button> -->
+                                      
+                                        <span (click)="cancelMixinOrder(mixinOrder)" matTooltip="Cancel" [matTooltipPosition]="'above'" style="cursor: hand;cursor: pointer;"><i class="fas fa-window-close text-danger"></i></span>
+                                        &nbsp;
+                                        &nbsp;
+                                        <span (click)="viewMixinOrder(mixinOrder)" matTooltip="View" [matTooltipPosition]="'above'" style="cursor: hand;cursor: pointer;"><a [routerLink]="['/mixinorderview',mixinOrder.id]"><i class="fas fa-eye text-primary"></i></a></span>
+                                        <!-- &nbsp;
+                                        &nbsp;
+                                        <span (click)="printMixinOrder(mixinOrder)" matTooltip="Print" [matTooltipPosition]="'above'" style="cursor: hand;cursor: pointer;"><i class="fas fa-print text-info"></i></span>
+                                       -->
+                                      </div>
+                                    </td>
+                                  </ng-container>
+                                  <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
+                                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                                <mat-paginator
+                                [length]="pagination.total"
+                                [pageIndex]="pagination.pageIndex - 1"
+                                [pageSize]="pagination.pageSize"
+                                [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                                (page)="paginated.emit($event)"
+                                showFirstLastButtons>
+                              </mat-paginator>
+                            </div> 
+                          </div>
+            </div>
+          </div>
+
+      </div>
+  </div><!-- /.container-fluid -->
+</section>
+</div>

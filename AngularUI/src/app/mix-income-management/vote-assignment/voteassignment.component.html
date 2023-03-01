@@ -1,5 +1,22 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
     <div class="container-fluid">
@@ -90,33 +107,33 @@
                         </div>
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
                                   <ng-container matColumnDef="id">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-                                    <td mat-cell *matCellDef="let i = index">
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let i = index">
                                     {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}</td>
                                   </ng-container>
                                   <ng-container matColumnDef="voteId">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Vote </th>
-                                    <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.voteDetail.code}} </td>
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef mat-sort-header> Vote </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.voteDetail.code}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="voteName">
-                                    <th mat-header-cell *matHeaderCellDef> Vote Name </th>
-                                    <td mat-cell *matCellDef="let voteAssignment"> 
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef> Vote Name </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment"> 
                                       <span *ngIf="isSinhala">{{voteAssignment.voteDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.voteDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.voteDetail.nameTamil}}</span> 
                                     </td>
                                   </ng-container>
                                   <ng-container matColumnDef="bankAccountId">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Account No. </th>
-                                    <td mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.accountDetail.accountNo}} </td>
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef mat-sort-header> Account No. </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.accountDetail.accountNo}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="office">
-                                    <th mat-header-cell *matHeaderCellDef> Office </th>
-                                    <td mat-cell *matCellDef="let voteAssignment">
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef> Office </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment">
                                       <span *ngIf="isSinhala">{{voteAssignment.office.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.office.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.office.nameTamil}}</span> 
                                     </td>
                                   </ng-container>
                                   <ng-container matColumnDef="actions">
-                                    <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
-                                    <td mat-cell *matCellDef="let voteAssignment">
+                                    <th style="font-size:12px;" mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment">
                                       <div class="text-center">
                                         <button mat-flat-button color="" (click)="editVoteAssignment(voteAssignment)"  matTooltip="Edit" [matTooltipPosition]="'above'"  style="margin-right: 5px;"><i class="fas fa-edit text-primary"></i></button>
                                         <button mat-flat-button color=""  (click)="deleteVoteAssignment(voteAssignment)"  matTooltip="Remove" [matTooltipPosition]="'above'" > <i class="fas fa-trash text-danger"></i></button>

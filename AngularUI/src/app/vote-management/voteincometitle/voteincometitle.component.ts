@@ -22,12 +22,30 @@ export class VoteincometitleComponent implements OnInit {
   isSinhala :boolean;
   isTamil :boolean;
   isEnglish :boolean;
-   
+  isadmin:boolean=false;
   constructor(private httpProvider: HttpProviderService) {
   }
-
   ngOnInit() {
+    this.checkPermission("VTTITLEADDEDIT", Number(localStorage.getItem('Currentuserid')));
     this.refresh();
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
+  }
+
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
   }
 
   async refresh() {

@@ -25,6 +25,7 @@ import { LoginComponent } from './system-security/login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor, ErrorInterceptor } from './system-security/_helpers';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 
@@ -56,6 +57,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
     MatButtonModule,
     MatIconModule,
     BrowserAnimationsModule,
+    // JwtModule.forRoot({}),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

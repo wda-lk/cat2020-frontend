@@ -20,13 +20,37 @@ export class ProgrammesComponent implements OnInit {
   isTamil :boolean= false;
   isEnglish :boolean= false;
 
+
   constructor(private httpProvider: HttpProviderService, private spinner: NgxSpinnerService) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    // this.iseditable()
     this.spinner.show();
     this.refresh();
     this.spinner.hide();
+
+    this.checkPermission("VTPRGMADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
+    // console.log(this.haspermissionforuserrule);
+  }
+
+
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
   }
 
   async refresh() {
@@ -46,7 +70,26 @@ export class ProgrammesComponent implements OnInit {
     this.loading = false;
 
   }
-
+  
+  // async iseditable() {
+  //   this.httpProvider.getAllIncomeSubtitlebyTitleID(Number(localStorage.getItem('sabhaId'))).subscribe({
+  //     next: (data) => {
+  //     if (data != null && data.body != null) {
+  //       var resultData = data.body;
+  //         console.log(resultData);
+  //   //       this.objVoteDetails=null;
+  //   // this.objIncomeTitle = this.APIIncomeTitleListByProgramme.find((obj:any) => obj.id == id);
+  //     }
+  //   },
+  //   error: error => {
+  //         if (error.status == 404) {
+  //           if(error.error && error.error.message){
+  //             Notify.failure(error.error.message);
+  //             // this.APIIncomeSubTitleListByTitle = [];
+  //           }
+  //       }}
+  //     });
+  // }
 
 async getAllProgrammes() {
   this.httpProvider.getAllProgramme(localStorage.getItem('sabhaId')).subscribe({

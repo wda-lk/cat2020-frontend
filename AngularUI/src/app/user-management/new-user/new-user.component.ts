@@ -11,14 +11,48 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 export class NewUserComponent {
   model : NewUser = new  NewUser();
   UserList:any;
+  APIOfficesList : any;
+
+  SelectedLanguage : any;
+  isSinhala :boolean;
+  isTamil :boolean;
+  isEnglish :boolean;
 
   constructor(private httpProvider: HttpProviderService) {
   }
-  
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("NEWUSERADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
+    this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
+    if (this.SelectedLanguage=="Sinhala")
+    {this.isSinhala=true;}
+    if (this.SelectedLanguage=="Tamil")
+    {this.isTamil=true;}
+    if (this.SelectedLanguage=="English")
+    {this.isEnglish=true;}
+
     this.getAllUsers();
+    this.getAllOffices();
   }
   
+  haspermission :Boolean;
+
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
+  }
+
 async getAllUsers() {
   this.httpProvider.getAllUsers(Number(localStorage.getItem('sabhaId'))).subscribe({
     next: (data) => {
@@ -38,6 +72,7 @@ async getAllUsers() {
       }}
     });
 }
+
 async saveUser() {
   this.model.sabhaID=Number(localStorage.getItem('sabhaId'));
 this.httpProvider.saveUser(this.model)
@@ -58,5 +93,33 @@ this.getAllUsers();
 // await this.refresh();
 // }
 }
+
+onchangeOffice(id:any)
+{
+this.model.officeID=id;
+}
+
+async getAllOffices() {
+  this.httpProvider.getAllOfficesForSabhaId(localStorage.getItem('sabhaId')).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      if (resultData) {
+        this.APIOfficesList = resultData;
+      }
+      console.log(this.APIOfficesList );
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            this.APIOfficesList = [];
+          }
+      }}
+    });
+}
+
+
 }
 

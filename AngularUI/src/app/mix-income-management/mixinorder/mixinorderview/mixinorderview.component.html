@@ -1,0 +1,229 @@
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <button class="btn btn-warning"> <a href="#/mixinorderlist" style="color:white;"><i class="fa fa-arrow-left"></i> Back </a></button>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">Mix Income Management</li>
+            <li class="breadcrumb-item active">View Order</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card card-primary">
+                  <!-- <div class="card-header card-header-primary">
+                      <h4 class="card-title ">Receipt No : {{mixinOrderCustomOBJ?.code}}</h4>
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                      </div>
+                    </div> -->
+                  <div class="card-body">
+                    
+                    <!-- Main content -->
+            <div class="invoice p-3 mb-3">
+              <!-- title row -->
+              <div class="row">
+                <div class="col-12">
+                  <h4>
+                    <!-- <i class="fas fa-globe"></i> AdminLTE, Inc. -->
+                    <!-- <small class="float-right">Date: {{mixinOrder.createdAt}}</small> -->
+                  </h4>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
+                <div class="col-sm-2 invoice-col">
+                  <div style="height:100%;">
+                    <img  style="border-radius: 3px; 
+                    width: 100%;
+                    max-width:100%;
+                    background: #fff;
+                    height: auto;"  src="../../../assets/Photos/{{logopath}} "  />
+                </div>
+                  <!-- <b>Customer :</b>
+                  <address>
+                    {{mixinOrderCustomOBJ?.partner.name}}<span *ngIf="mixinOrderCustomOBJ?.partner.street1.length>0"><br> </span>
+                    {{mixinOrderCustomOBJ?.partner.street1}}  <span *ngIf="mixinOrderCustomOBJ?.partner.street2.length>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.street2}} <span *ngIf="mixinOrderCustomOBJ?.partner.city>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.city}} <span *ngIf="mixinOrderCustomOBJ?.partner.zip.length>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.zip}} <span *ngIf="mixinOrderCustomOBJ?.partner.mobileNumber.length>0"><br></span>
+                    {{mixinOrderCustomOBJ?.partner.mobileNumber}} <span *ngIf="mixinOrderCustomOBJ?.partner.email.length>0"><br></span>
+                    {{mixinOrderCustomOBJ?.partner.email}}<span *ngIf="mixinOrderCustomOBJ?.partner.nicNumber.length>0"><br></span>
+                    {{mixinOrderCustomOBJ?.partner.nicNumber}}
+                  </address> -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-7 invoice-col">
+                  <h1><b>{{sabhaName}}</b></h1>
+                  <address>
+                    <strong><span *ngIf="isSinhala;">බිල් අංකය : </span> <span *ngIf="isEnglish;">Receipt No : </span> <span *ngIf="isTamil;">ரசீது இலக்கம் : </span> </strong> 
+                    <strong> {{mixinOrderCustomOBJ?.code}} </strong><br>
+                    <strong><span *ngIf="isSinhala;">නම : </span> <span *ngIf="isEnglish;">Receipt No : </span> <span *ngIf="isTamil;">பெயர் : </span>  </strong> 
+                    {{mixinOrderCustomOBJ?.partner.name}}<span *ngIf="mixinOrderCustomOBJ?.partner.street1.length>0">, </span>
+                    {{mixinOrderCustomOBJ?.partner.street1}}  <span *ngIf="mixinOrderCustomOBJ?.partner.street2.length>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.street2}} <span *ngIf="mixinOrderCustomOBJ?.partner.city>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.city}} <span *ngIf="mixinOrderCustomOBJ?.partner.zip.length>0">,</span>
+                    {{mixinOrderCustomOBJ?.partner.zip}} <br>
+                  </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 ">
+                  <!-- <div class="col-sm-3 invoice-col"> -->
+                  <table>
+                    <tr>
+                  <td>
+                    <!-- <b>දිනය </b></td> <td><b> :</b></td> <td>{{mixinOrderCustomOBJ?.createdAt | date  : 'YYYY-MM-dd HH:mm'  }} -->
+
+                    </td>
+                </tr>
+                  <tr>
+                    <td class="text-right"><br>
+                      <b>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span *ngIf="isSinhala;">දිනය </span> <span *ngIf="isEnglish;">Date : </span> <span *ngIf="isTamil;">திகதி </span></b></td><td><br>:</td>
+                       <td>  <br>&nbsp;&nbsp;&nbsp;&nbsp;  {{mixinOrderCustomOBJ?.createdAt|date :'YYYY-MM-dd HH:mm'}}</td>
+                  <tr>
+                  </table>
+                  <!-- <b>Invoice #007612</b><br>
+                  <br>
+                  <b>Order ID:</b> 4F3S8J<br>
+                  <b>Payment Due:</b> 2/22/2014<br>
+                  <b>Account:</b> 968-34567 -->
+                </div>
+                <br>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+              <!-- Table row -->
+              <div class="row">
+                <span hidden>"let totalVAT=0"</span>
+                <div class="col-12 table-responsive ">
+                  <table class="table table-striped border border-radius:10px;  " >
+                    <thead>
+                    <tr>
+                      <th  class="text-center col-7"><span *ngIf="isSinhala;">විස්තරය </span> <span *ngIf="isEnglish;">Description </span> <span *ngIf="isTamil;">விபரம் </span></th>
+                      <th  class="col-3 text-right"><span *ngIf="isSinhala;">මුදල රු. </span> <span *ngIf="isEnglish;">Amount Rs. </span> <span *ngIf="isTamil;">பணம் ரூ </span></th>
+                      <th  class="col-2"><span *ngIf="isSinhala;">අය ශීර්ෂය </span> <span *ngIf="isEnglish;">Vote Code </span> <span *ngIf="isTamil;">தரவுகள்  </span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let mixinOrderItem of mixinOrderCustomOBJ?.mixinOrderLine; index as i">
+                      <td>{{i+1}}. {{mixinOrderItem.description}}</td>
+                      <td class="text-right">{{mixinOrderItem.amount | number:'1.2-2'}}
+                        <td>{{mixinOrderItem.customVoteName}}</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td class="text-right"> 
+                        <span *ngIf="getTotalVAT()>0" > <span class="text-left">VAT : &nbsp;&nbsp;</span> <span class="text-right">{{getTotalVAT() | number:'1.2-2'}}</span> </span> <br *ngIf="getTotalNBT()>0" >
+                        <span *ngIf="getTotalNBT()>0" ><span class="text-left">NBT :  &nbsp;&nbsp;</span> <span class="text-right"> {{getTotalNBT() | number:'1.2-2'}}</span></span><br *ngIf="getTotalStamp()>0" >
+                        <span *ngIf="getTotalStamp()>0" ><span class="text-left">Stamp : &nbsp;&nbsp;</span> <span class="text-right"> {{getTotalStamp() | number:'1.2-2'}}</span></span>
+                      </td>
+                      <td></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+              <div class="row">
+                <div class="col-7">
+                  <b><span *ngIf="isSinhala;">ගෙවීම් ක්‍රමය :</span> <span *ngIf="isEnglish;">Payment Method : </span> <span *ngIf="isTamil;">பணம் செலுத்தும் முறை : </span></b>    
+                 <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==1"> Cash</p>
+                 <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==2"> Cheque </p>    
+                 <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==3"> Cross</p>
+                 <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==4"> Direct</p>
+                </div>
+                <!-- /.col -->
+                <div class="col-3">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tr>
+                        <th class="text-right"><span *ngIf="isSinhala;">එකතුව :  </span> <span *ngIf="isEnglish;">Total : </span> <span *ngIf="isTamil;">மொத்தம் :</span> </th>
+                        <td class="text-right"><b>{{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</b></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-2">
+                  
+                </div>
+               
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+              <div class="row">
+                <div class="col-6">
+                  <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==2">
+                    <i><span *ngIf="isSinhala;">චෙක්පත් අංකය : </span> <span *ngIf="isEnglish;">Cheque Number : </span> <span *ngIf="isTamil;">காசோலை இலக்கம் :</span><span> {{mixinOrderCustomOBJ?.chequeNumber}}</span> <br> 
+                      <span *ngIf="isSinhala;">දිනය :  </span> <span *ngIf="isEnglish;">Date : </span> <span *ngIf="isTamil;">திகதி :</span><span> {{mixinOrderCustomOBJ?.chequeDate  | date  : 'YYYY-MM-dd' }}</span> | 
+                       <span *ngIf="isSinhala;">බැංකුව : </span> <span *ngIf="isEnglish;">Bank : </span> <span *ngIf="isTamil;">வங்கி :</span><span> {{mixinOrderCustomOBJ?.chequeBankName}}</span> 
+                    </i> </p>  
+                </div>
+                <div class="col-6">
+                  <p class="text-left">{{inwords(mixinOrderCustomOBJ?.totalAmount)}}</p>
+                </div>
+                <!-- /.col -->
+              </div>
+              <div class="row">
+                <div class="col-10">
+                  <p><b><span *ngIf="isSinhala;">සකස් කලේ : </span> <span *ngIf="isEnglish;">Prepared By : </span> <span *ngIf="isTamil;">வடிவமைத்தவர் :</span><span> {{mixinOrderCustomOBJ?.chequeBankName}}</span> </b> {{currentUserNamewithInitials}} &nbsp;&nbsp;
+                    <b><span *ngIf="isSinhala;">අයකැමි: </span> <span *ngIf="isEnglish;">Cashier : </span> <span *ngIf="isTamil;"> காசாளர் :</span><span> {{mixinOrderCustomOBJ?.chequeBankName}}</span> </b> {{currentUserNamewithInitials}}</p> 
+                 
+                </div>
+                  <div class="col-2">
+                    <p><b><span *ngIf="isSinhala;">අත්සන :  </span> <span *ngIf="isEnglish;">Signature : </span> <span *ngIf="isTamil;">கையொப்பம் :</span> </b></p>
+                  
+                </div>
+              </div>
+              <!-- this row will not appear when printing -->
+              <div class="row no-print">
+                <div class="col-10">
+              </div>
+              <div class="col-2">
+                <button class="btn btn-info form-control" (click)="print(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Print</button>
+                </div>
+            </div>
+            </div>
+            <!-- /.invoice -->
+                  </div>
+                </div>
+            </div>
+      </div>
+  </div><!-- /.container-fluid -->
+</section>
+</div>

@@ -1,5 +1,22 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!isadmin" class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div>
+ </div>
+ <!-- End of if not page allowed for user wrapper -->
+   <!-- Content Wrapper. Contains page content -->
+<div *ngIf="isadmin"  class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -22,7 +39,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-4 col-md-12">
                 <div class="card card-primary">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Create Group</h4>
@@ -35,8 +52,8 @@
                     <div class="card-body">
                           <input type="text" [(ngModel)]="selectedGroup.description" placeholder="Type Group Name" class="form-control"required/>
                           <br>
-                            
-                            <br>
+                          Active <mat-checkbox [(ngModel)]="selectedGroup.isActive" (change)="onchangeIsActive($event)" value="checked"></mat-checkbox>
+                            <br><br>
                             <div class="form-group">
                               <button class="btn btn-success" (click)="saveGroup()">{{(selectedGroup.id!==undefined)?'Update':'Create'}}</button>
                               &nbsp;
@@ -49,7 +66,7 @@
               </div>
           </div>
 
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Groups List</h3>
@@ -62,73 +79,64 @@
                     </div>
                       <div class="card-body">
                           <div class="tab-content">
-                              
-                              <div class="tab-pane active" id="inSinhala">
                                   <table class="table">
                                     <tbody>
                                         <tr>
                                             <th>#</th>
                                             <th>Group</th>
-                                            <th>Users</th>
-                                            <th>Rules</th>
-                                            <th>Audit Logs</th>
-                                            <th>Options</th>
+                                            <th class="text-center">Users</th>
+                                            <th  class="text-center">Rules</th>
+                                            <th  class="text-center">Active</th>
+                                            <!-- <th>Audit Logs</th> -->
+                                            <th class="text-center">Options</th>
                                         </tr>
                                         <tr *ngFor="let Group of APIGroupsList; index as i">
                                             <td>{{ i+1 }}</td>
                                             <td >{{Group.description}} </td> 
-
-                                            <td> 
-                                              <button mat-raised-button (click)="tab=1" type="button" matTooltip="Group Users" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                <i class="fas fa-user"></i>
+                                            
+                                            <td class="text-center"> 
+                                              <button mat-raised-button (click)="loadGroupUsers(Group.id,Group.description)" type="button" matTooltip="Group Users" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                <i class="fas fa-user text-info"></i>
                                             </button>
                                             </td> 
-                                            <td> 
-                                              <button mat-raised-button (click)="tab=2" type="button" matTooltip="Group Rules" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                <i class="fas fa-file"></i>
+                                            <td class="text-center"> 
+                                              <button mat-raised-button (click)="loadGroupRules(Group.id,Group.description)" type="button" matTooltip="Group Rules" [matTooltipPosition]="'above'" class="btn btn-info">
+                                                <i class="fas fa-file text-info"></i>
                                             </button>
                                             </td> 
-                                            <td> Audit Logs</td>
-                                            <td class="td-actions">
-                                                <button mat-raised-button (click)="editGroup(Group)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-info">
-                                                    <i class="fas fa-edit"></i>
+                                            <td class="text-center">  <span *ngIf="Group.isActive==true">Yes</span>  <span *ngIf="Group.isActive!=true">No</span></td> 
+                                            
+                                            <!-- <td> Audit Logs</td> -->
+                                            <td class="td-actions text-center">
+                                                <button mat-flat-button (click)="editGroup(Group)" type="button" matTooltip="Edit Group" [matTooltipPosition]="'above'" >
+                                                  <i class="fas fa-edit text-primary"></i>
                                                 </button>
-                                                &nbsp;
-                                                <button (click)="deleteGroup(Group)" mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger ">
-                                                    <i class="fas fa-trash"></i>
+                                                <button (click)="deleteGroup(Group)" mat-flat-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" >
+                                                  <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                   </table>
-                              </div>
-                              
                           </div>
                       </div>
                   </div>
               </div>
-   
-          
         </div>
-
         <div class="row">
-          <div class="col-12 col-sm-6">
-            <div class="card card-primary card-tabs">
-              <div class="card-header p-0 pt-1">
-                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-                  <li class="pt-2 px-3"><h3 class="card-title">{{selectedGroup.description}} Group</h3></li>
-                  <li class="nav-item">
-                    <a class="nav-link active" id="group-users-tab" data-toggle="pill" href="#group-users" role="tab" aria-controls="group-users" aria-selected="true">Group Users</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="group-rules-tab" data-toggle="pill" href="#group-rules" role="tab" aria-controls="group-rules" aria-selected="false">Group Rules</a>
-                  </li>
-                </ul>
+          <div class="col-12 col-sm-12">
+            <div *ngIf="enableGroupUserForm==true" class="card card-primary">
+              <!-- <div class="card card-primary"> -->
+              <div class="card-header">
+                <h3 class="card-title">{{selectedGroupDescriptionForGroupUser}} - Group Users</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-danger" (click)="closeGroupUsers()" title="Close Window">
+                    <i class="fas fa-window-close"></i>
+                  </button>
+                </div>
               </div>
               <div class="card-body">
-                <div class="tab-content" id="custom-tabs-two-tabContent">
-                  <div class="tab-pane fade show active" id="group-users" role="tabpanel" aria-labelledby="group-users-tab" [class.active]="tab===1">
-                    <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
+                     <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
                     [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled"></dual-list>
                     <br>
                     <div class="row">
@@ -136,22 +144,84 @@
                         <form class="form-inline well">
                           <button class="btn btn-default" (click)="doFilter()">{{filterBtn()}}</button>
                           <!-- <button class="btn btn-default" (click)="doDisable()">{{disableBtn()}}</button> -->
-                          <button class="btn btn-primary" (click)="doReset()">Reset</button>
+                          <!-- <button class="btn btn-primary" (click)="doResetGroupUserDualList()">Reset</button> -->
                         </form>
                       </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane show fade" id="group-rules" role="tabpanel" aria-labelledby="group-rules-tab" [class.active]="tab===2">
-                    Group Rules
-                  </div>
                 </div>
+                
+                <br>
+                <div class="row">
+                  <div class="col-6 col-sm-6">
+                  </div>
+                  <div class="col-4 col-sm-4">
+                <div class="form-group">
+                  <button class="btn btn-success" (click)="saveGroupUser(selectedGroupIDForGroupUser)">Save Changes</button>
+                  &nbsp;
+                  <button class="btn btn-danger" (click)="resetGroupUser(selectedGroupIDForGroupUser)">Reset</button>
+                  <div class="loading" *ngIf="loading">
+                   <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+              </div>
+             </div>
+            </div>
+            <div class="col-2 col-sm-2">
+            </div>
+            </div>
+
               </div>
               <!-- /.card -->
             </div>
+
+
+            <div *ngIf="enableGroupRuleForm==true" class="card card-primary">
+              <!-- <div class="card card-primary"> -->
+              <div class="card-header">
+                <h3 class="card-title">{{selectedGroupDescriptionForGroupRule}} - Group Rules</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-danger" (click)="closeGroupRules()" title="Close Window">
+                    <i class="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                     <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
+                    [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled"></dual-list>
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <form class="form-inline well">
+                          <button class="btn btn-default" (click)="doFilter()">{{filterBtn()}}</button>
+                          <!-- <button class="btn btn-default" (click)="doDisable()">{{disableBtn()}}</button> -->
+                          <!-- <button class="btn btn-primary" (click)="doResetGroupUserDualList()">Reset</button> -->
+                        </form>
+                      </div>
+                </div>
+                
+                <br>
+                <div class="row">
+                  <div class="col-6 col-sm-6">
+                  </div>
+                  <div class="col-4 col-sm-4">
+                <div class="form-group">
+                  <button class="btn btn-success" (click)="saveGroupRule(selectedGroupIDForGroupRule)">Save Changes</button>
+                  &nbsp;
+                  <button class="btn btn-danger" (click)="resetGroupRule(selectedGroupIDForGroupRule)">Reset</button>
+                  <div class="loading" *ngIf="loading">
+                   <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+              </div>
+             </div>
+            </div>
+            <div class="col-2 col-sm-2">
+            </div>
+            </div>
+
+              </div>
+              <!-- /.card -->
+            </div>
+            
           </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
         <div class="col-lg-6 col-md-12">
           <div class="card card-primary">
               <div class="card-header card-header-primary">
@@ -175,7 +245,7 @@
                   </ul>
 
                   <div class="tab-content">
-                    <div class="tab-pane" [class.active]="tab===1">
+                    <div >
                       <div class="row">
                         <div class="col-sm-6" style="margin-top:32px;"><h4>Source</h4><pre><small>{{source|json}}</small></pre></div>
                         <div class="col-sm-6" style="margin-top:32px;"><h4>Confirmed</h4><pre><small>{{confirmed|json}}</small></pre></div>
@@ -183,7 +253,7 @@
                     </div>
 
 
-                    <div class="tab-pane" [class.active]="tab===2">
+                    <div >
                       <form class="form">
                         <div class="form-group">
                           <label style="display:block;">Direction</label>
@@ -226,7 +296,7 @@
                    
 
 
-                    <div class="tab-pane" [class.active]="tab===3">
+                    <div >
                       <div class="row" style="margin-top:20px;">
                         <div class="col-sm-6">
                           <label>Modify parent's source</label>
@@ -261,19 +331,10 @@
                     </div>
                   </div>
 
-                      <br>
-                      <div class="form-group">
-                        <button class="btn btn-success" (click)="saveGroup()">{{(selectedGroup.id!==undefined)?'Update':'Create'}}</button>
-                        &nbsp;
-                        <button class="btn btn-danger" (click)="clearGroup()">Clear</button>
-                        <div class="loading" *ngIf="loading">
-                         <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-                    </div>
-              </div>
           </div>
         </div>
     </div>
-  </div>
+  </div> -->
     </div><!-- /.container-fluid -->
 </section>
 </div>

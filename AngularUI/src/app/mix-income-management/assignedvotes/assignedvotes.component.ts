@@ -30,7 +30,14 @@ export class AssignedVotesComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'voteCode', 'voteName', 'accountNo','officeName'];
   dataSource = new MatTableDataSource<VoteAssignment>([]);
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  // @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator) set _paginator(paginator: MatPaginator) {
+     this.paginator = paginator;
+     this.dataSource.paginator = this.paginator;
+   }
+
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   
   @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
@@ -43,14 +50,33 @@ export class AssignedVotesComponent implements OnInit {
  
   constructor(private httpProvider: HttpProviderService, private fb: FormBuilder) {
   }
-
+  isadmin:boolean=false;
   ngOnInit() {
+    this.checkPermission("ASGNEDVOTELIST", Number(localStorage.getItem('Currentuserid')));
+    if(Number(localStorage.getItem('IsAdmin'))==1)
+    {this.isadmin=true;}
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
     this.getAllOfficeGroupedForVoteAssignment();
   }
+  
+  haspermission :Boolean;
 
+  async checkPermission(ruleCode:any,userId:Number) {
+    this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
+      next: (data) => {
+          this.haspermission = Boolean(data.body);
+          console.log('haspermission : '+this.haspermission);
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+            }
+        }}
+      });
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

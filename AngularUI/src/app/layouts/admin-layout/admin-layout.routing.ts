@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../../system-security/_helpers';
+import { PermissionGuard } from '../../system-security/_helpers/permission.guard';
 
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { ProgrammesComponent } from '../../vote-management/programmes/programmes.component'; 
@@ -21,11 +22,17 @@ import { GroupsComponent } from '../../user-management/groups/groups.component';
 import { VoteAssignmentComponent } from '../../mix-income-management/vote-assignment/voteassignment.component'; 
 import { AssignedVotesComponent } from '../../mix-income-management/assignedvotes/assignedvotes.component'; 
 import { VoteAssignmentDetailsComponent } from '../../mix-income-management/vote-assignmentdetails/voteassignmentdetails.component'; 
-
+import { MixinOrderListComponent } from '../../mix-income-management/mixinorder/mixinorderlist/mixinorderlist.component'; 
+import { MixinOrderAddEditComponent } from '../../mix-income-management/mixinorder/mixinorderaddedit/mixinorderaddedit.component'; 
+import { MixinOrderViewComponent } from '../../mix-income-management/mixinorder/mixinorderview/mixinorderview.component'; 
+import { AccessDeniedComponent } from '../../common/accessdenied/accessdenied.component'; 
+import { ReportViewerComponent } from '../../reports/reportviewer.component'; 
+import { ReportViewerNewComponent } from '../../reportviewer/reportviewernew.component'; 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },
-    { path: 'programmes',   component: ProgrammesComponent, canActivate: [AuthGuard]  },
+    // { path: 'programmes',      component: ProgrammesComponent, canActivate: [AuthGuard]  },
+    { path: 'programmes',   component: ProgrammesComponent, canActivate: [AuthGuard]},
     { path: 'voteincometitle',   component: VoteincometitleComponent, canActivate: [AuthGuard]  }, 
     { path: 'voteincomesubtitle',   component: VoteincomesubtitleComponent, canActivate: [AuthGuard]  },
     { path: 'voteincomeproject',   component: VoteincomeprojectComponent, canActivate: [AuthGuard]  },  
@@ -44,4 +51,36 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'voteassignment',   component: VoteAssignmentComponent, canActivate: [AuthGuard]  },
     { path: 'assignedvotes',   component: AssignedVotesComponent, canActivate: [AuthGuard]  },
     { path: 'voteassignmentdetails',   component: VoteAssignmentDetailsComponent, canActivate: [AuthGuard]  },
+    { path: 'mixinorderlist',   component: MixinOrderListComponent, canActivate: [AuthGuard]  },
+    { path: 'mixinorderaddedit',   component: MixinOrderAddEditComponent, canActivate: [AuthGuard]  },
+    { path: 'mixinorderview/:orderid',   component: MixinOrderViewComponent, canActivate: [AuthGuard]  },
+    { path: 'accessdenied', component: AccessDeniedComponent, data: {} },
+    { path: 'reportviewer', component: ReportViewerComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'reportviewernew', component: ReportViewerNewComponent, canActivate: [AuthGuard], data: {} }
+
+
+
+    // { path: 'programmes',   component: ProgrammesComponent, canActivate: [AuthGuard], data: {rules: ['VTPRGMADDEDIT']} },
+    // { path: 'voteincometitle',   component: VoteincometitleComponent, canActivate: [AuthGuard] , data: {rules: ['VTTITLEADDEDIT']} }, 
+    // { path: 'voteincomesubtitle',   component: VoteincomesubtitleComponent, canActivate: [AuthGuard] , data: {rules: ['VTSUBTITLEADDEDIT']} },
+    // { path: 'voteincomeproject',   component: VoteincomeprojectComponent, canActivate: [AuthGuard], data: {rules: ['VTPROJECTADDEDIT']}  },  
+    // { path: 'voteincomesubproject',   component: VoteincomesubprojectComponent, canActivate: [AuthGuard], data: {rules: ['VTSUBPROJECTADDEDIT']}  }, 
+    // { path: 'balancesheettitle',   component: BalancesheettitleComponent, canActivate: [AuthGuard], data: {rules: ['VTBALSHEETADDEDIT']}  },
+    // { path: 'balancesheetsubtitle',   component: BalancesheetsubtitleComponent, canActivate: [AuthGuard], data: {rules: ['VTSSUBBALSHEETADDEDIT']}  }, 
+    // { path: 'votedetail',   component: VotedetailComponent, canActivate: [AuthGuard], data: {rules: ['VTDETAILSADDEDIT']}  },
+    // { path: 'accountdetail',   component: AccountdetailComponent, canActivate: [AuthGuard], data: {rules: ['VTACCDTLADDEDIT']}  }, 
+    // { path: 'accountbalancedetail',   component: AccountbalancedetailComponent, canActivate: [AuthGuard], data: {rules: ['VTACCBALDTLADDEDIT']}  }, 
+    // { path: 'voteallocation',   component: VoteallocationComponent, canActivate: [AuthGuard], data: {rules: ['VTESTDINCMADDEDIT']}  },   
+    // { path: 'balancesheetbalance',   component: BalancesheetbalanceComponent, canActivate: [AuthGuard], data: {rules: ['VTBALSHTBALADDEDIT']}  },
+    // { path: 'userdetail',   component: UserDetailComponent, canActivate: [AuthGuard], data: {rules: ['USRPROFILEEDIT']}  },
+    // { path: 'changepassword',   component: ChangePasswordComponent, canActivate: [AuthGuard], data: {rules: ['USRCHNGPWD']}  },
+    // { path: 'newuser',   component: NewUserComponent, canActivate: [AuthGuard], data: {rules: ['NEWUSERADDEDIT']}  },
+    // { path: 'groups',   component: GroupsComponent, canActivate: [AuthGuard], data: {rules: ['USERGROUPSADDEDIT']}  },
+    // { path: 'voteassignment',   component: VoteAssignmentComponent, canActivate: [AuthGuard], data: {rules: ['VOTEASSIGNMNT']}  },
+    // { path: 'assignedvotes',   component: AssignedVotesComponent, canActivate: [AuthGuard], data: {rules: ['ASGNEDVOTELIST']}  },
+    // { path: 'voteassignmentdetails',   component: VoteAssignmentDetailsComponent, canActivate: [AuthGuard], data: {rules: ['CUSTOMVOTEASIGNADDEDIT']}  },
+    // { path: 'mixinorderlist',   component: MixinOrderListComponent, canActivate: [AuthGuard], data: {rules: ['MXORDERVIEW']}  },
+    // { path: 'mixinorderaddedit',   component: MixinOrderAddEditComponent, canActivate: [AuthGuard], data: {rules: ['MXORDERADDEDIT']}  },
+    // { path: 'mixinorderview/:orderid',   component: MixinOrderViewComponent, canActivate: [AuthGuard], data: {rules: ['MXORDERVIEW']}  },
+    // { path: 'accessdenied', component: AccessDeniedComponent, data: {} }
 ];

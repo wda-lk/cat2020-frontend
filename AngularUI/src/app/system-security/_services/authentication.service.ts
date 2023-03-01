@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+// import { JwtHelperService } from '@auth0/angular-jwt';
+import { HttpProviderService } from '../../services/http-provider.service';
 
 import { environment } from '../../../environments/environment';
 import { SystemUser } from '../../../app/system-security/_models';
@@ -14,7 +16,8 @@ export class AuthenticationService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private httpProvider: HttpProviderService
     ) {
         this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
         this.user = this.userSubject.asObservable();
@@ -33,6 +36,7 @@ export class AuthenticationService {
                     localStorage.setItem('user', JSON.stringify(user));
                     localStorage.setItem('Currentuserid', user.userid);
                     localStorage.setItem('CurrentUserNm', user.username);
+                    localStorage.setItem('IsAdmin', user.isadmin);
                     localStorage.setItem('CurrentToken', user.token);
                     localStorage.setItem('CurrentSessionExp', user.expiration);
                     localStorage.setItem('CurrentUserNamewithinitials', user.namewithinitials);
@@ -40,7 +44,8 @@ export class AuthenticationService {
                     localStorage.setItem('sabhaCode', user.sabhaCode);
                     localStorage.setItem('CurrentLogopathNm', user.sabhaLogoPath);
                     localStorage.setItem('CurrentOfficeId', user.officeID);
-                    localStorage.setItem('CurrentSabhaNm', user.sabhaName);
+                    localStorage.setItem('CurrentSabhaName', user.sabhaName);
+                    localStorage.setItem('CurrentSabhaNameEnglish', user.sabhaNameEnglish);
                     localStorage.setItem('CurrentDistrictNm', user.districtName);
                     localStorage.setItem('CurrentProvinceNm', user.provinceName);
                     localStorage.setItem('CurrentSabhaLanId', user.languageid);
@@ -62,12 +67,14 @@ export class AuthenticationService {
                     localStorage.removeItem('Currentuserid');
                     localStorage.removeItem('CurrentUserNm');
                     localStorage.removeItem('CurrentToken');
+                    localStorage.removeItem('IsAdmin');
                     localStorage.removeItem('CurrentSessionExp');
                     localStorage.removeItem('CurrentUserNamewithinitials');
                     localStorage.removeItem('SabhaID');
                     localStorage.removeItem('CurrentLogopathNm');
                     localStorage.removeItem('CurrentOfficeId');
-                    localStorage.removeItem('CurrentSabhaNm');
+                    localStorage.removeItem('CurrentSabhaName');
+                    localStorage.removeItem('CurrentSabhaNameEnglish');
                     localStorage.removeItem('CurrentDistrictNm');
                     localStorage.removeItem('CurrentProvinceNm');
                     localStorage.removeItem('CurrentSabhaLanId');
@@ -79,5 +86,17 @@ export class AuthenticationService {
         this.userSubject.next(null);
         // window.location.reload();
         this.router.navigate(['/login']);
+    }
+
+    hasPermission(ruleCode: any, userid: number) {
+        return this.httpProvider.getCheckAccessByRuleCode(ruleCode,userid)
+            .pipe(map(data => {
+                // if (data.body) { // need to improve security
+                    console.log('Befor session = '+data.body);
+                    localStorage.removeItem('hasPermission');
+                    localStorage.setItem('hasPermission', data.body);
+                    return data.body;
+                // }
+            }));
     }
 }
