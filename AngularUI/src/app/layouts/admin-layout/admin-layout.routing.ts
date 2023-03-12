@@ -28,6 +28,10 @@ import { MixinOrderViewComponent } from '../../mix-income-management/mixinorder/
 import { AccessDeniedComponent } from '../../common/accessdenied/accessdenied.component'; 
 import { ReportViewerComponent } from '../../reports/reportviewer.component'; 
 import { ReportViewerNewComponent } from '../../reportviewer/reportviewernew.component'; 
+import { MixinOrderCancelAprovalComponent } from '../../mix-income-management/mixinorder/mixinordercancelaproval/mixinordercancelaproval.component'; 
+import { CashierComponent } from '../../cashier/cashier.component'; 
+import { MixinSessionComponent } from '../../mix-income-management/mixinsession/mixinsession.component'; 
+import { MixinSessionOrderListComponent } from '../../mix-income-management/mixinsessionorderlist/mixinsessionorderlist.component'; 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },
@@ -56,10 +60,13 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'mixinorderview/:orderid',   component: MixinOrderViewComponent, canActivate: [AuthGuard]  },
     { path: 'accessdenied', component: AccessDeniedComponent, data: {} },
     { path: 'reportviewer', component: ReportViewerComponent, canActivate: [AuthGuard], data: {} },
-    { path: 'reportviewernew', component: ReportViewerNewComponent, canActivate: [AuthGuard], data: {} }
-
-
-
+    { path: 'reportviewernew', component: ReportViewerNewComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'mixinordercancelaproval', component: MixinOrderCancelAprovalComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'cashier', component: CashierComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'mixinsession', component: MixinSessionComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'mixinsessionorderlist/:sessionid', component: MixinSessionOrderListComponent, canActivate: [AuthGuard], data: {} }
+    
+    
     // { path: 'programmes',   component: ProgrammesComponent, canActivate: [AuthGuard], data: {rules: ['VTPRGMADDEDIT']} },
     // { path: 'voteincometitle',   component: VoteincometitleComponent, canActivate: [AuthGuard] , data: {rules: ['VTTITLEADDEDIT']} }, 
     // { path: 'voteincomesubtitle',   component: VoteincomesubtitleComponent, canActivate: [AuthGuard] , data: {rules: ['VTSUBTITLEADDEDIT']} },

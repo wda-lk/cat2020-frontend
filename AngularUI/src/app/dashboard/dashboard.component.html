@@ -109,7 +109,17 @@
               <input type="text" [(ngModel)]="selectedUserDetail.nic" placeholder="Type NIC" class="form-control"  />
               <br>
               <label>Date of Birth</label>
-              <input type="text" [(ngModel)]="selectedUserDetail.birthday" placeholder="Type Date of Birth" class="form-control" />
+              <div class="row">
+            <div  class="col-10">
+              <input type="text " [(ngModel)]="selectedUserDetail.birthday" #resultPickerModel="ngModel"
+              [matDatepicker]="resultPicker" placeholder="Type Date of Birth" class="form-control" />
+                <mat-datepicker #resultPicker>
+                </mat-datepicker>
+              </div>
+              <div  class="col-2">
+                <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
+              </div>
+              </div>
               <br>
               <label>Contact No</label>
               <input type="text" [(ngModel)]="selectedUserDetail.contactNo" placeholder="Type Contact Number" class="form-control" />

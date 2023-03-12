@@ -35,6 +35,10 @@ import { MixinOrderAddEditComponent } from '../../mix-income-management/mixinord
 import { MixinOrderListComponent } from '../../mix-income-management/mixinorder/mixinorderlist/mixinorderlist.component'; 
 import { MixinOrderViewComponent } from '../../mix-income-management/mixinorder/mixinorderview/mixinorderview.component'; 
 import { ReportViewerComponent } from '../../reports/reportviewer.component'; 
+import { MixinOrderCancelAprovalComponent } from '../../mix-income-management/mixinorder/mixinordercancelaproval/mixinordercancelaproval.component'; 
+import { CashierComponent } from '../../cashier/cashier.component'; 
+import { MixinSessionComponent } from '../../mix-income-management/mixinsession/mixinsession.component'; 
+import { MixinSessionOrderListComponent } from '../../mix-income-management/mixinsessionorderlist/mixinsessionorderlist.component'; 
 
 import { MatRippleModule} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -57,6 +61,9 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
+import { NgxBarcode6Module } from 'ngx-barcode6';
+import { DialogComponent } from '../../mix-income-management/mixinorder/mixinorderaddedit/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -86,6 +93,8 @@ import { DatePipe } from '@angular/common';
     DpDatePickerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    NgxBarcode6Module,
+    MatDialogModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   declarations: [
@@ -112,7 +121,12 @@ import { DatePipe } from '@angular/common';
     MixinOrderAddEditComponent,
     MixinOrderListComponent,
     MixinOrderViewComponent,
-    ReportViewerComponent
+    ReportViewerComponent,
+    MixinOrderCancelAprovalComponent,
+    DialogComponent,
+    CashierComponent,
+    MixinSessionComponent,
+    MixinSessionOrderListComponent,
   ],
   providers: [  
     MatDatepickerModule,  

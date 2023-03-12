@@ -121,30 +121,31 @@ export class ReportViewerComponent implements OnInit {
   }
 
   PreviewReport() {
-    if(this.selectedDate!=null)
-    {
+    // if(this.selectedDate!=null)
+    // {
      let selecteddateformatted = this.datepipe.transform(this.selectedDate, 'yyyy-MM-dd');
-    let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/pdf/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
+    // let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/pdf/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
+    let reportAPI = apiUrl+"/api/Report/sarapReceiptsDailyReport";
     this.downloadFile(reportAPI).subscribe(
         (res:any) => {
           console.log(res);
             this.pdfSrc = window.URL.createObjectURL(res); // pdfSrc can be Blob or Uint8Array
         }
     );
-  }
+  // }
   }
 
   ExportToExcel() {
     if(this.selectedDate!=null)
     {
       let selecteddateformatted = this.datepipe.transform(this.selectedDate, 'yyyy-MM-dd');
-      let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/XLS/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
+      let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/XLSX/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
       this.downloadFile(reportAPI).subscribe(
           (res:any) => {
             console.log(res);
           const downloadLink = document.createElement('a');
           downloadLink.target = '_self';
-          const fileName = "Sarap_Receipts_"+this.selectedDate+".xls";
+          const fileName = "Sarap_Receipts_"+this.selectedDate+".xlsx";
           const data = window.URL.createObjectURL(res);
           downloadLink.href = data;
           downloadLink.download = fileName;
@@ -180,7 +181,7 @@ export class ReportViewerComponent implements OnInit {
     if(this.selectedDate!=null)
     {
       let selecteddateformatted = this.datepipe.transform(this.selectedDate, 'yyyy-MM-dd');
-    let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/WORD/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
+    let reportAPI = apiUrl+"/api/Report/getMixinSarapReceiptsDailyReport/DOCX/"+ localStorage.getItem('CurrentOfficeId') +"/"+selecteddateformatted;
     this.downloadFile(reportAPI).subscribe(
         (res:any) => {
         this.APIReportResponse = res;

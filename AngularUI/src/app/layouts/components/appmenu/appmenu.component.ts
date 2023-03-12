@@ -21,6 +21,7 @@ export class AppmenuComponent {
   isadmin:boolean=false;
   haspermission:boolean;
 
+  moduleList:any;
   ruleList:any;
   assignedruleList :any = new Array();
 
@@ -51,6 +52,25 @@ export class AppmenuComponent {
     this.authenticationService.logout();
 }
 
+hasModulePermission(module :string) 
+{
+  if(this.isadmin)
+  {
+  return true;
+  }
+else{
+  let modules :any = localStorage.getItem('ruleList');
+  this.moduleList = JSON.parse(modules);
+
+  if(this.ruleList!=undefined){
+  return this.searchIModuleArray(module,this.moduleList);}
+  else{
+    return false;
+  }
+}
+}
+
+
 hasPermission(rulecode :string) 
 {
   if(this.isadmin)
@@ -78,6 +98,16 @@ searchInArray(nameKey:any, myArray:any){
   return false;
 }
 
+searchIModuleArray(nameKey:any, myArray:any){
+  for (let i=0; i < myArray.length; i++) {
+      if (myArray[i].module === nameKey) {
+          // return myArray[i];
+          return true
+      }
+  }
+  return false;
+}
+
 async checkPermission(ruleCode:any,userId:Number) {
   this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
     next: (data) => {
@@ -97,6 +127,7 @@ async getAllRulesForUser(userID:number) {
   this.httpProvider.getPermittedRulesForUser(userID).subscribe({
     next: (data) => {
       localStorage.setItem('ruleList', JSON.stringify(data.body));
+      // console.log(localStorage.getItem('ruleList'));
   },
   error: error => {
         if (error.status == 404) {

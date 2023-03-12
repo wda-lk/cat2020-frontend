@@ -20,6 +20,11 @@ import { UserDetail } from 'src/app/user-management/models/UserDetail';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import {DatePickerComponent} from 'ng2-date-picker';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './dialog.component';
+import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from "ngx-spinner";
+import { Session } from '../../../common/models/Session';
 
 @Component({
   selector: 'app-mixinorderaddedit',
@@ -31,6 +36,8 @@ export class MixinOrderAddEditComponent implements OnInit {
 
   @ViewChild('dayPicker') dayPicker: DatePickerComponent;
 
+  currentSession : Session = new Session();
+  loading = false;
   mixinOrderItems: MixinOrderLine[] = new Array();
   mixinOrder : MixinOrder = new MixinOrder();
   APIVoteAssignmentsForOfficeList:any[];
@@ -85,6 +92,8 @@ export class MixinOrderAddEditComponent implements OnInit {
   isEnglish :boolean;
 
   isEditing:boolean = false;
+  clicked = false;
+  submitButtonClickCount :number = 1;
 
   paymentOptions = [
     { "name": "Cash", id: "1", "checked": true},
@@ -93,7 +102,7 @@ export class MixinOrderAddEditComponent implements OnInit {
     { "name": "Direct", id: "4", "checked": false}
 ];
 
-  constructor(private httpProvider: HttpProviderService, private fb: FormBuilder, private _router: Router) {
+  constructor(private httpProvider: HttpProviderService, private fb: FormBuilder, private _router: Router,public dialog: MatDialog,public datepipe: DatePipe,private spinner: NgxSpinnerService) {
     this.mixinOrderItems.push(
     );
   }
@@ -103,7 +112,7 @@ export class MixinOrderAddEditComponent implements OnInit {
     this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
       next: (data) => {
           this.haspermission = Boolean(data.body);
-          console.log('haspermission : '+this.haspermission);
+          // console.log('haspermission : '+this.haspermission);
     },
     error: error => {
           if (error.status == 404) {
@@ -112,8 +121,46 @@ export class MixinOrderAddEditComponent implements OnInit {
         }}
       });
   }
+
+  bcValue:any=0;
+
+  elementType = 'svg';
+  value = 'someValue12340987';
+  format = 'CODE128';
+  lineColor = '#000000';
+  width = 2;
+  height = 100;
+  displayValue = true;
+  fontOptions = '';
+  font = 'monospace';
+  textAlign = 'center';
+  textPosition = 'bottom';
+  textMargin = 2;
+  fontSize = 20;
+  background = '#ffffff';
+  margin = 10;
+  marginTop = 10;
+  marginBottom = 10;
+  marginLeft = 10;
+  marginRight = 10;
+
+  get values(): string[] {
+    return this.value.split('\n');
+  }
+  codeList: string[] = [
+    '', 'CODE128',
+    'CODE128A', 'CODE128B', 'CODE128C',
+    'UPC', 'EAN8', 'EAN5', 'EAN2',
+    'CODE39',
+    'ITF14',
+    'MSI', 'MSI10', 'MSI11', 'MSI1010', 'MSI1110',
+    'pharmacode',
+    'codabar'
+  ];
+
+
   AddItem() {
-    if (((this.newMixinOrderItem.mixinVoteAssignmentDetailId == undefined || this.newMixinOrderItem.mixinVoteAssignmentDetailId==0) && this.newMixinOrderItem.voteOrBal==0)) {
+    if (this.SelectedVoteId==0  || this.newMixinOrderItem.voteOrBal==0) {
       this.isValidItem=false; Notify.warning('Please select a Vote/Balance Sheet');
     } 
     else if (this.newMixinOrderItem.customVoteName ==  undefined) {
@@ -125,6 +172,7 @@ export class MixinOrderAddEditComponent implements OnInit {
     else{this.isValidItem=true;}
   
     if (this.isValidItem==true) {
+      this.spinner.show();
       if(this.newMixinOrderItem.description==undefined)
       {
         this.newMixinOrderItem.description = this.newMixinOrderItem.customVoteName;
@@ -154,6 +202,7 @@ console.log('item added:' + this.newMixinOrderItem);
 console.log('items List:' + this.mixinOrderItems);
 
     this.newMixinOrderItem = {};
+    this.spinner.hide();
     }
     this.clearOrderItem();
   }
@@ -182,11 +231,16 @@ console.log('items List:' + this.mixinOrderItems);
     this.mixinOrderItems.splice(i, 1);
   }
   isadmin:boolean=false;
+
+
   ngOnInit() {
+
+    this.spinner.show();
+
    this.checkPermission("MXORDERADDEDIT", Number(localStorage.getItem('Currentuserid')));
-   if(Number(localStorage.getItem('IsAdmin'))==1)
-   {this.isadmin=true;}
-   
+  //  if(Number(localStorage.getItem('IsAdmin'))==1)
+  //  {this.isadmin=true;}
+   this.getSession();
   this.refresh();
 
   this.VoteDetailsDropdownSettings = {
@@ -200,6 +254,32 @@ console.log('items List:' + this.mixinOrderItems);
   };
 
   this.newMixinOrderItem.stampAmount=0.00;
+  this.spinner.hide();
+  }
+
+  async getSessionByOfficeAndModule(officeid:number,module:any) {
+    this.httpProvider.getSessionByOfficeAndModule(officeid,module).subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.currentSession = resultData;
+          localStorage.setItem('MixSessionId',this.currentSession.id.toString());
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.currentSession=new Session();
+            }
+        }}
+      });
+  }
+
+  getSession(){
+    this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
   }
 
   onVoteSelect(item: any) {
@@ -235,7 +315,7 @@ console.log('items List:' + this.mixinOrderItems);
 
   async refresh() {
     this.getAllPartners();
-    this.getAllGnDivisionsForOffice();
+    this.getAllGnDivisionsForSabha();
     this.getAllVoteAssignmentDetailsForOffice();
     this.getAllBalancesheetTitles();
     this.getAllVoteAssignmentsForOffice();
@@ -313,25 +393,33 @@ onchangebalancesheetsubtitle(id : any)
 
   this.objBalanceSheetSubtitle = this.APIBalancesheetsubtitleListBybalancetitle.find((obj:any) => obj.id == id);
   this.selectedBalancesheetSubTitleID=this.objBalanceSheetSubtitle.id;
-  this.selectedVoteCode = this.objBalanceSheetSubtitle.code+"-"+this.objBalanceSheettitle.code;
 
   if (this.isSinhala) 
+  {
   this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.nameSinhala;
+  this.selectedVoteCode = this.objBalanceSheetSubtitle.nameSinhala;
+  }
     if (this.isTamil) 
+    {
     this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.isTamil;
+    this.selectedVoteCode=this.objBalanceSheetSubtitle.isTamil;
+    }
     if (this.isEnglish) 
+    {
     this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.isEnglish;
-
+    this.selectedVoteCode=this.objBalanceSheetSubtitle.isEnglish;
+    }
     this.newMixinOrderItem.mixinVoteAssignmentDetailId=this.objBalanceSheetSubtitle.id;
     this.newMixinOrderItem.customVoteName=this.selectedBalancesheetSubTitleName;
+    this.SelectedVoteId=this.objBalanceSheetSubtitle.id;
 
     // console.log(this.newMixinOrderItem.voteorbal);
     // console.log(this.selectedBalancesheetSubTitleID);
     // console.log(this.selectedBalancesheetSubTitleName);
 }
 
-async getAllGnDivisionsForOffice()  {
-  this.httpProvider.getAllGnDivisionsForOffice(localStorage.getItem('CurrentOfficeId')).subscribe({
+async getAllGnDivisionsForSabha()  {
+  this.httpProvider.getAllGnDivisionsForSabha(localStorage.getItem('sabhaId')).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
@@ -446,14 +534,20 @@ this.refresh();
 }
 
 async GetCustomerPhone() {
+  this.spinner.show();
   this.getPartnerByPhoneNo(this.selectedCustomer.mobileNumber);
+  this.getSession();
+  this.spinner.hide();
 }
 
 async GetCustomerNIC() {
+  this.spinner.show();
   this.getPartnerByNIC(this.selectedCustomer.nicNumber);
+  this.getSession();
+  this.spinner.hide();
 }
 
-
+newcustomer=false;
 async getPartnerByNIC(nic:any) {
   this.httpProvider.getPartnerByNIC(nic).subscribe({
     next: (data) => {
@@ -461,6 +555,7 @@ async getPartnerByNIC(nic:any) {
       var resultData = data.body;
       if (resultData) {
         this.selectedCustomer = resultData;
+        this.newcustomer=false;
       }
     }
   },
@@ -468,6 +563,7 @@ async getPartnerByNIC(nic:any) {
         if (error.status == 404) {
           if(error.error && error.error.message){
             Notify.failure(error.error.message);
+            this.newcustomer=true;
             // this.APIAllPartnersList = [];
           }
       }}
@@ -481,6 +577,7 @@ async getPartnerByPhoneNo(phoneNo:any) {
       var resultData = data.body;
       if (resultData) {
         this.selectedCustomer = resultData;
+        this.newcustomer=false;
       }
     }
   },
@@ -489,6 +586,7 @@ async getPartnerByPhoneNo(phoneNo:any) {
           if(error.error && error.error.message){
             Notify.failure(error.error.message);
             // this.APIAllPartnersList = [];
+            this.newcustomer=true;
           }
       }}
     });
@@ -516,6 +614,9 @@ clearOrderItem() {
       this.newMixinOrderItem.paymentNbtAmount=0.00;
       this.newMixinOrderItem.stampAmount=0.00;
       
+      this.vatChecked=false;
+      this.nbtChecked=false;
+      this.stampChecked=false;
 }
 
 async getAllVoteAssignmentsForOffice() {
@@ -675,8 +776,10 @@ stampInputHandle(event:any) {
 }
 
 async saveMixinOrder() {
-
-  if (this.selectedCustomer.id == 0 || this.selectedCustomer.id==undefined) {
+  if (this.currentSession.id == 0 ) {
+    this.isValid=false; Notify.warning('Please Create a Session First..!');
+  }
+  else if (this.selectedCustomer.id == 0 || this.selectedCustomer.id==undefined) {
     this.isValid=false; Notify.warning('Please Select a Customer');
   } 
   else if (this.mixinOrderItems.length == 0){
@@ -687,10 +790,22 @@ async saveMixinOrder() {
   } 
   else if(this.mixinOrder.paymentMethodId==2 && (this.mixinOrder.chequeDate==undefined || this.mixinOrder.chequeNumber==undefined || this.mixinOrder.chequeBankName==undefined))
     {
-     this.isValid=false; Notify.warning('Please Enter Cheque Information');
+      this.isValid=false; Notify.warning('Please complete all the fields of cheque information.');
     }
+    else if(this.mixinOrder.paymentMethodId==2 && this.mixinOrder.chequeNumber=="")
+    {
+      this.isValid=false; Notify.warning('Please Enter Cheque Number.');
+    }
+   else if(this.mixinOrder.paymentMethodId==2 && this.mixinOrder.chequeBankName=="")
+    {
+      this.isValid=false; Notify.warning('Please Enter Cheque Issued Bank.');
+    }
+
   else{this.isValid=true;}
+    // let currentDateTime = this.datepipe.transform((new Date), 'MM/dd/yyyy h:mm:ss');
+    // var unixtimestamp = (new Date(currentDateTime!.replace('-','/'))).getTime() / 1000;
     this.mixinOrder.id="0";
+    // this.mixinOrder.code=localStorage.getItem('CurrentOfficeId')+String(unixtimestamp);
     this.mixinOrder.code="";
     this.mixinOrder.state=1;
     this.mixinOrder.partnerId=Number(this.selectedCustomer.id);
@@ -704,6 +819,10 @@ async saveMixinOrder() {
     });
     
     this.mixinOrder.totalAmount=totalamount;
+
+    const customdate  = this.datepipe.transform(this.mixinOrder.chequeDate, 'yyyy-MM-dd');
+    this.mixinOrder.chequeDate = new Date(customdate!);
+
     // this.mixinOrder.totalAmount: number;
     // this.mixinOrder.chequeNumber?: string;
     // this.mixinOrder.chequeDate?: Date;
@@ -715,38 +834,52 @@ async saveMixinOrder() {
     this.mixinOrder.cashierId=0;
     this.mixinOrder.createdBy=Number(localStorage.getItem('Currentuserid'));
     this.mixinOrder.officeId=Number(localStorage.getItem('CurrentOfficeId'));
-    this.mixinOrder.sessionId=1;
+    this.mixinOrder.sessionId=this.currentSession.id;
     // this.mixinOrder.mixinCancelOrder=[];
 
     this.mixinOrder.mixinOrderLine = [];
     this.mixinOrderItems.forEach((item:any) => {
       this.mixinOrder.mixinOrderLine.push(item);
     });
-    console.log('Item List to save :' + this.mixinOrderItems);
-    console.log('Order Line to save :' + this.mixinOrder.mixinOrderLine);
+    // console.log('Item List to save :' + this.mixinOrderItems);
+    // console.log('Order Line to save :' + this.mixinOrder.mixinOrderLine);
     // this.mixinOrder.mixinOrderLine=this.mixinOrderItems;
   if(this.isValid){
+  // this.spinner.show();
+  // this.clicked = true;
+    // console.log(this.mixinOrder);
+
+    if(this.submitButtonClickCount==1)
+    {
+    this.submitButtonClickCount=this.submitButtonClickCount+1;
     console.log(this.mixinOrder);
-  this.httpProvider.saveMixinOrderDetail(this.mixinOrder)
+    this.httpProvider.saveMixinOrderDetail(this.mixinOrder)
   .subscribe({
     next: (result) => {
          var resultData = result.body;
-         console.log(resultData);
+         localStorage.setItem('lastreceiptcode',resultData.code);
          Notify.success('Order Saved successfully..!');
+         this.submitButtonClickCount=1;
+         this.showDialog();
     },
     error: error => {
        Notify.failure('Error Occured..!');
     }
 });
+    }
+    else{
+      Notify.success('Please Wait, Allready Sent the Save Request..!');
+    }
+// this.clicked = false;
+// this.spinner.hide();
 setTimeout(() => {
 this.mixinOrder = new MixinOrder();
 this._router.navigateByUrl('/mixinorderlist');
 this.refresh();
+this.getSession();
 }, 2000);
 }
 }
-
-
     
     open() {
         this.dayPicker.api.open();
@@ -755,4 +888,16 @@ this.refresh();
     close() {
          this.dayPicker.api.close();
     } 
+
+    showDialog(){
+      const dialogRef = this.dialog.open(DialogComponent, {
+        width: '450px',
+        height: '270px'
+      }); 
+      setTimeout(() => {
+        dialogRef.close();
+      }, 100000);
+    }
+
+
 }

@@ -13,7 +13,10 @@ import { HttpClient } from '@angular/common/http';
 import { Pagination } from '../../../common/models/pagination.model';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-
+import { NgxBarcode6Component } from 'ngx-barcode6';
+import { interval, Subscription } from 'rxjs';
+import { NgxSpinnerService } from "ngx-spinner";
+import { Session } from '../../../common/models/Session';
 // import { ConfirmationService } from 'primeng/api';
 // import { MessageService } from 'primeng/api';
 
@@ -33,13 +36,20 @@ export class MixinOrderListComponent implements OnInit {
 
   displayedColumns: string[] = ['position','code', 'customerName', 'customerMobileNumber','paymentMethodId', 'totalAmount', 'date', 'actions'];
   dataSource = new MatTableDataSource<VoteAssignment>([]);
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator) set _paginator(paginator: MatPaginator) {
+     this.paginator = paginator;
+     this.dataSource.paginator = this.paginator;
+   }
+   @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
+
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   
-  @Input() pagination: Pagination = { pageIndex: 0, pageSize: 10, total: 0 };
   @Output() paginated = new EventEmitter<PageEvent>();
   p: number = 1;
   
+  currentSession : Session = new Session();
+
   selectedofficeId:any;
   selectedOrderStatus :any=1;
   selectedVoteDetailsItems :any=[];
@@ -70,6 +80,7 @@ export class MixinOrderListComponent implements OnInit {
 
   loading = false;
   APIMixinOrders: any=[];
+  selectedOrderforBarcode: any;
   SelectedVoteName :any;
   SelectedVoteId : any;
   isValid : boolean;
@@ -80,20 +91,71 @@ export class MixinOrderListComponent implements OnInit {
   isTamil :boolean;
   isEnglish :boolean;
 
+  hassession:boolean;
+
   isEditing:boolean = false;
 
-  constructor(private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router) {
+  constructor(private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private spinner: NgxSpinnerService) {
+    
     this.customVoteNameForm = this.fb.group({  
       offices: '',  
       assignedVotes: '',  
       customVoteNames: this.fb.array([]) ,  
     });  
   }
+
   isadmin:boolean=false;
+
+  bcValue:any=0;
+
+  elementType = 'svg';
+  value = 'someValue12340987';
+  format = 'CODE128';
+  lineColor = '#000000';
+  width = 2;
+  height = 100;
+  displayValue = true;
+  fontOptions = '';
+  font = 'monospace';
+  textAlign = 'center';
+  textPosition = 'bottom';
+  textMargin = 2;
+  fontSize = 20;
+  background = '#ffffff';
+  margin = 10;
+  marginTop = 10;
+  marginBottom = 10;
+  marginLeft = 10;
+  marginRight = 10;
+
+  get values(): string[] {
+    return this.value.split('\n');
+  }
+  codeList: string[] = [
+    '', 'CODE128',
+    'CODE128A', 'CODE128B', 'CODE128C',
+    'UPC', 'EAN8', 'EAN5', 'EAN2',
+    'CODE39',
+    'ITF14',
+    'MSI', 'MSI10', 'MSI11', 'MSI1010', 'MSI1110',
+    'pharmacode',
+    'codabar'
+  ];
+
+  
+subscription: Subscription;
+source = interval(60000);
+
+
   ngOnInit() {
-    this.checkPermission("MXORDERVIEW", Number(localStorage.getItem('Currentuserid')));
-    if(Number(localStorage.getItem('IsAdmin'))==1)
-    {this.isadmin=true;}
+    
+    this.spinner.show();
+    this.getCurrentSession();
+    this.checkPermission("MXORDERADDEDIT", Number(localStorage.getItem('Currentuserid')));
+    this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
+
+    // if(Number(localStorage.getItem('IsAdmin'))==1)
+    // {this.isadmin=true;}
     
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
     if (this.SelectedLanguage=="Sinhala")
@@ -108,7 +170,10 @@ export class MixinOrderListComponent implements OnInit {
 
     // this.getAllOffices();
     //this.getAllAccountdetails();
-    this.getAllMixinOrdersForOfficeAndState(this.selectedOrderStatus);
+     this.getAllMixinOrdersForUserAndState(this.selectedOrderStatus);
+
+    // this.subscription = this.source.subscribe(val =>  this.getAllMixinOrdersForOfficeAndState(this.selectedOrderStatus));
+
 
     this.VoteDetailsDropdownSettings = {
       idField: 'id',
@@ -189,15 +254,126 @@ export class MixinOrderListComponent implements OnInit {
       allowSearchFilter: true
     };
     }
-
+    this.spinner.hide();
   }
-  haspermission :Boolean;
+
+  newOrder()  { 
+    if(this.currentSession.id!=0)
+    {
+    this._router.navigateByUrl('/mixinorderaddedit');
+    }
+    else{
+      Notify.failure('Please Start a Session First..!');
+    }
+  }
+
+  startSession()  {  
+    if (confirm(`Are you sure you want to Start a Session ?`)) {
+      this.startSessionAPI();
+      this.getCurrentSession();
+    }
+  }  
+
+
+  endSession()  {  
+    if (confirm(`Are you sure you want to End the Session ?`)) {
+      this.endSessionAPI();
+    }
+  }  
+
+  getCurrentSession()  {  
+    this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
+    this.getAllMixinOrdersForUserAndState(this.selectedOrderStatus);
+  }
+
+
+  async getSessionByOfficeAndModule(officeid:number,module:any) {
+    this.httpProvider.getSessionByOfficeAndModule(officeid,module).subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.currentSession = resultData;
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.currentSession=new Session();
+            }
+        }}
+      });
+  }
+
+  async startSessionAPI() {
+    if (this.currentSession.id == 0) {
+      this.currentSession.name="MIX-"+new Date().toDateString;
+      this.currentSession.module="MIX";
+      this.currentSession.active=1;
+      this.currentSession.createdAt=new Date();
+      this.currentSession.startAt=new Date();
+      this.currentSession.createdBy=Number(localStorage.getItem('Currentuserid'));
+      this.currentSession.officeId=Number(localStorage.getItem('CurrentOfficeId'))
+
+     this.httpProvider.startSession(this.currentSession)
+    .subscribe({
+      next: (result) => {
+           var resultData = result.body;
+           this.currentSession = new Session();
+           this.currentSession=result.body;
+           Notify.success('Session Started Successfully..!');
+      },
+      error: error => {
+         Notify.failure('Error Occured..!');
+      }
+  });
+  setTimeout(() => {
+  // this.currentSession = new Session();
+  }, 2000);
+  }
+  else{
+    Notify.failure('Error Occured..!');
+  }
+  }
+
+  async endSessionAPI() {
+    if (this.currentSession.id != 0) {
+      this.currentSession.active=0;
+      this.currentSession.updatedBy=Number(localStorage.getItem('Currentuserid'));
+      this.currentSession.stopAt=new Date();
+
+     this.httpProvider.endSession(this.currentSession)
+    .subscribe({
+      next: (result) => {
+           var resultData = result.body;
+           this.currentSession = new Session();
+           this.currentSession=result.body;
+          //  console.log(result.body);
+           this.currentSession.id=0;
+           Notify.success('Session Ended Successfully..!');
+      },
+      error: error => {
+         Notify.failure('Error Occured..!');
+      }
+  });
+  setTimeout(() => {
+  // this.currentSession = new Session();
+  }, 2000);
+  }
+  else{
+    Notify.failure('No any Started Sessions found..!');
+  }
+  }
+
+  haspermission :Boolean=true;
 
   async checkPermission(ruleCode:any,userId:Number) {
     this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
       next: (data) => {
           this.haspermission = Boolean(data.body);
-          console.log('haspermission : '+this.haspermission);
+          // console.log('haspermission : '+this.haspermission);
     },
     error: error => {
           if (error.status == 404) {
@@ -277,14 +453,16 @@ onVoteUnSelectAll() {
     // do something
   }
 
-async getAllMixinOrdersForOfficeAndState(orderstate:any) {
+async getAllMixinOrdersForUserAndState(orderstate:any) {
+  // console.log(orderstate);
   this.selectedOrderStatus=orderstate;
   this.dataSource = new MatTableDataSource<VoteAssignment>([]);
   this.APIMixinOrders=[];
-  this.httpProvider.getAllMixinOrdersForOfficeAndState(localStorage.getItem('CurrentOfficeId'),orderstate).subscribe({
+  this.httpProvider.getAllMixinOrdersForUserAndState(Number(localStorage.getItem('Currentuserid')),orderstate).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
+      // console.log(resultData);
       this.APIMixinOrders = resultData;
         this.dataSource.data=this.APIMixinOrders;
     }
@@ -399,6 +577,7 @@ async getAllOffices() {
     //       });
     //     });
     // }
+    this.spinner.show();
   this.httpProvider.saveMixinOrderDetail(this.selectedVoteDetailsItems)
   .subscribe({
     next: (result) => {
@@ -411,6 +590,7 @@ async getAllOffices() {
 });
 setTimeout(() => {
 this.clearRecord() ;
+this.spinner.hide();
 // this.getAllVoteAssignmentsForOfficeId(this.selectedofficeId);
 }, 5000);
 }
@@ -430,25 +610,25 @@ this.clearRecord() ;
     // this.isEditing=false;
   }
 
-  async cancelMixinOrder(mixinOrder: any) {
-    this.loading = true;
-    if (confirm(`Are you sure you want to cancel the Mixin Order ${mixinOrder.code}. This cannot be undone.`)) {
-      this.httpProvider.cancelMixinOrder(mixinOrder.id)
-      .subscribe({
-        next: (data) => {
-             var resultData = data.body;
-             Notify.success('Mixin Order Sent for Cancel Approval.');
-        },
-        error: error => {
-          Notify.failure('Error Occured..!');
-        }
-    });
-    setTimeout(() => {
-      //this.clearRecord() ;
-      this.getAllMixinOrdersForOfficeAndState(this.selectedOrderStatus);
-      }, 1000);
-  }
-  }
+  // async cancelMixinOrder(mixinOrder: any) {
+  //   this.loading = true;
+  //   if (confirm(`Are you sure you want to cancel the Mixin Order ${mixinOrder.code}. This cannot be undone.`)) {
+  //     this.httpProvider.cancelMixinOrder(mixinOrder.id)
+  //     .subscribe({
+  //       next: (data) => {
+  //            var resultData = data.body;
+  //            Notify.success('Mixin Order Sent for Cancel Approval.');
+  //       },
+  //       error: error => {
+  //         Notify.failure('Error Occured..!');
+  //       }
+  //   });
+  //   setTimeout(() => {
+  //     //this.clearRecord() ;
+  //     this.getAllMixinOrdersForOfficeAndState(this.selectedOrderStatus);
+  //     }, 1000);
+  // }
+  // }
 
   async printMixinOrder(mixinOrder: any) {
   }
@@ -488,6 +668,66 @@ editVoteAssignment(voteAssignment: VoteAssignmentFullDataClass) {
     this.selectedBankAccountsItems = [
       { id: voteAssignment.bankAccountId, nameEnglish: voteAssignment.accountDetail.nameEnglish }
       ];
+}
+
+barcode :any;
+hasorderforbarcode :boolean=true;
+async GetOrderByBarcode() {
+  this.spinner.show();
+  this.getMixinOrderByBarcode(this.barcode);
+//   this.selectedOrderforBarcode=localStorage.getItem('orderForBarcode');
+//   localStorage.removeItem('orderForBarcode');
+//   if(this.selectedOrderforBarcode != null)
+//   {
+//     this._router.navigate(['/mixinorderview',this.selectedOrderforBarcode]);
+//   }
+//   else{
+//     this.hasorderforbarcode=false;
+//     setTimeout(() => {
+//       this.hasorderforbarcode=true;
+//     }, 1000);
+//   }
+this.spinner.hide();
+}
+
+async getMixinOrderByBarcode(barcode:any) {
+  this.httpProvider.getMixinOrderByBarcode(barcode, localStorage.getItem('CurrentOfficeId')).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      this._router.navigate(['/mixinorderview',resultData.id]);
+      // localStorage.setItem('orderForBarcode',resultData.id);
+    }
+    else{
+      this.hasorderforbarcode=false;
+      setTimeout(() => {
+        this.hasorderforbarcode=true;
+      }, 1000);
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            localStorage.removeItem('orderForBarcode');
+          }
+      }
+      else{
+        localStorage.removeItem('orderForBarcode');
+        this.hasorderforbarcode=false;
+        setTimeout(() => {
+          this.hasorderforbarcode=true;
+        }, 1000);
+      }
+    }
+    });
+   
+}
+
+refreshList() {
+  this.spinner.show();
+this.getAllMixinOrdersForUserAndState(this.selectedOrderStatus);
+this.spinner.hide();
 }
 
 }

@@ -76,7 +76,7 @@
               <p>User Profile</p>
             </a>
           </li> -->
-          <li class="nav-item">
+          <li *ngIf="hasModulePermission('Vote')" class="nav-item">
             <a href="#/dashboard" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
@@ -86,7 +86,7 @@
             </a>
            
             <ul *ngIf="isAllowed" class="nav nav-treeview">
-              <li class="nav-item">
+              <li  class="nav-item">
                 <a href="#/dashboard" class="nav-link">
                   <i class="nav-icon fas fa-folder"></i>
                   <p>
@@ -183,7 +183,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+          <li *ngIf="hasModulePermission('Mix')" class="nav-item">
             <a href="#/dashboard" class="nav-link">
               <i class="nav-icon fas fa-money-check-alt"></i>
               <p>
@@ -238,19 +238,52 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-              <li *ngIf="hasPermission('MXORDERVIEW')"  routerLinkActive="active" class="nav-item">
+              <li *ngIf="hasPermission('MXORDERADDEDIT')"  routerLinkActive="active" class="nav-item">
                 <a [routerLink]="['/mixinorderlist']" class="nav-link">
                   <i class="far fa-dot-circle nav-icon"></i>
                   <p>Mix Income Orders</p>
+                </a>
+              </li>
+              <li *ngIf="hasPermission('MXORDERCANCELAPROVAL')"  routerLinkActive="active" class="nav-item">
+                <a [routerLink]="['/mixinordercancelaproval']" class="nav-link">
+                  <i class="far fa-dot-circle nav-icon"></i>
+                  <p>Approve Cancel Requests </p>
                 </a>
               </li>
             </ul>
           </li>
         </ul>
       </li>
-           
- 
-            <li  class="nav-item">
+     <li *ngIf="hasPermission('CASHIER')"  class="nav-item">
+      <!-- <a href="/dashboard" class="nav-link active"> -->
+        <a href="#/cashier" class="nav-link">
+        <i class="nav-icon fas fa-money-check-alt"></i>
+        <p>
+          CASHIER
+        </p>
+      </a>
+    </li>
+
+    <li *ngIf="hasModulePermission('Session')" class="nav-item">
+      <a href="#/dashboard" class="nav-link">
+        <i class="nav-icon fas fa-clock"></i>
+        <p>
+         SESSION MANAGEMENT
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul *ngIf="isAllowed" class="nav nav-treeview">
+        <li *ngIf="hasPermission('MIXINSESSION')" class="nav-item">
+          <a href="#/mixinsession" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Mix Income Session</p>
+          </a>
+        </li>
+      </ul>
+  </li>
+
+
+            <li *ngIf="hasModulePermission('Report')" class="nav-item">
               <a href="#/dashboard" class="nav-link">
                 <i class="nav-icon fas fa-file"></i>
                 <p>
@@ -285,7 +318,7 @@
               </ul>
           </li>
 
-          <li class="nav-item">
+          <li *ngIf="hasModulePermission('User')" class="nav-item">
             <a href="#/dashboard" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>

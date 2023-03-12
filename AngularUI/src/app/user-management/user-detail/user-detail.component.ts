@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NewUser } from '../models/newUser';
 import { HttpProviderService } from '../../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-detail',
@@ -26,7 +26,7 @@ export class UserDetailComponent implements OnInit {
   isTamil :boolean;
   isEnglish :boolean;
    
-  constructor(private httpProvider: HttpProviderService) {
+  constructor(private datepipe: DatePipe, private httpProvider: HttpProviderService) {
   }
   isadmin:boolean=false;
   ngOnInit() {
@@ -182,6 +182,8 @@ resetForm() {
     } else{this.isValid=true;}
 
     if (this.isValid==true) {
+      const customdate  = this.datepipe.transform(this.selectedUserDetail.birthday, 'yyyy-MM-dd');
+      this.selectedUserDetail.birthday= new Date(customdate!);
       this.httpProvider.updateUserDetails(this.selectedUserDetail)
     .subscribe({
       next: (result) => {

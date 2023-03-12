@@ -84,7 +84,8 @@ export class VoteAssignmentDetailsComponent implements OnInit {
   isEnglish :boolean;
 
   isEditing:boolean = false;
-
+  submitButtonClickCount :number = 1;
+  
   constructor(private httpProvider: HttpProviderService, private fb: FormBuilder) {
     this.customVoteNameForm = this.fb.group({  
       offices: '',  
@@ -433,8 +434,11 @@ async getAllOffices() {
     //       });
     //     });
     // }
-console.log(this.selectedVoteDetailsItems);
+// console.log(this.selectedVoteDetailsItems);
 
+if(this.submitButtonClickCount==1)
+    {
+    this.submitButtonClickCount=this.submitButtonClickCount+1;
   this.httpProvider.saveVoteAssignmentDetail(this.selectedVoteDetailsItems)
   .subscribe({
     next: (result) => {
@@ -445,6 +449,10 @@ console.log(this.selectedVoteDetailsItems);
       Notify.failure('Error Occured..!');
     }
 });
+    }
+    else{
+      Notify.success('Please Wait, Allready Sent the Save Request..!');
+    }
 setTimeout(() => {
 this.clearRecord() ;
 // this.getAllVoteAssignmentsForOfficeId(this.selectedofficeId);

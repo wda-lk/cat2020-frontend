@@ -1,28 +1,23 @@
-<!-- Content Wrapper. if not page allowed for user -->
-<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
-  <div class="row">
-    <div class="col-sm-2">
-    </div>
-        <div class="col-sm-8">
-    <div class="w3-display-middle">
-      <br><br><br>
-      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
-      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
-      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
-      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
-      </div>
-    </div>
-  </div>
- </div>
- <!-- End of if not page allowed for user wrapper -->
-  <!-- Content Wrapper. Contains page content -->
-<div *ngIf="haspermission || isadmin"  class="content-wrapper">
+
+<ngx-spinner  bdColor = "rgba(51,51,51,0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+<!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin || hasaddeditpermission || hascashierpermission || hascancelapprovepermission"  class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
+          <div *ngIf="hasaddeditpermission"> 
           <button class="btn btn-warning"> <a href="#/mixinorderlist" style="color:white;"><i class="fa fa-arrow-left"></i> Back </a></button>
+        </div>
+        <div *ngIf="!hasaddeditpermission"> 
+          <div *ngIf="hascashierpermission"> 
+            <button class="btn btn-warning"> <a href="#/cashier" style="color:white;"><i class="fa fa-arrow-left"></i> Back </a></button>
+          </div>
+          <div *ngIf="hascancelapprovepermission"> 
+            <button class="btn btn-warning"> <a href="#/mixinordercancelaproval" style="color:white;"><i class="fa fa-arrow-left"></i> Back </a></button>
+          </div>
+        </div>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -201,8 +196,8 @@
               </div>
               <div class="row">
                 <div class="col-10">
-                  <p><b><span *ngIf="isSinhala;">සකස් කලේ : </span> <span *ngIf="isEnglish;">Prepared By : </span> <span *ngIf="isTamil;">வடிவமைத்தவர் :</span><span> {{mixinOrderCustomOBJ?.chequeBankName}}</span> </b> {{currentUserNamewithInitials}} &nbsp;&nbsp;
-                    <b><span *ngIf="isSinhala;">අයකැමි: </span> <span *ngIf="isEnglish;">Cashier : </span> <span *ngIf="isTamil;"> காசாளர் :</span><span> {{mixinOrderCustomOBJ?.chequeBankName}}</span> </b> {{currentUserNamewithInitials}}</p> 
+                  <p><b><span *ngIf="isSinhala;">සකස් කලේ : </span> <span *ngIf="isEnglish;">Prepared By : </span> <span *ngIf="isTamil;">வடிவமைத்தவர் :</span> </b> {{mixinOrderCustomOBJ?.userDetail?.nameWithInitials}} &nbsp;&nbsp;
+                    <b><span *ngIf="isSinhala;">අයකැමි: </span> <span *ngIf="isEnglish;">Cashier : </span> <span *ngIf="isTamil;"> காசாளர் :</span></b> {{mixinOrderCustomOBJ?.cashier?.nameWithInitials}}</p> 
                  
                 </div>
                   <div class="col-2">
@@ -212,11 +207,61 @@
               </div>
               <!-- this row will not appear when printing -->
               <div class="row no-print">
-                <div class="col-10">
+                <div class="col-9">
+                <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+                <ngx-barcode6 [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor"
+		 [bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font"
+		 [bc-text-align]="textAlign" [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
+		 [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom" [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode6>
               </div>
-              <div class="col-2">
+              <div *ngIf="mixinOrderCustomOBJ?.state==2" >
+                <b><span style="color:green"> <h1>PAID</h1></span> </b>
+              </div>
+              <div *ngIf="mixinOrderCustomOBJ?.state==3" >
+                <b><span style="color:green"> <h1>POSTED</h1></span> </b>
+              </div>
+              <div *ngIf="mixinOrderCustomOBJ?.state==4" >
+                <b><span style="color:orangered"> <h1>CANCEL APPROVAL PENDING</h1></span> </b>
+              </div>
+              <div *ngIf="mixinOrderCustomOBJ?.state==5" >
+                <b><span style="color:red"> <h1>CANCELED</h1></span> </b>
+              </div>
+              <div *ngIf="mixinOrderCustomOBJ?.state==6" >
+                <b><span style="color:purple"> <h1>CANCEL DISAPPROVED</h1></span> </b>
+              </div>
+              </div>
+              <div class="col-3">
+                <div *ngIf="hascashierpermission"> 
+                  <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
                 <button class="btn btn-info form-control" (click)="print(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Print</button>
+               
                 </div>
+                <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
+                  <button class="btn btn-info form-control" (click)="duplicateprint(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Reprint</button>
+                  </div>
+                
+              </div>
+              <div *ngIf="hasaddeditpermission"> 
+              <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+              <br>
+                <button class="btn btn-danger form-control" (click)="deleteOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> &nbsp; Delete Order</button>
+   
+              </div>
+              <br>
+              <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
+                <button class="btn btn-warning form-control" (click)="cancelMixinOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> Cancel Order</button>
+                </div>
+              </div>
+               
+                <div *ngIf="hascancelapprovepermission" >  
+                 
+                  <div *ngIf="mixinOrderCustomOBJ?.state==4" > 
+                <button  class="btn btn-success form-control" (click)="approveCancelMixinOrder(mixinOrderCustomOBJ)"> Approve Request </button>
+                <br>
+                <br>
+                <button class="btn btn-danger form-control" (click)="disapproveCancelMixinOrder(mixinOrderCustomOBJ)"> Disapprove Request</button>
+                </div></div>
+              </div>
             </div>
             </div>
             <!-- /.invoice -->
@@ -227,3 +272,20 @@
   </div><!-- /.container-fluid -->
 </section>
 </div>
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <!-- <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div> -->
+ </div>
+ <!-- End of if not page allowed for user wrapper -->

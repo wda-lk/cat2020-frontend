@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NewUser } from '../user-management/models/newUser';
 import { HttpProviderService } from '../services/http-provider.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { DatePipe } from '@angular/common';
+import { AuthenticationService } from '../system-security/_services';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +27,7 @@ export class DashboardComponent {
   isEnglish :boolean;
   isNewUser:boolean=true;
    
-  constructor(private httpProvider: HttpProviderService) {
+  constructor(private datepipe: DatePipe,private httpProvider: HttpProviderService,private authenticationService: AuthenticationService) {
   }
 
 
@@ -197,6 +199,8 @@ async updateRecord() {
       this.isValid=true;
     }
   if (this.isValid==true) {
+    const customdate  = this.datepipe.transform(this.selectedUserDetail.birthday, 'yyyy-MM-dd');
+      this.selectedUserDetail.birthday= new Date(customdate!);
     this.httpProvider.updateUserDetails(this.selectedUserDetail)
   .subscribe({
     next: (result) => {
@@ -207,6 +211,7 @@ async updateRecord() {
        Notify.failure('Error Occured..!');
     }
 });
+this.authenticationService.logout();
 setTimeout(() => {
 this.selectedUserDetail = new NewUser();
 this.refresh();

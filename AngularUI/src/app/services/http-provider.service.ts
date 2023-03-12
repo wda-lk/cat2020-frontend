@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable,map } from 'rxjs';
 import { WebApiService } from './web-api.service';
 import { environment } from '../../environments/environment';
+import { MixinCancelOrder } from '../mix-income-management/models/MixinCancelOrder';
 var apiUrl = environment.apiUrl;
 localStorage.setItem('apiUrl', apiUrl);
 
@@ -135,6 +136,7 @@ getPaymentNbtsById: apiUrl + "/api/PaymentNbts/getById",
 getAllGnDivisions: apiUrl + "/api/GnDivisions/getAll",
 getGnDivisions: apiUrl + "/api/GnDivisions/getById",
 getAllGnDivisionsForOffice: apiUrl + "/api/GnDivisions/getAllForOffice",
+getAllGnDivisionsForSabha: apiUrl + "/api/GnDivisions/getAllForSabha",
 
 //Partner 
 getAllPartners: apiUrl + "/api/mixin/partners/getAll",
@@ -145,6 +147,17 @@ getPartnerByPhoneNo: apiUrl + "/api/mixin/partners/getByPhoneNo",
 getAllPartnersForPartnerType : apiUrl + "/api/mixin/partners/getAllForPartnerType",
 getAllForPartnerTypeAndSabha : apiUrl + "/api/mixin/partners/getAllForPartnerTypeAndSabha",
 savePartner:apiUrl+"/api/mixin/partners/save",
+
+
+//Session 
+getSessionById: apiUrl + "/api/mixin/sessions/getById",
+getSessionByOfficeAndModule: apiUrl + "/api/mixin/sessions/getByOfficeAndModule",
+getAllActiveSessionsByOffice: apiUrl + "/api/mixin/sessions/getAllActiveSessionsByOffice",
+getAllSessionsByOffice: apiUrl + "/api/mixin/sessions/getAllSessionsByOffice",
+getAllSessionsByOfficeAndModule: apiUrl + "/api/mixin/sessions/getAllSessionsByOfficeAndModule",
+startSession: apiUrl + "/api/mixin/sessions/startSession",
+endSession: apiUrl + "/api/mixin/sessions/endSession",
+
 
 //End of Common APIs
 
@@ -199,19 +212,27 @@ getAllVoteAssignmentDetailsForVoteAssignmentId: apiUrl +"/api/mixin/voteAssignme
 
 //MixinOrder
 getAllMixinOrders:  apiUrl +"/api/mixin/mixinOrder/getAll",
-getMixinOrderById:  apiUrl +"/api/mixin/mixinOrder/getById",
+getMixinOrderByIdAndOffice:  apiUrl +"/api/mixin/mixinOrder/getByIdAndOffice",
 saveMixinOrder: apiUrl +"/api/mixin/mixinOrder/save",
 cancelMixinOrder: apiUrl +"/api/mixin/mixinOrder/cancel",
+deleteMixinOrder: apiUrl +"/api/mixin/mixinOrder/delete",
 paidMixinOrder: apiUrl +"/api/mixin/mixinOrder/paid",
+approveCancelMixinOrder: apiUrl +"/api/mixin/mixinOrder/approveCancelOrder",
+disapproveCancelMixinOrder: apiUrl +"/api/mixin/mixinOrder/disapproveCancelOrder",
 updateMixinOrderState: apiUrl +"/api/mixin/mixinOrder/updateState",
 getAllMixinOrdersForOffice: apiUrl +"/api/mixin/mixinOrder/getAllForOffice",
 getAllMixinOrdersForOfficeAndState: apiUrl +"/api/mixin/mixinOrder/getAllForOfficeAndState",
+getAllMixinOrdersForSesionAndState: apiUrl +"/api/mixin/mixinOrder/getAllForSesionAndState",
+getAllMixinOrdersForUserAndState: apiUrl +"/api/mixin/mixinOrder/getAllForUserAndState",
+getMixinOrderByBarcode:  apiUrl +"/api/mixin/mixinOrder/getOrderByBarcode",
+
 
 //End of Mix Income Management APIs
 
 
 //Reports
 getMixinSarapReceiptsDailyReport:  apiUrl +"/api/Report/getMixinSarapReceiptsDailyReport",
+getTestReport:  apiUrl +"/api/Report/TestReport",
 //End of Reports
 
 }
@@ -578,7 +599,9 @@ public getGnDivisions(id:any): Observable<any> {
 public getAllGnDivisionsForOffice(id:any): Observable<any> {
   return this.webApiService.get(httpLink.getAllGnDivisionsForOffice+ '/'+ id);
 }
-
+public getAllGnDivisionsForSabha(id:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllGnDivisionsForSabha+ '/'+ id);
+}
 
 
 //Partner 
@@ -607,9 +630,32 @@ public savePartner(partner:any): Observable<any> {
   return this.webApiService.post(httpLink.savePartner, partner);
 }
 
+
+//Session
+public getSessionById(id:any): Observable<any> {
+  return this.webApiService.get(httpLink.getSessionById+ '/'+ id);
+}
+public getSessionByOfficeAndModule(officeid:any,module:any): Observable<any> {
+  return this.webApiService.get(httpLink.getSessionByOfficeAndModule+ '/'+ officeid+ '/'+ module);
+}
+public getAllActiveSessionsByOffice(officeid:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllActiveSessionsByOffice+ '/'+ officeid);
+}
+public getAllSessionsByOffice(officeid:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllSessionsByOffice+ '/'+ officeid);
+}
+public getAllSessionsByOfficeAndModule(officeid:any, module:any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllSessionsByOfficeAndModule+ '/'+ officeid+ '/'+ module);
+}
+
+
+public startSession(partner:any): Observable<any> {
+  return this.webApiService.post(httpLink.startSession, partner);
+}
+public endSession(partner:any): Observable<any> {
+  return this.webApiService.post(httpLink.endSession, partner);
+}
 //Begin of Common Functions
-
-
 
 //Begin of User Management Functions
 
@@ -720,8 +766,8 @@ public getAllVoteAssignmentDetailsForVoteAssignmentId(id : any): Observable<any>
 }
 
 //Mixin Order
-public getMixinOrderById(id : any): Observable<any> {
-  return this.webApiService.get(httpLink.getMixinOrderById  + '/'+id);
+public getMixinOrderByIdAndOffice(id : any, officeid : any): Observable<any> {
+  return this.webApiService.get(httpLink.getMixinOrderByIdAndOffice + '/'+id + '/'+officeid);
 }
 public getAllMixinOrders(): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrders);
@@ -732,11 +778,20 @@ public saveMixinOrderDetail(model: any): Observable<any> {
 public updateMixinOrderState(model:any): Observable<any> {
   return this.webApiService.post(httpLink.updateMixinOrderState + '/' + model, "");
 }
-public cancelMixinOrder(id: any): Observable<any> {
-  return this.webApiService.post(httpLink.cancelMixinOrder + '/' + id, "");
+public deleteMixinOrder(id: any, cashierid:number): Observable<any> {
+  return this.webApiService.post(httpLink.deleteMixinOrder + '/' + id + '/' + cashierid, "");
+}
+public cancelMixinOrder(cancelOrder:MixinCancelOrder): Observable<any> {
+  return this.webApiService.post(httpLink.cancelMixinOrder + '/' + cancelOrder, "");
 }
 public paidMixinOrder(id: any, cashierid:number): Observable<any> {
   return this.webApiService.post(httpLink.paidMixinOrder + '/' + id + '/' + cashierid, "");
+}
+public approveCancelMixinOrder(id: any, officerid:number): Observable<any> {
+  return this.webApiService.post(httpLink.approveCancelMixinOrder + '/' + id + '/' + officerid, "");
+}
+public disapproveCancelMixinOrder(id: any, officerid:number): Observable<any> {
+  return this.webApiService.post(httpLink.disapproveCancelMixinOrder + '/' + id + '/' + officerid, "");
 }
 public getAllMixinOrdersForOffice(id: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrdersForOffice + '/' + id);
@@ -744,6 +799,16 @@ public getAllMixinOrdersForOffice(id: any): Observable<any> {
 public getAllMixinOrdersForOfficeAndState(office: any, status: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrdersForOfficeAndState + '/' + office + '/' + status);
 }
+public getAllMixinOrdersForSesionAndState(session: any, status: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllMixinOrdersForSesionAndState + '/' + session + '/' + status);
+}
+public getAllMixinOrdersForUserAndState(user: any, status: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllMixinOrdersForUserAndState + '/' + user + '/' + status);
+}
+public getMixinOrderByBarcode(id : any,officeid : any): Observable<any> {
+  return this.webApiService.get(httpLink.getMixinOrderByBarcode  + '/'+id+ '/'+officeid);
+}
+
 //End of Mix Income Management Functions
 
 
@@ -751,5 +816,9 @@ public getAllMixinOrdersForOfficeAndState(office: any, status: any): Observable<
 public getMixinSarapReceiptsDailyReport(reporttype : any, officeId : any): Observable<any> {
   return this.webApiService.get(httpLink.getMixinSarapReceiptsDailyReport  + '/'+reporttype+ '/'+officeId);
 }
+public getTestReport(reporttype : any): Observable<any> {
+  return this.webApiService.get(httpLink.getTestReport  + '/'+reporttype);
+}
+
 //End of Report Functions
 }

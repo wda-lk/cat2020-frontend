@@ -43,7 +43,7 @@ export class NewUserComponent {
     this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
       next: (data) => {
           this.haspermission = Boolean(data.body);
-          console.log('haspermission : '+this.haspermission);
+          // console.log('haspermission : '+this.haspermission);
     },
     error: error => {
           if (error.status == 404) {
@@ -107,7 +107,7 @@ async getAllOffices() {
       if (resultData) {
         this.APIOfficesList = resultData;
       }
-      console.log(this.APIOfficesList );
+      // console.log(this.APIOfficesList );
     }
   },
   error: error => {

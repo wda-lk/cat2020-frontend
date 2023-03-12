@@ -151,7 +151,7 @@ export class GroupsComponent implements OnInit  {
 	}
 
 	private ruleLabel(item: any) {
-		return item.description;
+		return item.module + " :  " + item.description ;
 	}
 
   private useUserDetails() {
