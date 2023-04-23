@@ -1,0 +1,153 @@
+
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h4 class="m-0">Mix Income Receipts - Income Cash Book</h4>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">CAT2020</li>
+            <li class="breadcrumb-item active">Reports
+            </li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+          <div class="row">
+          <div class="col-lg-12 col-md-12">
+              <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title"> Report Filter Parameters
+                    </h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row form-group">
+                      <div class="col-md-12">
+                    <label id="example-radio-group-label">Pick an option for Report : </label>&nbsp;&nbsp;
+                    <mat-radio-group
+                      aria-labelledby="filterby-radio-group-label"
+                      class="filterby-radio-group"
+                      [(ngModel)]="filterby">
+                      <mat-radio-button class="filterby-radio-button" *ngFor="let filteroption of filteroptions" [value]="filteroption">
+                        {{filteroption}} &nbsp;&nbsp;&nbsp;
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    <!-- <div>Filter By : {{filterby}}</div> -->
+                    </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-4">
+                        <div *ngIf="isSinhala;">
+                          <label>Select Bank Account</label>
+                          <select class="form-control" [(ngModel)]="bankAccountID"  (ngModelChange)="onbankaccountchange($event);">
+                              <option value="0" > --Select Bank Account-- </option>
+                              <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameSinhala)}} </option>
+                          </select>
+                      </div>
+                      <div *ngIf="isEnglish;">
+                        <label>Select Bank Account</label>
+                        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+                          <option value="0" > --Select Bank Account-- </option>
+                            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameEnglish)}} </option>
+                        </select>
+                      </div>
+                      <div *ngIf="isTamil;">
+                        <label>Select Bank Account</label>
+                        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+                          <option value="0" > --Select Bank Account-- </option>
+                            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameTamil)}} </option>
+                        </select>
+                      </div>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                    <div *ngIf="filterby=='Year' || filterby=='Month'" class="col-md-2">
+                      <div >
+                        <!-- <label>Year</label> -->
+                        <select class="form-control" [(ngModel)]="selectedyear">
+                         <option value="0"> --Select Year--</option>
+                            <option *ngFor=" let yeardetail of APIYearsList" [value]="yeardetail.description">  {{(yeardetail.description)}}  </option>
+                        </select>
+                    </div>
+                    
+                  </div>
+                  <div class="col-md-2"  *ngIf="filterby=='Month'">
+                    <div >
+                      <!-- <label>Month</label> -->
+                      <select class="form-control" [(ngModel)]="selectedmonth">
+                       <option value="0"> --Select Month--</option>
+                          <option *ngFor=" let monthdetail of APIMonthsList" [value]="monthdetail.id">  {{(monthdetail.description)}}  </option>
+                      </select>
+                  </div>
+                </div>
+                    <div class="col-md-4"  *ngIf="filterby=='Date'">
+                      <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
+                      <mat-form-field>
+                        <mat-label>Pick a date</mat-label>
+                        <input matInput
+                               #resultPickerModel="ngModel"
+                               [matDatepicker]="resultPicker"
+                               [(ngModel)]="selectedDate"
+                               >
+                        <mat-datepicker #resultPicker>
+                        </mat-datepicker>
+                      </mat-form-field>
+                      
+                    </div>
+                    <div class="col-md-4">
+                      <a class="btn btn-success" (click)="LoadReport()">View Report </a> &nbsp;&nbsp;
+                      <!-- <a class="btn btn-success" (click)="Print()">Print </a> &nbsp;&nbsp; -->
+                      <!-- <a class="btn btn-info" (click)="Print(selectedDate)"><i class="fas fa-print"></i> &nbsp; Print</a>  -->
+                       &nbsp; &nbsp; &nbsp; &nbsp;
+                      Export :
+                      <!-- <a class="btn btn-success" (click)="ExportToPdf()">To PDF</a> &nbsp;&nbsp; -->
+                      <a class="btn btn-success" (click)="ExportToExcel()"> <i class="fas fa-file-excel"></i> &nbsp; Excel</a>  &nbsp;&nbsp;
+                      <!-- <a class="btn btn-success" (click)="ExportToWord()"> To Word</a>   -->
+                  </div>
+                    </div>
+                  </div>
+          </div>
+        </div>
+      </div>
+
+    <div *ngIf="doc!=null" class="card card-info">
+      <div class="card-body">
+  <div [innerHTML]="reportpreview"></div>
+</div>
+</div>
+  </div><!-- /.container-fluid -->
+</section>
+</div>
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <!-- <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div> -->
+ </div>
+ <!-- End of if not page allowed for user wrapper -->

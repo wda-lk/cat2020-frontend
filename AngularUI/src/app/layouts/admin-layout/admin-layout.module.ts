@@ -39,6 +39,15 @@ import { MixinOrderCancelAprovalComponent } from '../../mix-income-management/mi
 import { CashierComponent } from '../../cashier/cashier.component'; 
 import { MixinSessionComponent } from '../../mix-income-management/mixinsession/mixinsession.component'; 
 import { MixinSessionOrderListComponent } from '../../mix-income-management/mixinsessionorderlist/mixinsessionorderlist.component'; 
+import { UserCommentDialogComponent } from '../../mix-income-management/mixinorder/mixinorderview/usercommentdialog.component'; 
+import { MixinSessionAdvancedSettingsComponent } from '../../mix-income-management/mixinsessionadvancedsettings/mixinsessionadvancedsettings.component';
+import { BankingComponent } from '../../banking/banking.component'; 
+
+import { SarapDailyReceiptsVoteWiseReportComponent } from '../../reports/sarapdailyreceiptsvotewisereport.component'; 
+import { BankDepositReceiptsReportComponent } from '../../reports/bankdepositreceiptsreport.component'; 
+import { MonthlyReceiptsVoteWiseReportComponent } from '../../reports/monthlyreceiptsvotewisereport.component'; 
+import { BankDepositAccountWiseReportComponent } from '../../reports/bankdepositaccountwisereport.component'; 
+import { IncomeCashBookReportComponent } from '../../reports/incomecashbookreport.component'; 
 
 import { MatRippleModule} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -63,7 +72,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
 import { NgxBarcode6Module } from 'ngx-barcode6';
 import { DialogComponent } from '../../mix-income-management/mixinorder/mixinorderaddedit/dialog.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+
 import { MatDialogModule } from '@angular/material/dialog';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
   imports: [
@@ -95,6 +107,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatNativeDateModule,
     NgxBarcode6Module,
     MatDialogModule,
+    NgxMatSelectSearchModule,
+    NgxDocViewerModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   declarations: [
@@ -127,6 +141,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     CashierComponent,
     MixinSessionComponent,
     MixinSessionOrderListComponent,
+    UserCommentDialogComponent,
+    MixinSessionAdvancedSettingsComponent,
+    SarapDailyReceiptsVoteWiseReportComponent,
+    BankingComponent,
+    BankDepositReceiptsReportComponent,
+    MonthlyReceiptsVoteWiseReportComponent,
+    BankDepositAccountWiseReportComponent,
+    IncomeCashBookReportComponent,
   ],
   providers: [  
     MatDatepickerModule,  

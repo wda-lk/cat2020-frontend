@@ -10,4 +10,6 @@ export class Session {
     createdBy?: number=0;
     updatedBy?: number=0;
     officeId?: number;
+    rescue?: number;
+    rescueStartedAt?: Date;
 }

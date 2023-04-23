@@ -51,7 +51,23 @@ export class AssignedVotesComponent implements OnInit {
   constructor(private httpProvider: HttpProviderService, private fb: FormBuilder) {
   }
   isadmin:boolean=false;
+
+  SelectedLanguage : any;
+  isSinhala :boolean;
+  isTamil :boolean;
+  isEnglish :boolean;
+  
   ngOnInit() {
+
+    this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
+    if (this.SelectedLanguage=="Sinhala")
+    {this.isSinhala=true;}
+    if (this.SelectedLanguage=="Tamil")
+    {this.isTamil=true;}
+    if (this.SelectedLanguage=="English")
+    {this.isEnglish=true;}
+
+
     this.checkPermission("ASGNEDVOTELIST", Number(localStorage.getItem('Currentuserid')));
     if(Number(localStorage.getItem('IsAdmin'))==1)
     {this.isadmin=true;}

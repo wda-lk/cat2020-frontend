@@ -23,6 +23,10 @@ import { NgxBarcode6Component } from 'ngx-barcode6';
 import { ToWords } from 'to-words';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MixinCancelOrder } from '../../models/MixinCancelOrder';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { UserCommentDialogComponent } from './usercommentdialog.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgxPrinterService } from "ngx-printer";
 
 @Component({
   selector: 'app-mixinorderview',
@@ -32,7 +36,8 @@ import { MixinCancelOrder } from '../../models/MixinCancelOrder';
 
 
 export class MixinOrderViewComponent implements OnInit {
-
+  doc: any;
+  reportpreview: SafeResourceUrl;
   orderID:any=0;
   sub:any;
   logopath:any;
@@ -46,10 +51,13 @@ export class MixinOrderViewComponent implements OnInit {
   isSinhala :boolean;
   isTamil :boolean;
   isEnglish :boolean;
-  
+  showReciept:boolean=false;
+
   // mixinOrderItems: MixinOrderLine[] = new Array();
   mixinOrder : MixinOrder = new MixinOrder();
+  mixinCancelOrder : MixinCancelOrder = new MixinCancelOrder();
   mixinOrderCustomOBJ : any;
+  hidePage = false;
 
   toWords = new ToWords({
     localeCode: 'en-IN',
@@ -71,7 +79,7 @@ export class MixinOrderViewComponent implements OnInit {
     }
   });
 
-  constructor(private httpProvider: HttpProviderService, private _router: Router, private _Activatedroute: ActivatedRoute, private fb: FormBuilder,private spinner: NgxSpinnerService) {
+  constructor(private httpProvider: HttpProviderService, private _router: Router, private _Activatedroute: ActivatedRoute, private fb: FormBuilder,private sanitizer: DomSanitizer,private spinner: NgxSpinnerService,public dialog: MatDialog,private printerService: NgxPrinterService) {
     
   }
   bcValue:any=0;
@@ -113,6 +121,13 @@ export class MixinOrderViewComponent implements OnInit {
 
   isadmin:boolean=false;
 
+  ngAfterViewInit() {
+    this.printerService.$printWindowOpen.subscribe(opened => {
+      this.hidePage = opened;
+      console.log(this.hidePage);
+    });
+  }
+
   ngOnInit() {
     // this.spinner.show();
     this.checkPermission("MXORDERVIEW", Number(localStorage.getItem('Currentuserid')));
@@ -138,6 +153,7 @@ export class MixinOrderViewComponent implements OnInit {
       this.orderID = params.get('orderid');
     });
 
+    this.LoadReport(this.orderID);
     this.getMixinOrderById(this.orderID);
     // this.spinner.hide();
   }
@@ -227,6 +243,49 @@ async getMixinOrderById(id:any) {
     });
 }
 
+
+printPage() {
+  const css = `
+    // @page {
+    //   margin: 0;
+    //   size: 21.0cm 29.7cm;
+
+    // }
+    @page
+   {
+    size: 11.7in 8.3in;
+    size: Portrait
+    ;
+  }
+  `;
+
+  const head = document.getElementsByTagName("head")[0];
+  const style = document.createElement("style");
+  style.type = "text/css";
+  style.media = "print";
+  style.appendChild(document.createTextNode(css));
+  head.appendChild(style);
+
+  this.printerService.printDiv("printDiv");
+}
+
+LoadReport(orderid:Number)
+ {
+  if(this.isSinhala)
+  // this.doc='https://cat2020.lk/birt/output?__report=mixinorderreceipt_sin.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&__emitterid=org.eclipse.birt.report.engine.emitter.html&695874038&orderid='+orderid+'';
+  this.doc='https://cat2020.lk/birt/output?__report=mixinorderreceipt_sin.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&orderid='+orderid+'';
+  
+  if(this.isTamil)
+  // this.doc='https://cat2020.lk/birt/output?__report=mixinorderreceipt_sin.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&__emitterid=org.eclipse.birt.report.engine.emitter.html&695874038&orderid='+orderid+'';
+  this.doc='https://cat2020.lk/birt/output?__report=mixinorderreceipt_tml.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&orderid='+orderid+'';
+
+  this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
+    // '<iframe width="790" height="490" align="left|right|middle|top|bottom" allowTransparency="true" frameborder="0" scrolling="auto" src='+this.doc+'></iframe>',
+    '<iframe  class="" align="left|right|middle|top|bottom" style="width: 11in; height: 11in;position: relative; border: 1px solid white;" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
+  );
+  // window.open(this.doc, "_blank"); 
+}
+
 getTotalVAT(): number {
   let sum = 0;
   for (let i = 0; i < this.mixinOrderCustomOBJ?.mixinOrderLine.length; i++) {
@@ -252,7 +311,8 @@ getTotalStamp(): number {
 }
 
  duplicateprint(mixinOrder:any){
-  window.print();
+  this.printPage();
+  // window.print();
   }
 
 async print(mixinOrder:any){
@@ -276,20 +336,26 @@ async paidMixinOrder(mixinOrder: any) {
       }
   });
   setTimeout(() => {
+  this.LoadReport(this.orderID);
   this.getMixinOrderById(this.orderID);
-}, 1000);
   setTimeout(() => {
-    //this.clearRecord() ;
-    window.print();
-    }, 3000);
+  // window.print();
+  this.printPage();
+}, 6000);
+}, 2000);
 }
 }
 
+usercomment:any="";
 
 async approveCancelMixinOrder(mixinOrder: any) {
-  if (confirm(`Are you sure you want to Approve the cancellation of Mixin Order ${mixinOrder.code}. This cannot be undone.`)) {
-  this.spinner.show();
-    this.httpProvider.approveCancelMixinOrder(mixinOrder.id,Number(localStorage.getItem('Currentuserid')))
+  // if (confirm(`Are you sure you want to Approve the cancellation of Mixin Order ${mixinOrder.code}. This cannot be undone.`)) {
+  // this.spinner.show();
+  mixinOrder.mixinCancelOrder.updatedAt=new Date;
+  mixinOrder.mixinCancelOrder.approvedBy=Number(localStorage.getItem('Currentuserid'));
+  mixinOrder.mixinCancelOrder.ApprovalComment=this.usercomment;
+  this.mixinCancelOrder.mixinOrderId=Number(mixinOrder.id);
+    this.httpProvider.approveCancelMixinOrder(mixinOrder.mixinCancelOrder)
     .subscribe({
       next: (data) => {
            var resultData = data.body;
@@ -301,15 +367,16 @@ async approveCancelMixinOrder(mixinOrder: any) {
   });
   setTimeout(() => {
     //this.clearRecord() ;
-    this.spinner.hide();
-    this._router.navigateByUrl('/mixinorderlist');
+    this._router.navigateByUrl('/mixinordercancelaproval');
     }, 1000);
 }
-}
+
 async disapproveCancelMixinOrder(mixinOrder: any) {
-  if (confirm(`Are you sure you want to Disapprove the cancellation of Mixin Order ${mixinOrder.code}. This cannot be undone.`)) {
-  this.spinner.show();
-    this.httpProvider.disapproveCancelMixinOrder(mixinOrder.id,Number(localStorage.getItem('Currentuserid')))
+  mixinOrder.mixinCancelOrder.updatedAt=new Date;
+  mixinOrder.mixinCancelOrder.approvedBy=Number(localStorage.getItem('Currentuserid'));
+  mixinOrder.mixinCancelOrder.ApprovalComment=this.usercomment;
+  this.mixinCancelOrder.mixinOrderId=Number(mixinOrder.id);
+    this.httpProvider.disapproveCancelMixinOrder(mixinOrder.mixinCancelOrder)
     .subscribe({
       next: (data) => {
            var resultData = data.body;
@@ -321,10 +388,8 @@ async disapproveCancelMixinOrder(mixinOrder: any) {
   });
   setTimeout(() => {
     //this.clearRecord() ;
-    this.spinner.hide();
-    this._router.navigateByUrl('/mixinorderlist');
+    this._router.navigateByUrl('/mixinordercancelaproval');
     }, 1000);
-}
 }
 
 async deleteOrder(mixinOrder: any) {
@@ -348,21 +413,19 @@ async deleteOrder(mixinOrder: any) {
 }
 }
 
-async cancelMixinOrder(mixinOrder: MixinOrder) {
-  if (confirm(`Are you sure you want to cancel the Mixin Order ${mixinOrder.code}. This will send for approval. `)) {
-  this.spinner.show();
-  mixinOrder.mixinCancelOrder=new MixinCancelOrder();
-  mixinOrder.mixinCancelOrder.id="0";
-  mixinOrder.mixinCancelOrder.reason="Reason1";
-  mixinOrder.mixinCancelOrder.createdAt=new Date;
-  mixinOrder.mixinCancelOrder.updatedAt=new Date;
-  mixinOrder.mixinCancelOrder.createdBy=Number(localStorage.getItem('Currentuserid'));
-  mixinOrder.mixinCancelOrder.sessionId=mixinOrder.sessionId;
-  mixinOrder.mixinCancelOrder.mixinOrderId=Number(mixinOrder.id);
-  mixinOrder.mixinCancelOrder.approvedBy=0;
-  mixinOrder.mixinCancelOrder.ApprovalComment="ApprovalComment1";
-  console.log(mixinOrder.mixinCancelOrder);
-    this.httpProvider.cancelMixinOrder(mixinOrder.mixinCancelOrder)
+
+cancelMixinOrder(mixinOrder: MixinOrder) {
+  if(this.usercomment!="")
+  {
+  this.mixinCancelOrder=new MixinCancelOrder();
+  this.mixinCancelOrder.id="0";
+  this.mixinCancelOrder.reason=this.usercomment;
+  this.mixinCancelOrder.createdAt=new Date;
+  this.mixinCancelOrder.createdBy=Number(localStorage.getItem('Currentuserid'));
+  this.mixinCancelOrder.sessionId=mixinOrder.sessionId;
+  this.mixinCancelOrder.mixinOrderId=Number(mixinOrder.id);
+  console.log(this.mixinCancelOrder);
+    this.httpProvider.cancelMixinOrder(this.mixinCancelOrder)
     .subscribe({
       next: (data) => {
            var resultData = data.body;
@@ -374,9 +437,9 @@ async cancelMixinOrder(mixinOrder: MixinOrder) {
   });
   setTimeout(() => {
     //this.clearRecord() ;
-    this.spinner.hide();
     this._router.navigateByUrl('/mixinorderlist');
     }, 1000);
+  // }
 }
 }
 
@@ -389,5 +452,48 @@ getUserNameWithInitials(id:any)
 // return this.selectedUser.nameWithInitials;
 }
 
+name: string;
+
+cancelOrderDialog(mixinOrder: MixinOrder): void {
+  if (confirm(`Are you sure you want to cancel the Mixin Order ${mixinOrder.code}. This will send for approval. `)) {
+  let dialogRef = this.dialog.open(UserCommentDialogComponent, {
+    width: '300px',
+    data: { name: this.name, usercomment: this.usercomment }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.usercomment = result;
+    this.cancelMixinOrder(mixinOrder);
+  });
+}
+}
+
+cancelOrderApproveDialog(mixinOrder: MixinOrder): void {
+  if (confirm(`Are you sure you want to Approve the Mixin Order ${mixinOrder.code}.`)) {
+  let dialogRef = this.dialog.open(UserCommentDialogComponent, {
+    width: '300px',
+    data: { name: this.name, usercomment: this.usercomment }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.usercomment = result;
+    this.approveCancelMixinOrder(mixinOrder);
+  });
+}
+}
+
+cancelOrderDisapproveDialog(mixinOrder: MixinOrder): void {
+  if (confirm(`Are you sure you want to diasaprove the Mixin Order ${mixinOrder.code}.`)) {
+  let dialogRef = this.dialog.open(UserCommentDialogComponent, {
+    width: '300px',
+    data: { name: this.name, usercomment: this.usercomment }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.usercomment = result;
+    this.disapproveCancelMixinOrder(mixinOrder);
+  });
+}
+}
 
 }

@@ -12,13 +12,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { Pagination } from '../../common/models/pagination.model';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
 import { NgxBarcode6Component } from 'ngx-barcode6';
 import { interval, Subscription } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Session } from '../../common/models/Session';
 import { DatePipe } from '@angular/common';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {  Router, ActivatedRoute } from '@angular/router';
+
 // import { ConfirmationService } from 'primeng/api';
 // import { MessageService } from 'primeng/api';
 
@@ -29,12 +29,12 @@ export interface Post {
   userId: number;
 }
 @Component({
-  selector: 'app-mixinsession',
-  templateUrl: './mixinsession.component.html',
-  styleUrls: ['./mixinsession.component.scss']
+  selector: 'app-mixinsessionadvancedsettings',
+  templateUrl: './mixinsessionadvancedsettings.component.html',
+  styleUrls: ['./mixinsessionadvancedsettings.component.scss']
 })
 
-export class MixinSessionComponent implements OnInit {
+export class MixinSessionAdvancedSettingsComponent implements OnInit {
   haspermission :Boolean=true;
   displayedColumns: string[] = ['position','module', 'name', 'startAt','stopAt', 'active', 'actions'];
   dataSource = new MatTableDataSource<Session>([]);
@@ -51,6 +51,7 @@ export class MixinSessionComponent implements OnInit {
   p: number = 1;
   
   currentSession : Session = new Session();
+  currentExpiredSession : Session = new Session();
 
   selectedofficeId:any;
   selectedOrderStatus :any=1;
@@ -93,13 +94,13 @@ export class MixinSessionComponent implements OnInit {
   isSinhala :boolean;
   isTamil :boolean;
   isEnglish :boolean;
-
+  selectedDate:any;
   hassession:boolean;
 
   isEditing:boolean = false;
   cancelPendingmixinorders : MixinOrder[];
   
-  constructor(private datepipe: DatePipe, private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private spinner: NgxSpinnerService,public dialog: MatDialog) {
+  constructor(private datepipe: DatePipe, private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private spinner: NgxSpinnerService, private _Activatedroute: ActivatedRoute) {
     
     this.customVoteNameForm = this.fb.group({  
       offices: '',  
@@ -149,14 +150,21 @@ export class MixinSessionComponent implements OnInit {
   
 subscription: Subscription;
 source = interval(60000);
-
+sub:any;
+sessionid:any=0;
 
   ngOnInit() {
+
+    this.sub = this._Activatedroute.paramMap.subscribe((params) => {
+      this.sessionid = params.get('sessionid');
+      this.getExpiredSessionByid(this.sessionid);
+    });
+
     this.checkPermission("MIXINSESSION", Number(localStorage.getItem('Currentuserid')));
     
     this.spinner.show();
     this.getCurrentSession();
-    this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
+    // this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
 
     // if(Number(localStorage.getItem('IsAdmin'))==1)
     // {this.isadmin=true;}
@@ -271,27 +279,56 @@ source = interval(60000);
     // }
   }
 
+
+  async getSessionByid(id:number) {
+    if (id != 0) {
+     this.httpProvider.getSessionById(id)
+    .subscribe({
+      next: (result) => {
+           var resultData = result.body;
+           this.currentSession = new Session();
+           this.currentSession=result.body;
+      },
+      error: error => {
+         Notify.failure('Error Occured..!');
+      }
+  });
+  setTimeout(() => {
+  // this.currentSession = new Session();
+  }, 2000);
+  }
+  else{
+    Notify.failure('No Active Session Found..!');
+  }
+  }
+
+
   submitButtonClickCount:number=1;
-  startSession()  {  
+
+  startCustomSession(selectedDate:Date)  {  
     if(this.submitButtonClickCount==1)
     {
     this.submitButtonClickCount=this.submitButtonClickCount+1;
     if (confirm(`Are you sure you want to Start a Session ?`)) {
-      var today= this.datepipe.transform(new Date(), 'yyyy-MM-dd');
-
-      if(this.sessionsList.length>0)
-      {
+      var sessiondatetobecreated= this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
       var lastsessiondate= this.datepipe.transform(this.sessionsList[0].startAt, 'yyyy-MM-dd');
-      }
-      else {
-      var lastsessiondate= this.datepipe.transform('1970-01-01', 'yyyy-MM-dd');
-    }
-      
-      console.log(lastsessiondate + " " + today);
-      if(today!=lastsessiondate)
+      if(sessiondatetobecreated!=lastsessiondate)
       {
-      this.startSessionAPI();
+        var unixtimestamptodayDate = (new Date()).getTime() / 1000;
+        var unixtimestampselectedDate = (new Date(selectedDate)).getTime() / 1000;
+        var unixtimestampstartat = (new Date(this.sessionsList[0].startAt)).getTime() / 1000;
+
+        console.log(unixtimestampselectedDate + " " + unixtimestampstartat);
+
+        if((unixtimestampselectedDate>unixtimestampstartat) && unixtimestampselectedDate<unixtimestamptodayDate)
+        {
+      this.startCustomSessionAPI(sessiondatetobecreated);
       this.getCurrentSession();
+      this.getExpiredSessionByid(this.currentSession.id);
+    }
+    else{
+      Notify.failure('Please Select a Date After ' + lastsessiondate + ' and before today.');
+    }
       }
       else{
         Notify.failure('You have already Ended a session for the date you are attempting.');
@@ -313,6 +350,47 @@ source = interval(60000);
     
     }
   }  
+
+
+  allowReciepts()  {  
+    if (confirm(`Are you sure you want to Allow reciepts for the expired session ?`)) {
+      this.setAllowReciepts();
+    }
+  }  
+
+async setAllowReciepts() {
+
+    if(this.currentExpiredSession.id!=0)
+    {
+        this.currentExpiredSession.active=0;
+        this.currentExpiredSession.rescue=1;
+        this.currentExpiredSession.updatedBy=Number(localStorage.getItem('Currentuserid'));
+        this.currentExpiredSession.rescueStartedAt=new Date();
+       this.httpProvider.allowReceiptsForExpiredSession(this.currentSession)
+      .subscribe({
+        next: (result) => {
+             var resultData = result.body;
+             this.currentExpiredSession = new Session();
+             this.currentExpiredSession=result.body;
+             if(this.currentExpiredSession.rescue==1)
+             {
+             Notify.success('Reciepts Allowed Successfully..!');
+            }
+        },
+        error: error => {
+           Notify.failure('Error Occured..!');
+        }
+    });
+    // setTimeout(() => {
+      // this.getAllSessionsByOfficeAndModule();
+  
+    // this.currentSession = new Session();
+    // }, 2000);
+  }
+  else{
+    Notify.failure('No any Started Sessions found..!');
+  }
+  }
 
   getCurrentSession()  {  
     this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
@@ -340,17 +418,76 @@ source = interval(60000);
       });
   }
 
-  async startSessionAPI() {
+  // async getCurrentExpiredSessionByOfficeAndModule(officeid:number,module:any) {
+  //   this.httpProvider.getSessionByOfficeAndModule(officeid,module).subscribe({
+  //     next: (data) => {
+  //     if (data != null && data.body != null) {
+  //       var resultData = data.body;
+  //       if (resultData) {
+  //         this.currentSession = resultData;
+  //         var currentsessiondate= new Date(this.currentSession.startAt.getFullYear(),this.currentSession.startAt.getMonth(),this.currentSession.startAt.getDay());
+  //         var todatydate= new Date(this.datetoday.getFullYear(),this.datetoday.getMonth(),this.datetoday.getDay());
+  //         console.log(currentsessiondate +" "+ todatydate);
+  //         if(currentsessiondate<=todatydate)
+  //         {
+  //           this.currentSession=new Session();
+  //         }
+  //       }
+  //     }
+  //   },
+  //   error: error => {
+  //         if (error.status == 404) {
+  //           if(error.error && error.error.message){
+  //             Notify.failure(error.error.message);
+  //             this.currentSession=new Session();
+  //           }
+  //       }}
+  //     });
+  // }
+
+
+  today= this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+
+  async getExpiredSessionByid(id:number) {
+    this.currentExpiredSession=new Session();
+    if (id != 0) {
+     this.httpProvider.getSessionById(id)
+    .subscribe({
+      next: (result) => {
+        var resultData = result.body;
+        if (resultData) {
+          var lastsessiondate= this.datepipe.transform(resultData.startAt, 'yyyy-MM-dd');
+          console.log(this.today +" "+ lastsessiondate);
+          if(this.today!==lastsessiondate)
+          {
+            this.currentExpiredSession = resultData;
+          }
+        }
+      },
+      error: error => {
+         Notify.failure('Error Occured..!');
+      }
+  });
+  setTimeout(() => {
+  // this.currentExpiredSession = new Session();
+  }, 2000);
+  }
+  else{
+    Notify.failure('No Active Session Found..!');
+  }
+  }
+
+  async startCustomSessionAPI(sessiondatetobecreated:any) {
     if (this.currentSession.id == 0) {
       this.currentSession.name="MIX-"+new Date().toDateString;
       this.currentSession.module="MIX";
       this.currentSession.active=1;
       this.currentSession.createdAt=new Date();
-      this.currentSession.startAt=new Date();
+      this.currentSession.startAt=sessiondatetobecreated;
       this.currentSession.createdBy=Number(localStorage.getItem('Currentuserid'));
       this.currentSession.officeId=Number(localStorage.getItem('CurrentOfficeId'))
 
-     this.httpProvider.startSession(this.currentSession)
+     this.httpProvider.startCustomSession(this.currentSession)
     .subscribe({
       next: (result) => {
            var resultData = result.body;
@@ -782,6 +919,11 @@ async mixinOrdersForSession(session: any) {
 }
 
 
+
+
+
+
+
 async getAllMixinOrdersForSessionAndState(sessionid:any) {
   this.httpProvider.getAllMixinOrdersForSessionAndState(sessionid,4).subscribe({
     next: (data) => {
@@ -800,7 +942,4 @@ async getAllMixinOrdersForSessionAndState(sessionid:any) {
     });
 }
 
-async mixinsessionadvancedsettings(session: any) {
-  this._router.navigateByUrl('/mixinsessionadvancedsettings',session.id);
-}
 }

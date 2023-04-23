@@ -42,12 +42,12 @@ export interface Post {
   userId: number;
 }
 @Component({
-  selector: 'app-reportviewer',
-  templateUrl: './reportviewer.component.html',
-  styleUrls: ['./reportviewer.component.scss']
+  selector: 'app-bankdepositaccountwisereport',
+  templateUrl: './bankdepositaccountwisereport.component.html',
+  styleUrls: ['./bankdepositaccountwisereport.component.scss']
 })
 
-export class ReportViewerComponent implements OnInit {
+export class BankDepositAccountWiseReportComponent implements OnInit {
   @ViewChild('pdfViewer') public pdfViewer:any;
   dateTo = dayjs();
   dateFrom : any;
@@ -58,7 +58,8 @@ export class ReportViewerComponent implements OnInit {
   selectedOrderStatus :any=1;
 
   selectedsession : Session = new Session();
-
+  APIBankAccountsList :any;
+  bankAccountID:Number;
   @Input()
   doc: any;
   reportpreview: SafeResourceUrl;
@@ -94,7 +95,7 @@ export class ReportViewerComponent implements OnInit {
   }
   isadmin:boolean=false;
   ngOnInit() {
-    this.checkPermission("RPTSARAPDAILY", Number(localStorage.getItem('Currentuserid')));
+    this.checkPermission("RPTBNKDEPSITACCTWISE", Number(localStorage.getItem('Currentuserid')));
     if(Number(localStorage.getItem('IsAdmin'))==1)
     {this.isadmin=true;}
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
@@ -107,6 +108,7 @@ export class ReportViewerComponent implements OnInit {
     
     
     this.officename=localStorage.getItem('CurrentSabhaName');
+    this.getAllAccountDetail();
   }
 
 
@@ -143,20 +145,16 @@ reportdate:String;
   this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
   setTimeout(() => {
   //console.log(this.selectedsession);
-  if(this.isSinhala)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-  
-  if(this.isTamil)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-    // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
+  this.doc='https://cat2020.lk/birt/output?__report=bankdepositreceiptsbyaccount.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&date='+selecteddateformatted+'';
+
+  // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
   //console.log(this.doc);
   // this.mypreview= this.sanitizer.bypassSecurityTrustResourceUrl(this.doc);
 
-  // this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
-  //   '<iframe width="100%" height="800" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
-  // );
-
-  window.open(this.doc, "_blank"); 
+  // window.open(this.doc, "_blank"); 
+  this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
+    '<iframe width="100%" height="1000" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
+  );
 
   // let winUrl:any = URL.createObjectURL(new Blob([this.doc], { type: 'text/html' }));
   // window.open(this.doc);
@@ -166,7 +164,7 @@ reportdate:String;
   // this.getAllPostedMixinOrders(selecteddateformatted);
 }
 else{
-  Notify.failure("Please select a date first.");
+  Notify.failure("Please Enter all parameters.");
 }
  }
 
@@ -203,6 +201,7 @@ else{
     });
   }
 
+
   PreviewReport() {
     // if(this.selectedDate!=null)
     // {
@@ -218,6 +217,11 @@ else{
   // }
   }
 
+  onbankaccountchange(id:Number){
+    this.bankAccountID=id;
+    console.log(this.bankAccountID);
+  }
+
   ExportToExcel(date:any) {
     if(date!=null)
     {
@@ -228,11 +232,10 @@ else{
   this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
 
       setTimeout(() => {
-        if(this.isSinhala)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-        
-        if(this.isTamil)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+        this.doc='https://cat2020.lk/birt/output?__report=bankdepositreceiptsbyaccount.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&date='+selecteddateformatted+'';
+
+
+        // this.doc='https://cat2020.lk/birt/output?__report=sarapdailyreportforoffice_tml.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
         
           const downloadLink = document.createElement('a');
           downloadLink.target = '_self';
@@ -523,4 +526,26 @@ this.canceledmixinorders!.forEach((item) => {
 });
 return total;
 }
+
+
+async getAllAccountDetail() {
+  this.httpProvider.getAllAccountDetail(localStorage.getItem('sabhaId')).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      if (resultData) {
+        this.APIBankAccountsList = resultData;
+      }
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            this.APIBankAccountsList = [];
+          }
+      }}
+    });
+}
+
 }

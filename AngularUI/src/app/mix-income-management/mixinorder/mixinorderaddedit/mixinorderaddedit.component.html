@@ -59,7 +59,7 @@
                             <label *ngIf="newcustomer" for="customer">New Customer..!</label>
                             </div>
                             <div *ngIf="selectedCustomer.id!==0" class="col-md-3">
-                              <input type="text" [(ngModel)]="selectedCustomer.mobileNumber" placeholder="Mobile No." class="form-control" (keyup.enter)="GetCustomerPhone()" required readonly/>
+                              <input type="text" [(ngModel)]="selectedCustomer.mobileNumber" placeholder="Mobile No." class="form-control" (keyup.enter)="GetCustomerPhone()" (keypress)="numberOnly($event)"  required readonly/>
                               </div>
                             <br>
                             <div class="col-md-3">
@@ -115,6 +115,32 @@
                         <div class="row">
                           <div class='col-md-9 col-xs-9'>
                              <div class="row">
+                              <div class='col-md-12 col-xs-12'>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div *ngIf="isSinhala;">
+                                      <select class="form-control" [(ngModel)]="selectedBankDetailID" (ngModelChange)="onchangebankdetails($event);" [disabled]="mixinOrderItems.length>0">
+                                          <option value="0" > --Select Bank Account-- </option>
+                                          <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameSinhala)}} </option>
+                                      </select>
+                                  </div>
+                                  <div *ngIf="isEnglish;">
+                                    <select class="form-control" [(ngModel)]="selectedBankDetailID" (ngModelChange)="onchangebankdetails($event);" [disabled]="mixinOrderItems.length>0">
+                                      <option value="0" > --Select Bank Account-- </option>
+                                        <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameEnglish)}} </option>
+                                    </select>
+                                  </div>
+                                  <div *ngIf="isTamil;">
+                                    <select class="form-control" [(ngModel)]="selectedBankDetailID" (ngModelChange)="onchangebankdetails($event);" [disabled]="mixinOrderItems.length>0">
+                                      <option value="0" > --Select Bank Account-- </option>
+                                        <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameTamil)}} </option>
+                                    </select>
+                                  </div>
+                                  <br>
+                                </div>
+                              </div>
+                            </div>
+
                                  <div class='col-md-12 col-xs-12'>
                                   <div class="row">
                                   <div class="col-md-6">
@@ -200,7 +226,7 @@
                             </div> -->
                             <div class="col-md-12">
                               <div class="form-group">
-                              <input matInput id="amount" name="amount" required [(ngModel)]="newMixinOrderItem.amount"  placeholder="Amount" class="form-control" (input)="amountInputHandle($event)" numbersOnly>
+                              <input matInput id="amount" name="amount" required [(ngModel)]="newMixinOrderItem.amount"  placeholder="Amount" class="form-control" (keypress)="numberOnly($event)" (input)="amountInputHandle($event)" numbersOnly>
                             </div>
                             </div>
                             <div class="col-md-6">
@@ -227,7 +253,7 @@
                           </div>
                             <div class="col-md-6">
                               <div class="form-group">
-                              <input matInput id="stamp" name="stamp" required [(ngModel)]="newMixinOrderItem.stampAmount" value="0" placeholder="0.00" class="form-control" numbersOnly (input)="stampInputHandle($event)">
+                              <input matInput id="stamp" name="stamp" required [(ngModel)]="newMixinOrderItem.stampAmount" value="0" placeholder="0.00" class="form-control" (keypress)="numberOnly($event)"  (input)="stampInputHandle($event)"  [readonly]="!stampChecked">
                             </div>
                             </div>
                             <div class="col-md-12">
@@ -359,10 +385,10 @@
                       <!-- <td>{{newMixinOrderItem.voteCode}}</td> -->
                       <td>{{mixinOrderItem.description}}</td>
                       <!-- <td>{{newMixinOrderItem.amount}}</td> -->
-                      <td>{{mixinOrderItem.paymentVatAmount | number:'1.2-2'}}</td>
-                      <td>{{mixinOrderItem.paymentNbtAmount | number:'1.2-2'}}</td>
-                      <td>{{mixinOrderItem.stampAmount | number:'1.2-2'}}</td>
-                      <td>{{mixinOrderItem.totalAmount | number:'1.2-2'}}</td>
+                      <td class="text-right">{{mixinOrderItem.paymentVatAmount | number:'1.2-2'}}</td>
+                      <td class="text-right">{{mixinOrderItem.paymentNbtAmount | number:'1.2-2'}}</td>
+                      <td class="text-right">{{mixinOrderItem.stampAmount | number:'1.2-2'}}</td>
+                      <td class="text-right">{{mixinOrderItem.totalAmount | number:'1.2-2'}}</td>
                       <td>
                         <!-- <button mat-flat-button (click)="EditItem(i)"  matTooltip="Edit" [matTooltipPosition]="'above'" type="button">
                           <i class="fas fa-edit text-primary"></i>
@@ -371,7 +397,7 @@
                        <span (click)="DeleteItem(i)" matTooltip="Remove" [matTooltipPosition]="'above'" style="cursor: hand;cursor: pointer;"><i class="fas fa-trash text-danger"></i></span>
                     </td>
                     </tr>
-                    <tr *ngIf="mixinOrderItems.length>0"> <td colspan="6" class="text-center"> Total : </td>  <td><b>{{allitemstotal | number:'1.2-2'}}</b></td> <td></td> </tr>
+                    <tr *ngIf="mixinOrderItems.length>0"> <td colspan="6" class="text-center"> Total : </td>  <td class="text-right"><b>{{allitemstotal | number:'1.2-2'}}</b></td> <td></td> </tr>
                     </tbody>
                   </table>
                 </div>
@@ -412,7 +438,7 @@
           <fieldset style="background-color:#f1fcff;" class="border p-4">
             <legend  class="w-auto" style="font-size:16px;"><b>Cheque Information</b></legend>
             <div class="form-group">
-      <input id="chequeNo" name="chequeNo" required [(ngModel)]="mixinOrder.chequeNumber"  placeholder="Cheque Number" class="form-control">
+      <input id="chequeNo" name="chequeNo" required [(ngModel)]="mixinOrder.chequeNumber" (keypress)="numberOnly($event)"  placeholder="Cheque Number" class="form-control">
     </div>
     <!-- <div class="form-group">
       <input id="chequeDate" name="chequeDate" required [(ngModel)]="mixinOrder.chequeDate"  placeholder="Cheque Date" class="form-control">

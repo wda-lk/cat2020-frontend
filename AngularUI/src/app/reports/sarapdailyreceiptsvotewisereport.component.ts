@@ -42,12 +42,12 @@ export interface Post {
   userId: number;
 }
 @Component({
-  selector: 'app-reportviewer',
-  templateUrl: './reportviewer.component.html',
-  styleUrls: ['./reportviewer.component.scss']
+  selector: 'app-sarapdailyreceiptsvotewisereport',
+  templateUrl: './sarapdailyreceiptsvotewisereport.component.html',
+  styleUrls: ['./sarapdailyreceiptsvotewisereport.component.scss']
 })
 
-export class ReportViewerComponent implements OnInit {
+export class SarapDailyReceiptsVoteWiseReportComponent implements OnInit {
   @ViewChild('pdfViewer') public pdfViewer:any;
   dateTo = dayjs();
   dateFrom : any;
@@ -144,19 +144,20 @@ reportdate:String;
   setTimeout(() => {
   //console.log(this.selectedsession);
   if(this.isSinhala)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+  this.doc='https://cat2020.lk/birt/output?__report=LG03_S.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
   
   if(this.isTamil)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-    // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
+  //this.doc='https://cat2020.lk/birt/output?__report=sarapdailyreportforoffice_tml.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+  this.doc='https://cat2020.lk/birt/output?__report=LG03_T.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+
+  // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
   //console.log(this.doc);
   // this.mypreview= this.sanitizer.bypassSecurityTrustResourceUrl(this.doc);
 
+  window.open(this.doc, "_blank"); 
   // this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
   //   '<iframe width="100%" height="800" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
   // );
-
-  window.open(this.doc, "_blank"); 
 
   // let winUrl:any = URL.createObjectURL(new Blob([this.doc], { type: 'text/html' }));
   // window.open(this.doc);
@@ -229,10 +230,12 @@ else{
 
       setTimeout(() => {
         if(this.isSinhala)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+        this.doc='https://cat2020.lk/birt/output?__report=LG03_S.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
         
         if(this.isTamil)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+        this.doc='https://cat2020.lk/birt/output?__report=LG03_T.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+
+        // this.doc='https://cat2020.lk/birt/output?__report=sarapdailyreportforoffice_tml.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
         
           const downloadLink = document.createElement('a');
           downloadLink.target = '_self';

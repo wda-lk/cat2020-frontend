@@ -45,6 +45,7 @@ export class AuthenticationService {
                     localStorage.setItem('CurrentLogopathNm', user.sabhaLogoPath);
                     localStorage.setItem('CurrentOfficeId', user.officeID);
                     localStorage.setItem('CurrentSabhaName', user.sabhaName);
+                    localStorage.setItem('CurrentOfficeName', user.officeName);
                     localStorage.setItem('CurrentSabhaNameEnglish', user.sabhaNameEnglish);
                     localStorage.setItem('CurrentDistrictNm', user.districtName);
                     localStorage.setItem('CurrentProvinceNm', user.provinceName);

@@ -1,0 +1,408 @@
+<ngx-spinner  bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission || isadmin"  class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-5">
+         <h4 class="m-0">Receipt Banking</h4>
+        </div><!-- /.col -->
+        <div class="col-sm-2">
+          <!-- <div class="row">
+          <input type="text" style="font-size: large; color: blue;" [(ngModel)]="barcode" placeholder="Enter Barcode" class="form-control col-sm-5" (keyup.enter)="GetOrderByBarcode()" required />
+
+          <label *ngIf="!hasorderforbarcode" for="barcode"  class="col-sm-7" style="color: coral;"> {{barcode}} Not Found...!</label>
+        </div> -->
+        </div><!-- /.col -->
+        <div class="col-sm-5">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">CAT20 Automation System</li>
+            <li class="breadcrumb-item active">Banking</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <!-- <h6 class="m-0">Cash Book</h6> -->
+      </div>
+      <div class="col-sm-6 text-center">
+        <!-- <h6 class="m-0">Bank</h6> -->
+      </div>
+      </div>
+      <div class="row">
+        <div *ngIf="isSinhala;">
+          <!-- <label>Select Bank Account</label> -->
+          <select class="form-control" [(ngModel)]="bankAccountID"  (ngModelChange)="onbankaccountchange($event);" >
+              <option value="0" > --Select Bank Account-- </option>
+              <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameSinhala)}} </option>
+          </select>
+      </div>
+      <div *ngIf="isEnglish;">
+        <!-- <label>Select Bank Account</label> -->
+        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+          <option value="0" > --Select Bank Account-- </option>
+            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameEnglish)}} </option>
+        </select>
+      </div>
+      <div *ngIf="isTamil;">
+        <!-- <label>Select Bank Account</label> -->
+        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+          <option value="0" > --Select Bank Account-- </option>
+            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameTamil)}} </option>
+        </select>
+      </div>
+    </div>
+      <div class="row">
+        <!-- <div class="col-lg-6 col-md-12"> -->
+      <!-- <h3>Department  </h3>
+
+<mat-card> -->
+<!-- <table>
+<tr>
+	<td>
+		<div class="example-container mat-elevation-z8"> -->
+
+
+<div class="col-lg-7 col-md-12">
+
+<br>
+  <h6 class="m-0"><b>Cash Book</b></h6>
+			<mat-table #table [dataSource]="dataSource" >
+						  
+				    <ng-container  matColumnDef="select">
+				      <mat-header-cell style="flex: none; width: 60px;" *matHeaderCellDef>
+				        <mat-checkbox (change)="$event ? masterToggle() : null"
+				                      [checked]="selection.hasValue() && isAllSelected()"
+				                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+				        </mat-checkbox>
+				      </mat-header-cell>
+				      <mat-cell style="flex: none; width: 60px;" *matCellDef="let row">
+				        <mat-checkbox (click)="$event.stopPropagation()"
+				                      (change)="$event ? selection.toggle(row) : null"
+				                      [checked]="selection.isSelected(row)">
+				        </mat-checkbox>
+				      </mat-cell>
+				    </ng-container>
+
+			    <ng-container matColumnDef="date"  >
+			      <mat-header-cell class="text-center" *matHeaderCellDef style="flex: none; width: 100px;  font-size: 12px; "> Date </mat-header-cell>
+			      <mat-cell class="text-center" style="flex: none; width: 100px; font-size: 10px; text-align: left; justify-content: flex-start;" *matCellDef="let mixinOrder"> {{mixinOrder.createdAt | date : 'YYYY-MM-dd'}} </mat-cell>
+			    </ng-container>
+			    
+          <ng-container matColumnDef="code"  >
+			      <mat-header-cell class="text-center" style="flex: none; width: 150px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matHeaderCellDef > Receipt No. </mat-header-cell>
+			      <mat-cell class="text-left" style="flex: none; width: 150px; font-size: 10px; text-align: left; justify-content: flex-start;"*matCellDef="let mixinOrder"> {{mixinOrder.code}} </mat-cell>
+			    </ng-container>
+
+          <ng-container matColumnDef="cashamount"  >
+			      <mat-header-cell class="text-center" style="flex: none; width: 80px;  font-size: 12px; text-align: center; justify-content: flex-end;" *matHeaderCellDef > Cash </mat-header-cell>
+            <mat-cell class="text-right" style="flex: none; width: 80px;  font-size: 10px; text-align: right; justify-content: flex-end;"*matCellDef="let mixinOrder"> <span style=" text-align: right;" *ngIf="mixinOrder.paymentMethodId==1"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==2"> {{0.00 | number:'1.2-2'}} </span> </mat-cell>
+			    </ng-container>
+
+          <ng-container  matColumnDef="chequeamount"  >
+			      <mat-header-cell class="text-center" *matHeaderCellDef  style="flex: none; width: 80px;  font-size: 12px; text-align: center; justify-content: flex-end;"  > Cheque </mat-header-cell>
+            <mat-cell class="text-right"  style="flex: none; width: 80px;  font-size: 10px;  text-align: right; justify-content: flex-end;" *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> {{0.00 | number:'1.2-2'}} </span> </mat-cell>
+			    </ng-container>
+
+          <ng-container matColumnDef="chequenumber"  >
+			      <mat-header-cell class="text-center"  style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;"  *matHeaderCellDef > Cheque No. </mat-header-cell>
+            <mat-cell class="text-right" style="flex: none; width: 120px;  font-size: 10px;  text-align: center; justify-content: flex-start;"*matCellDef="let mixinOrder">  <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.chequeNumber}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> - </span> </mat-cell>
+			    </ng-container>
+
+          <ng-container matColumnDef="accountDetailId"  >
+			      <mat-header-cell class="text-center"  style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;"  *matHeaderCellDef > accountDetailId </mat-header-cell>
+            <mat-cell class="text-right" style="flex: none; width: 120px;  font-size: 10px;  text-align: center; justify-content: flex-start;"*matCellDef="let mixinOrder">  {{mixinOrder.accountDetailId}} </mat-cell>
+			    </ng-container>
+
+			 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				    <mat-row *matRowDef="let row; columns: displayedColumns; " [ngStyle]="{'background-color': getColor(row,APIMixinOrders)}"> </mat-row>
+				    
+			  </mat-table> 
+			  <div >
+			  <!-- <mat-paginator #paginator
+              [pageSize]="15"
+              [pageSizeOptions]="[5, 10, 15,25, 100]">
+			</mat-paginator> -->
+			</div>
+      <button class="addbtn" mat-raised-button color="primary" (click)="moveToTableTwo()" >Send >> </button>
+     	</div>
+       <!-- <mat-form-field *ngFor="let filter of filterSelectObj" style="margin-left: 15px;">
+        <mat-label>Filter {{filter.name}}</mat-label>
+        <select matNativeControl name="{{filter.columnProp}}" [(ngModel)]="filter.modelValue"
+          (change)="filterChange(filter,$event)">
+          <option value="">-- Select {{filter.name}} --</option>
+          <option [value]="item" *ngFor="let item of filter.options">{{item}}</option>
+        </select>
+      </mat-form-field>
+      &nbsp;
+      <button mat-flat-button color="warn" (click)="resetFilters()">Reset</button>
+       -->
+			<!-- </div>
+	</td>
+	<td> -->
+		
+		<!-- <div class="example-container2 mat-elevation-z8"> -->
+      <div class="col-lg-5 col-md-12">
+        <br>
+        <!-- <br><br><br> -->
+        <h6 class="m-0"><b>Bank</b></h6>
+					  <mat-table #table [dataSource]="checkedDataSource" > 
+          <!-- Checkbox Column -->
+          <ng-container  matColumnDef="select">
+            <mat-header-cell   hidden="true" style="flex: none; width: 60px;" *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell   hidden="true" style="flex: none; width: 60px;" *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </mat-cell>
+            <mat-footer-cell  hidden="true" style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matFooterCellDef> </mat-footer-cell>
+          </ng-container>
+
+        <ng-container matColumnDef="date"  >
+          <mat-header-cell hidden="true" class="text-center" *matHeaderCellDef style="flex: none; width: 100px;  font-size: 12px; "> Date </mat-header-cell>
+          <mat-cell  hidden="true" class="text-center" style="flex: none; width: 100px; font-size: 10px; text-align: left; justify-content: flex-start;" *matCellDef="let mixinOrder"> {{mixinOrder.createdAt | date : 'YYYY-MM-dd'}} </mat-cell>
+          <mat-footer-cell   hidden="true" style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matFooterCellDef> </mat-footer-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="code"  >
+          <mat-header-cell class="text-center" style="flex: none; width: 150px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matHeaderCellDef > Receipt No. </mat-header-cell>
+          <mat-cell class="text-left" style="flex: none; width: 150px; font-size: 10px; text-align: left; justify-content: flex-start;"*matCellDef="let mixinOrder"> {{mixinOrder.code}} </mat-cell>
+          <mat-footer-cell style="flex: none; width: 150px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matFooterCellDef> Total </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cashamount"  >
+          <mat-header-cell class="text-center" style="flex: none; width: 80px;  font-size: 12px; text-align: center; justify-content: flex-end;" *matHeaderCellDef > Cash </mat-header-cell>
+          <mat-cell class="text-right" style="flex: none; width: 80px;  font-size: 10px; text-align: right; justify-content: flex-end;"*matCellDef="let mixinOrder"> <span style=" text-align: right;" *ngIf="mixinOrder.paymentMethodId==1"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==2"> {{0.00 | number:'1.2-2'}} </span> </mat-cell>
+          <mat-footer-cell *matFooterCellDef  style="flex: none; width: 80px;  font-size: 12px;  text-align: right; justify-content: flex-end;" > <b> {{getTotalCash() | number:'1.2-2'}} </b> </mat-footer-cell>
+        </ng-container>
+
+        <ng-container  matColumnDef="chequeamount"  >
+          <mat-header-cell class="text-center" *matHeaderCellDef  style="flex: none; width: 80px;  font-size: 12px; text-align: center; justify-content: flex-end;"  > Cheque </mat-header-cell>
+          <mat-cell class="text-right"  style="flex: none; width: 80px;  font-size: 10px;  text-align: right; justify-content: flex-end;" *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> {{0.00 | number:'1.2-2'}} </span> </mat-cell>
+          <mat-footer-cell *matFooterCellDef  style="flex: none; width: 80px;  font-size: 12px;  text-align: right; justify-content: flex-end;" ><b> {{getTotalCheque() | number:'1.2-2'}} </b></mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="chequenumber"  >
+          <mat-header-cell class="text-center"  style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;"  *matHeaderCellDef > Cheque No. </mat-header-cell>
+          <mat-cell class="text-right" style="flex: none; width: 120px;  font-size: 10px;  text-align: center; justify-content: flex-start;"*matCellDef="let mixinOrder">  <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.chequeNumber}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> - </span> </mat-cell>
+          <mat-footer-cell style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;" *matFooterCellDef> </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="accountDetailId"  >
+          <mat-header-cell class="text-center"  style="flex: none; width: 120px;  font-size: 12px; text-align: center; justify-content: flex-start;"  *matHeaderCellDef > accountDetailId </mat-header-cell>
+          <mat-cell class="text-right" style="flex: none; width: 120px;  font-size: 10px;  text-align: center; justify-content: flex-start;"*matCellDef="let mixinOrder">  {{mixinOrder.accountDetailId}} </mat-cell>
+        </ng-container>
+			   		 
+			      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="checkedSelection.toggle(row) "  [ngStyle]="{'background-color': getColor(row,APIMixinOrders)}"></mat-row>
+            <mat-footer-row mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
+          
+				    
+
+          <!-- <tr *ngIf="mixinOrderItems.length>0"> <td colspan="6" class="text-center"> Total : </td>  <td><b>{{allitemstotal | number:'1.2-2'}}</b></td> <td></td> </tr> -->
+			  </mat-table> 
+			  <div >
+			  <!-- <mat-paginator #checkedpaginator
+              [pageSize]="15"
+              [pageSizeOptions]="[5, 10, 15,25, 100]">
+         	</mat-paginator> -->
+			</div>
+      <!-- <button class="addbtn" mat-raised-button color="primary" (click)="moveToTableOne()" >  Remove </button> -->
+      <button class="addbtn" style="background-color: rgb(233, 217, 0);" mat-raised-button  (click)="reset()" >  Reset </button>
+		</div>
+
+	<!-- </td>
+</tr>
+<tr> -->
+	<!-- <td><button class="addbtn" mat-raised-button color="primary" (click)="moveToTableTwo()" >Move To Table 2</button></td>
+	<td><button class="addbtn" mat-raised-button color="primary" (click)="moveToTableOne()" >Move To Table 1</button></td>
+</tr>	
+</table> -->
+<!-- </mat-card> -->
+<!-- </div> -->
+</div>
+<div class="row">
+  <div class="col-sm-7 text-right">
+    <!-- <button class="addbtn" mat-raised-button color="primary" (click)="moveToTableTwo()" >Send >> </button> -->
+</div>
+<div class="col-sm-5 text-right">
+  <!-- <button class="addbtn" mat-raised-button color="primary" (click)="moveToTableOne()" >Move To Table 1</button> -->
+</div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-sm-7 text-right">
+</div>
+<div class="col-sm-5 text-right">
+  <div class="row">
+  <div class="col-md-12">
+    <div class="row">
+    <div class="col-sm-4">
+  <label >Total Cash </label>
+</div>
+<div class="col-sm-4 text-right">
+    <input matInput class="text-right" id="totalcash" name="totalcash" required [(ngModel)]="totalcash"  placeholder="0.00" class="form-control" readonly numbersOnly>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+<label >Total Cheque </label>
+</div>
+<div class="col-sm-4 text-right">
+  <input matInput class="text-right" id="totalcheque" name="totalcheque" required [(ngModel)]="totalcheque"  placeholder="0.00" class="form-control" readonly numbersOnly>
+</div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+<label >Total </label>
+</div>
+<div class="col-sm-4 text-right">
+  <input matInput class="text-right" id="grandtotal" name="grandtotal" required [(ngModel)]="grandtotal"  placeholder="0.00" class="form-control" readonly numbersOnly>
+</div>
+</div>
+</div>
+ </div>
+</div>
+</div> -->
+<br>
+<br>
+<div class="row">
+  <div class="col-sm-6 text-right">
+</div>
+<div class="col-sm-6 text-right">
+  <div class="row">
+  <div class="col-md-8 ">
+    <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
+  <mat-form-field>
+    <mat-label>Banking Date</mat-label>
+    <input matInput
+          #resultPickerModel="ngModel"
+          [matDatepicker]="resultPicker"
+          [(ngModel)]="selectedDate"
+          >
+    <mat-datepicker #resultPicker>
+    </mat-datepicker>
+  </mat-form-field>
+  </div>
+  <div  class="col-md-4">
+    <a class="btn btn-success" (click)="saveBanking(selectedDate)"> Banking </a> &nbsp;&nbsp;
+  </div>
+</div>
+</div>
+
+</div>
+<br>
+<div *ngIf="doc!=null" class="card card-info">
+  <div class="card-body">
+<div [innerHTML]="reportpreview"></div>
+</div>
+</div>
+          <!-- <div class="row">
+          <div class="col-lg-12 col-md-12">
+              <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title">Cash Book</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                    <div class="card-body">
+                       <div class="table-responsive">                       
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover table-striped" matSort>
+                                  <ng-container matColumnDef="position">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                                    <td mat-cell *matCellDef="let i = index">
+                                    {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}</td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="date">
+                                    <th  class="text-center" mat-header-cell *matHeaderCellDef > Date </th>
+                                    <td class="text-center" mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.createdAt | date : 'YYYY-MM-dd'}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="code">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Receipt No.</th>
+                                    <td mat-cell *matCellDef="let mixinOrder"> {{mixinOrder.code}} </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="cashamount">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cash</th>
+                                    <td  class="text-right"  mat-cell *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==1"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==2"> {{0.00 | number:'1.2-2'}} </span> </td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="chequeamount">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cheque</th>
+                                    <td  class="text-right"  mat-cell *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.totalAmount | number:'1.2-2'}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> {{0.00 | number:'1.2-2'}} </span></td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="chequenumber">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cheque Number</th>
+                                    <td  class="text-center"  mat-cell *matCellDef="let mixinOrder"> <span *ngIf="mixinOrder.paymentMethodId==2"> {{mixinOrder.chequeNumber}} </span> <span *ngIf="mixinOrder.paymentMethodId==1"> - </span></td>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+                                    <td mat-cell *matCellDef="let mixinOrder">
+                                      <div class="text-center">
+                                        <span (click)="viewMixinOrder(mixinOrder)" matTooltip="View" [matTooltipPosition]="'above'" style="cursor: hand;cursor: pointer;"><a [routerLink]="['/mixinorderview',mixinOrder.id]"><i class="fas fa-eye text-primary"></i></a></span>
+                                      </div>
+                                    </td>
+                                  </ng-container>
+                                  <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
+                                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                                <mat-paginator
+                                [length]="pagination.total"
+                                [pageIndex]="pagination.pageIndex - 1"
+                                [pageSize]="pagination.pageSize"
+                                [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                                (page)="paginated.emit($event)"
+                                showFirstLastButtons>
+                              </mat-paginator>
+
+                            </div> 
+                            <div class="row">
+                            <div class="col-sm-12 text-right">
+                              <button class="btn btn-primary" (click)="refreshList()"> <i class="fa fa-reload"></i> Send </button>
+                            </div>
+                          </div>
+                          </div>
+            </div>
+          </div>
+
+      </div> -->
+  </div><!-- /.container-fluid -->
+</section>
+</div>
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+  <!-- <div class="row">
+    <div class="col-sm-2">
+    </div>
+        <div class="col-sm-8">
+    <div class="w3-display-middle">
+      <br><br><br>
+      <h2 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h2>
+      <h4 class="w3-center w3-animate-right">You dont have permission to view this page.</h4>
+      <h5 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h5>
+      <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+      </div>
+    </div>
+  </div> -->
+ </div>
+ <!-- End of if not page allowed for user wrapper -->

@@ -6,7 +6,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h4 class="m-0">Mix Income Sarap Receipts Daily Report (LG.02)</h4>
+          <h4 class="m-0">Bank Deposit Information By Receipt </h4>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -26,7 +26,7 @@
           <div class="col-lg-12 col-md-12">
               <div class="card card-info">
                   <div class="card-header">
-                    <h3 class="card-title"> Report Filter Parameters
+                    <h3 class="card-title"> Filter Parameters
                     </h3>
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -36,8 +36,32 @@
                   </div>
                   <div class="card-body">
                     <div class="row form-group">
-                    <div class="col-md-6">
-
+                      <div class="col-md-4">
+                        <div *ngIf="isSinhala;">
+                          <label>Select Bank Account</label>
+                          <select class="form-control" [(ngModel)]="bankAccountID"  (ngModelChange)="onbankaccountchange($event);">
+                              <option value="0" > --Select Bank Account-- </option>
+                              <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameSinhala)}} </option>
+                          </select>
+                      </div>
+                      <div *ngIf="isEnglish;">
+                        <label>Select Bank Account</label>
+                        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+                          <option value="0" > --Select Bank Account-- </option>
+                            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameEnglish)}} </option>
+                        </select>
+                      </div>
+                      <div *ngIf="isTamil;">
+                        <label>Select Bank Account</label>
+                        <select class="form-control" [(ngModel)]="bankAccountID" (ngModelChange)="onbankaccountchange($event);">
+                          <option value="0" > --Select Bank Account-- </option>
+                            <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameTamil)}} </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <!-- <label>Select Date</label> -->
+                      <br>
                       <!-- <div class="container"> -->
 <!-- 
                         <div>
@@ -70,7 +94,8 @@
   </mat-form-field>
                       <!-- <input type="text" [(ngModel)]="selectedDate" placeholder="Select Date" class="form-control col-md-3" required/> -->
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                      <br>
                       <a class="btn btn-success" (click)="LoadReport(selectedDate)">View Report </a> &nbsp;&nbsp;
                       <!-- <a class="btn btn-success" (click)="Print()">Print </a> &nbsp;&nbsp; -->
                       <!-- <a class="btn btn-info" (click)="Print(selectedDate)"><i class="fas fa-print"></i> &nbsp; Print</a>  -->

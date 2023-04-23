@@ -65,11 +65,13 @@ export class MixinOrderAddEditComponent implements OnInit {
   selectedBalancesheetSubTitle:any  ;
   selectedBalancesheetSubTitleID:any=0;
   selectedBalancesheetSubTitleName:any;
+  APIBankAccountsList:any;
   objBalanceSheetSubtitle:any;
   objBalanceSheettitle:any;
   allitemstotal:number=0;
   itemVoteCode:any;
-
+  selectedBankDetails:any  ;
+  selectedBankDetailID:any=0;
   vatChecked: boolean = false;
   nbtChecked: boolean = false;
   stampChecked: boolean = false;
@@ -198,8 +200,8 @@ export class MixinOrderAddEditComponent implements OnInit {
     this.mixinOrderItems.push(
       this.newMixinOrderItem
     );
-console.log('item added:' + this.newMixinOrderItem);
-console.log('items List:' + this.mixinOrderItems);
+// console.log('item added:' + this.newMixinOrderItem);
+// console.log('items List:' + this.mixinOrderItems);
 
     this.newMixinOrderItem = {};
     this.spinner.hide();
@@ -227,7 +229,7 @@ console.log('items List:' + this.mixinOrderItems);
   }
 
   DeleteItem(i:any) {
-    this.allitemstotal = Number(this.allitemstotal)-Number(this.mixinOrderItems[i].amount);
+    this.allitemstotal = Number(this.allitemstotal)-Number(this.mixinOrderItems[i].totalAmount);
     this.mixinOrderItems.splice(i, 1);
   }
   isadmin:boolean=false;
@@ -236,7 +238,6 @@ console.log('items List:' + this.mixinOrderItems);
   ngOnInit() {
 
     this.spinner.show();
-
    this.checkPermission("MXORDERADDEDIT", Number(localStorage.getItem('Currentuserid')));
   //  if(Number(localStorage.getItem('IsAdmin'))==1)
   //  {this.isadmin=true;}
@@ -245,7 +246,7 @@ console.log('items List:' + this.mixinOrderItems);
 
   this.VoteDetailsDropdownSettings = {
     idField: 'id',
-    textField: 'voteCode',
+    textField: 'voteCodewithCustomName',
     singleSelection: true,
     // selectAllText: 'Select All',
     // unSelectAllText: 'UnSelect All',
@@ -314,11 +315,12 @@ console.log('items List:' + this.mixinOrderItems);
   }
 
   async refresh() {
+    this.getAllAccountDetailForOffice();
     this.getAllPartners();
     this.getAllGnDivisionsForSabha();
-    this.getAllVoteAssignmentDetailsForOffice();
-    this.getAllBalancesheetTitles();
-    this.getAllVoteAssignmentsForOffice();
+    // this.getAllVoteAssignmentDetailsForOffice();
+    // this.getAllBalancesheetTitles();
+    // this.getAllVoteAssignmentsForOffice();
     this.getVatPercentage();
     this.getNbtPercentage();
 
@@ -362,7 +364,7 @@ async getAllBalancesheetSubtitleByTitleID(id:any) {
   this.SelectedVoteId=0;
   this.selectedVoteAssignmentDetail=[];
 
-  this.httpProvider.getAllBalancesheetSubtitleByTitleID(id).subscribe({
+  this.httpProvider.getAllBalancesheetSubtitlesForTitleIDAndAccountDetailID(id,this.selectedBankDetailID).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
@@ -380,6 +382,7 @@ async getAllBalancesheetSubtitleByTitleID(id:any) {
       }}
     });
 }
+
 
 onchangebalancesheetsubtitle(id : any)
 
@@ -401,13 +404,13 @@ onchangebalancesheetsubtitle(id : any)
   }
     if (this.isTamil) 
     {
-    this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.isTamil;
-    this.selectedVoteCode=this.objBalanceSheetSubtitle.isTamil;
+    this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.nameTamil;
+    this.selectedVoteCode=this.objBalanceSheetSubtitle.nameTamil;
     }
     if (this.isEnglish) 
     {
-    this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.isEnglish;
-    this.selectedVoteCode=this.objBalanceSheetSubtitle.isEnglish;
+    this.selectedBalancesheetSubTitleName=this.objBalanceSheetSubtitle.nameEnglish;
+    this.selectedVoteCode=this.objBalanceSheetSubtitle.nameEnglish;
     }
     this.newMixinOrderItem.mixinVoteAssignmentDetailId=this.objBalanceSheetSubtitle.id;
     this.newMixinOrderItem.customVoteName=this.selectedBalancesheetSubTitleName;
@@ -417,6 +420,43 @@ onchangebalancesheetsubtitle(id : any)
     // console.log(this.selectedBalancesheetSubTitleID);
     // console.log(this.selectedBalancesheetSubTitleName);
 }
+
+
+onchangebankdetails(id : any)
+{
+  this.selectedBankDetailID=id;
+  this.APIVoteAssignmentsForOfficeList=[];
+  this.APIAllBalanceSheetTitle=[];
+  this.APIBalancesheetsubtitleListBybalancetitle=[];
+  // console.log(id);
+  this.getAllVoteAssignmentsForOfficeAndBankAccount(id);
+  this.getAllBalancesheetTitleForAccountDetailsId(id);
+  this.selectedBalancesheetSubTitle=0;
+  this.TitleID=0;
+  this.newMixinOrderItem.customVoteName="";
+}
+
+async getAllAccountDetailForOffice() {
+  this.httpProvider.getAllAccountDetail(localStorage.getItem('sabhaId')).subscribe({
+    next: (data) => {
+    if (data != null && data.body != null) {
+      var resultData = data.body;
+      if (resultData) {
+        this.APIBankAccountsList = resultData;
+      }
+    }
+  },
+  error: error => {
+        if (error.status == 404) {
+          if(error.error && error.error.message){
+            Notify.failure(error.error.message);
+            this.APIBankAccountsList = [];
+          }
+      }}
+    });
+}
+
+
 
 async getAllGnDivisionsForSabha()  {
   this.httpProvider.getAllGnDivisionsForSabha(localStorage.getItem('sabhaId')).subscribe({
@@ -460,8 +500,29 @@ async getAllVoteAssignmentDetailsForOffice() {
 }
 
 
-async getAllBalancesheetTitles() {
-  this.httpProvider.getAllBalancesheetTitle(localStorage.getItem('sabhaId')).subscribe({
+// async getAllBalancesheetTitles() {
+//   this.httpProvider.getAllBalancesheetTitle(localStorage.getItem('sabhaId')).subscribe({
+//     next: (data) => {
+//     if (data != null && data.body != null) {
+//       var resultData = data.body;
+//       if (resultData) {
+//         this.APIAllBalanceSheetTitle = resultData;
+//       }
+//     }
+//   },
+//   error: error => {
+//         if (error.status == 404) {
+//           if(error.error && error.error.message){
+//             Notify.failure(error.error.message);
+//             this.APIAllBalanceSheetTitle = [];
+//           }
+//       }}
+//     });
+// }
+
+
+async getAllBalancesheetTitleForAccountDetailsId(accountdetailid:number) {
+  this.httpProvider.getAllBalancesheetTitleForAccountDetailsId(accountdetailid).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
@@ -520,15 +581,19 @@ async updateCustomer() {
   .subscribe({
     next: (result) => {
          var resultData = result.body;
+          this.selectedCustomer = resultData;
+        // this.newcustomer=false;
          Notify.success('Customer Saved successfully..!');
     },
     error: error => {
        Notify.failure('Error Occured..!');
     }
 });
+
 setTimeout(() => {
-this.selectedCustomer = new Partner();
+// this.selectedCustomer = new Partner();
 this.refresh();
+this.GetCustomerPhone();
 }, 2000);
 }
 }
@@ -619,10 +684,51 @@ clearOrderItem() {
       this.stampChecked=false;
 }
 
-async getAllVoteAssignmentsForOffice() {
+// async getAllVoteAssignmentsForOffice() {
+//   this.APIVoteAssignmentsForOfficeList=[];
+//   this.APICustomVoteNamesForOfficeList =[];
+//   this.httpProvider.getAllVoteAssignmentsForOfficeId(localStorage.getItem('CurrentOfficeId')).subscribe({
+//     next: (data) => {
+//     if (data != null && data.body != null) {
+//       var resultData = data.body;
+//       if (resultData) {
+//         this.APIVoteAssignmentsForOfficeList = resultData;
+//         this.APIVoteAssignmentsForOfficeList.forEach((voteAssignment:any) => {
+//           if(voteAssignment.voteAssignmentDetails.length>0)
+//           {
+//             voteAssignment.voteAssignmentDetails.forEach((voteAssignmentDetail:any) => {
+//             this.APICustomVoteNamesForOfficeList.push({
+//               id: voteAssignmentDetail.id,
+//               customVoteName: voteAssignmentDetail.customVoteName,
+//               voteAssignmentId:voteAssignmentDetail.voteAssignmentId,
+//               voteCode: voteAssignment.voteCode,
+//               isActive: voteAssignmentDetail.isActive,
+//               dateCreated: null,
+//               dateModified:null
+//             });
+//           });
+//           }
+//         });
+//         this.dataSource.data=this.APICustomVoteNamesForOfficeList;
+//       }
+//     }
+//   },
+//   error: error => {
+//         if (error.status == 404) {
+//           if(error.error && error.error.message){
+//             Notify.failure(error.error.message);
+//             this.APIVoteAssignmentsForOfficeList =[];
+//           }
+//       }}
+//     });
+// }
+
+
+async getAllVoteAssignmentsForOfficeAndBankAccount(bankdetailid:number) {
   this.APIVoteAssignmentsForOfficeList=[];
   this.APICustomVoteNamesForOfficeList =[];
-  this.httpProvider.getAllVoteAssignmentsForOfficeId(localStorage.getItem('CurrentOfficeId')).subscribe({
+  this.dataSource.data=[];
+  this.httpProvider.getAllVoteAssignmentsForOfficeIdAndAccountDetailId(localStorage.getItem('CurrentOfficeId'),bankdetailid).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;
@@ -637,6 +743,7 @@ async getAllVoteAssignmentsForOffice() {
               customVoteName: voteAssignmentDetail.customVoteName,
               voteAssignmentId:voteAssignmentDetail.voteAssignmentId,
               voteCode: voteAssignment.voteCode,
+              voteCodewithCustomName: voteAssignment.voteCode + ' : ' + voteAssignmentDetail.customVoteName,
               isActive: voteAssignmentDetail.isActive,
               dateCreated: null,
               dateModified:null
@@ -645,6 +752,7 @@ async getAllVoteAssignmentsForOffice() {
           }
         });
         this.dataSource.data=this.APICustomVoteNamesForOfficeList;
+        // console.log(this.APICustomVoteNamesForOfficeList);
       }
     }
   },
@@ -657,7 +765,6 @@ async getAllVoteAssignmentsForOffice() {
       }}
     });
 }
-
 async getVatPercentage() {
   this.httpProvider.getPaymentVatsById(1).subscribe({
     next: (data) => {
@@ -720,6 +827,10 @@ onchangePaymentOption(event:any) {
   this.mixinOrder.chequeBankName="";
 }
 
+financial(x:any):number {
+  return Number(Number.parseFloat(x).toFixed(2));
+}
+
 calculateTotalAmount()
 {
   let amount:number=0.00;
@@ -735,33 +846,33 @@ calculateTotalAmount()
 
   if(Number(this.newMixinOrderItem.amount)>0)
   {
-    amount=this.newMixinOrderItem.amount;
+    amount=this.financial(this.newMixinOrderItem.amount);
   }
   
   if(this.vatChecked)
   {
-    vatamount=(amount*Number(this.APIVatPercentage))/100;
+    vatamount=this.financial((amount*Number(this.APIVatPercentage))/100);
     this.newMixinOrderItem.paymentVatAmount=vatamount;
   }
   if(this.nbtChecked)
   {
-    nbtamount=(amount*Number(this.APINbtPercentage))/100;
+    nbtamount=this.financial((amount*Number(this.APINbtPercentage))/100);
     this.newMixinOrderItem.paymentNbtAmount=nbtamount;
   }
   if(this.stampChecked)
   {
-    stampamount=this.newMixinOrderItem.stampAmount;
-    this.newMixinOrderItem.paymentVatAmount=vatamount;
+    stampamount=this.financial(this.newMixinOrderItem.stampAmount);
+    this.newMixinOrderItem.stampAmount=stampamount;
   }
   // else{
   //   this.newMixinOrderItem.stampAmount=0.00;
   // }
   if(this.stampChecked==true && this.newMixinOrderItem.stampAmount !="" && Number(this.newMixinOrderItem.stampAmount)>0)
   {
-    stampamount=Number(this.newMixinOrderItem.stampAmount);
+    stampamount=this.financial(Number(this.newMixinOrderItem.stampAmount));
     this.newMixinOrderItem.stampAmount=stampamount;
   }
-  totalAmount=Number(amount)+Number(vatamount)+Number(nbtamount)+Number(stampamount);
+  totalAmount=this.financial(Number(amount)+Number(vatamount)+Number(nbtamount)+Number(stampamount));
   this.newMixinOrderItem.totalAmount=totalAmount;
 }
 
@@ -834,7 +945,18 @@ async saveMixinOrder() {
     this.mixinOrder.cashierId=0;
     this.mixinOrder.createdBy=Number(localStorage.getItem('Currentuserid'));
     this.mixinOrder.officeId=Number(localStorage.getItem('CurrentOfficeId'));
+    this.mixinOrder.accountDetailId=this.selectedBankDetailID;
     this.mixinOrder.sessionId=this.currentSession.id;
+
+if(this.currentSession.rescue==1)
+{
+    const createdAt  = this.datepipe.transform(this.currentSession.startAt, 'yyyy-MM-dd');
+    this.mixinOrder.createdAt = new Date(createdAt!);
+  }
+  else{
+    const createdAt  = this.datepipe.transform(new Date, 'yyyy-MM-dd HH:mm:ss');
+    this.mixinOrder.createdAt = new Date(createdAt!);
+  }
     // this.mixinOrder.mixinCancelOrder=[];
 
     this.mixinOrder.mixinOrderLine = [];
@@ -852,7 +974,7 @@ async saveMixinOrder() {
     if(this.submitButtonClickCount==1)
     {
     this.submitButtonClickCount=this.submitButtonClickCount+1;
-    console.log(this.mixinOrder);
+    // console.log(this.mixinOrder);
     this.httpProvider.saveMixinOrderDetail(this.mixinOrder)
   .subscribe({
     next: (result) => {
@@ -899,5 +1021,12 @@ this.getSession();
       }, 100000);
     }
 
-
+    numberOnly(event:any): boolean {
+      const charCode = (event.which) ? event.which : event.keyCode;
+      if (charCode > 31 && (charCode < 46 || charCode > 57)) {
+        return false;
+      }
+      return true;
+  
+    }
 }

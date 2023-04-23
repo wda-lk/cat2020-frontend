@@ -107,7 +107,9 @@
                                   </ng-container>
                                   <ng-container matColumnDef="bankAccountId">
                                     <th style="font-size:12px;" mat-header-cell *matHeaderCellDef mat-sort-header> Account No. </th>
-                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.accountDetail.accountNo}} </td>
+                                    <td style="font-size:12px;" mat-cell *matCellDef="let voteAssignment"> {{voteAssignment.accountDetail.accountNo}} - 
+                                      <span *ngIf="isSinhala">{{voteAssignment.accountDetail.nameSinhala}}</span> <span *ngIf="isEnglish">{{voteAssignment.accountDetail.nameEnglish}}</span> <span *ngIf="isTamil">{{voteAssignment.accountDetail.nameTamil}}</span> 
+                                    </td>
                                   </ng-container>
                                   <ng-container matColumnDef="office">
                                     <th style="font-size:12px;" mat-header-cell *matHeaderCellDef> Office </th>

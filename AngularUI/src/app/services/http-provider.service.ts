@@ -71,7 +71,8 @@ deleteBalancesheetSubtitleById: apiUrl + "/api/vote/balancesheetSubtitles/delete
 getBalancesheetSubtitleDetailById: apiUrl + "/api/vote/balancesheetsubtitles/getBalancesheetSubtitleById",
 saveBalancesheetSubtitle: apiUrl + "/api/vote/balancesheetSubtitles/saveBalancesheetSubtitle",
 updateBalancesheetSubtitle: apiUrl + "/api/vote/balancesheetSubtitles/updateBalancesheetSubtitle",
-getAllBalancesheetSubtitleByTitleID: apiUrl + "/api/vote/balancesheetSubtitles/getAllBalancesheetSubtitlesForTitleID"
+getAllBalancesheetSubtitleByTitleID: apiUrl + "/api/vote/balancesheetSubtitles/getAllBalancesheetSubtitlesForTitleID",
+getAllBalancesheetSubtitlesForTitleIDAndAccountDetailID: apiUrl + "/api/vote/balancesheetSubtitles/getAllBalancesheetSubtitlesForTitleIDAndAccountDetailID"
 
 //balancesheettitle
 ,getAllBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/getAllBalancesheetTitlesForSabhaId",
@@ -79,6 +80,7 @@ deleteBalancesheetTitleById: apiUrl + "/api/vote/balancesheettitles/deleteBalanc
 getBalancesheetTitleDetailById: apiUrl + "/api/vote/balancesheettitles/getBalancesheetTitleById",
 saveBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/saveBalancesheetTitle",
 updateBalancesheetTitle: apiUrl + "/api/vote/balancesheettitles/updateBalancesheetTitle",
+getAllBalancesheetTitleForAccountDetailsId: apiUrl + "/api/vote/balancesheettitles/getAllBalancesheetTitlesForAccountDetailId",
 
 //incomesubtitle
 getAllIncomeSubtitle: apiUrl + "/api/vote/incomeSubtitle/getAllIncomeSubTitlesForSabhaId",  //OK
@@ -117,6 +119,9 @@ getAllVoteDetailsForProgrammeId: apiUrl + "/api/vote/voteDetail/getAllVoteDetail
 //years
 getAllYears: apiUrl + "/api/Years",
 
+//years
+getAllMonths: apiUrl + "/api/Months",
+
 //Genders
 getAllGenders: apiUrl + "/api/Genders",
 
@@ -152,12 +157,14 @@ savePartner:apiUrl+"/api/mixin/partners/save",
 //Session 
 getSessionById: apiUrl + "/api/mixin/sessions/getById",
 getSessionByOfficeAndModule: apiUrl + "/api/mixin/sessions/getByOfficeAndModule",
+getSessionByOfficeModuleAndDate: apiUrl + "/api/mixin/sessions/getByOfficeModuleAndDate",
 getAllActiveSessionsByOffice: apiUrl + "/api/mixin/sessions/getAllActiveSessionsByOffice",
 getAllSessionsByOffice: apiUrl + "/api/mixin/sessions/getAllSessionsByOffice",
 getAllSessionsByOfficeAndModule: apiUrl + "/api/mixin/sessions/getAllSessionsByOfficeAndModule",
 startSession: apiUrl + "/api/mixin/sessions/startSession",
 endSession: apiUrl + "/api/mixin/sessions/endSession",
-
+startCustomSession: apiUrl + "/api/mixin/sessions/startCustomSession",
+allowReceiptsForExpiredSession: apiUrl + "/api/mixin/sessions/allowReceiptsForExpiredSession",
 
 //End of Common APIs
 
@@ -199,6 +206,7 @@ getVoteAssignmentById:  apiUrl +"/api/mixin/voteAssignments/getById",
 saveVoteAssignment: apiUrl +"/api/mixin/voteAssignments/save",
 deleteVoteAssignment: apiUrl +"/api/mixin/voteAssignments/delete",
 getAllVoteAssignmentsForOfficeId:  apiUrl +"/api/mixin/voteAssignments/GetAllForOfficeId",
+getAllVoteAssignmentsForOfficeIdAndAccountDetailId:  apiUrl +"/api/mixin/voteAssignments/GetAllForOfficeIdAndAccountDetailId",
 getAllVoteAssignmentsForVoteId: apiUrl +"/api/mixin/voteAssignments/GetAllForVoteId",
 getAllOfficeGroupedForVoteAssignment: apiUrl +"/api/mixin/voteAssignments/getAllOfficeGroupedForVoteAssignment",
 
@@ -222,10 +230,13 @@ disapproveCancelMixinOrder: apiUrl +"/api/mixin/mixinOrder/disapproveCancelOrder
 updateMixinOrderState: apiUrl +"/api/mixin/mixinOrder/updateState",
 getAllMixinOrdersForOffice: apiUrl +"/api/mixin/mixinOrder/getAllForOffice",
 getAllMixinOrdersForOfficeAndState: apiUrl +"/api/mixin/mixinOrder/getAllForOfficeAndState",
-getAllMixinOrdersForSesionAndState: apiUrl +"/api/mixin/mixinOrder/getAllForSesionAndState",
+getAllMixinOrdersForOfficeAndStateAndDate: apiUrl +"/api/mixin/mixinOrder/getAllForOfficeAndStateAndDate",
+getAllMixinOrdersForSessionAndState: apiUrl +"/api/mixin/mixinOrder/getAllForSessionAndState",
 getAllMixinOrdersForUserAndState: apiUrl +"/api/mixin/mixinOrder/getAllForUserAndState",
 getMixinOrderByBarcode:  apiUrl +"/api/mixin/mixinOrder/getOrderByBarcode",
-
+getAllCashBookForOfficeId:  apiUrl +"/api/mixin/mixinOrder/getAllCashBookForOfficeId",
+getAllCashBookForOfficeIdBankAccountId:  apiUrl +"/api/mixin/mixinOrder/getAllCashBookForOfficeIdBankAccountId",
+banking:  apiUrl +"/api/mixin/mixinOrder/banking",
 
 //End of Mix Income Management APIs
 
@@ -440,6 +451,10 @@ public updateBalancesheetSubtitle(model: any): Observable<any> {
 public getAllBalancesheetSubtitleByTitleID(model: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllBalancesheetSubtitleByTitleID + '/' + model);
 }
+public getAllBalancesheetSubtitlesForTitleIDAndAccountDetailID(titleid: any,acountdetailid: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetSubtitlesForTitleIDAndAccountDetailID + '/' + titleid+ '/' + acountdetailid);
+}
+
 
 //balancesheettitle
 public getAllBalancesheetTitle(model : any): Observable<any> {
@@ -460,6 +475,10 @@ public saveBalancesheetTitle(model: any): Observable<any> {
 
 public updateBalancesheetTitle(model: any): Observable<any> {
   return this.webApiService.post(httpLink.updateBalancesheetTitle, model);
+}
+
+public getAllBalancesheetTitleForAccountDetailsId(accountdetailid : any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllBalancesheetTitleForAccountDetailsId  + '/'+accountdetailid);
 }
 
 //incomesubtitle
@@ -559,7 +578,10 @@ public getAllBankDetails(): Observable<any> {
 public getAllYears(): Observable<any> {
   return this.webApiService.get(httpLink.getAllYears);
 }
-
+//Months details
+public getAllMonths(): Observable<any> {
+  return this.webApiService.get(httpLink.getAllMonths);
+}
 //Gender
 public getAllGenders(): Observable<any> {
   return this.webApiService.get(httpLink.getAllGenders);
@@ -638,6 +660,9 @@ public getSessionById(id:any): Observable<any> {
 public getSessionByOfficeAndModule(officeid:any,module:any): Observable<any> {
   return this.webApiService.get(httpLink.getSessionByOfficeAndModule+ '/'+ officeid+ '/'+ module);
 }
+public getSessionByOfficeModuleAndDate(officeid:any,module:any,date:any): Observable<any> {
+  return this.webApiService.get(httpLink.getSessionByOfficeModuleAndDate+ '/'+ officeid+ '/'+ module+ '/'+ date);
+}
 public getAllActiveSessionsByOffice(officeid:any): Observable<any> {
   return this.webApiService.get(httpLink.getAllActiveSessionsByOffice+ '/'+ officeid);
 }
@@ -649,12 +674,19 @@ public getAllSessionsByOfficeAndModule(officeid:any, module:any): Observable<any
 }
 
 
-public startSession(partner:any): Observable<any> {
-  return this.webApiService.post(httpLink.startSession, partner);
+public startSession(session:any): Observable<any> {
+  return this.webApiService.post(httpLink.startSession, session);
 }
-public endSession(partner:any): Observable<any> {
-  return this.webApiService.post(httpLink.endSession, partner);
+public endSession(session:any): Observable<any> {
+  return this.webApiService.post(httpLink.endSession, session);
 }
+public startCustomSession(session:any): Observable<any> {
+  return this.webApiService.post(httpLink.startCustomSession, session);
+}
+public allowReceiptsForExpiredSession(session:any): Observable<any> {
+  return this.webApiService.post(httpLink.allowReceiptsForExpiredSession, session);
+}
+
 //Begin of Common Functions
 
 //Begin of User Management Functions
@@ -738,6 +770,10 @@ public deleteVoteAssignment(id: any): Observable<any> {
 public getAllVoteAssignmentsForOfficeId(id: any): Observable<any> {
     return this.webApiService.get(httpLink.getAllVoteAssignmentsForOfficeId + '/'+ id);
 }
+public getAllVoteAssignmentsForOfficeIdAndAccountDetailId(officeid: any,bankaccountid: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllVoteAssignmentsForOfficeIdAndAccountDetailId + '/'+ officeid+ '/'+ bankaccountid);
+}
+
 public getAllVoteAssignmentsForVoteId(id: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllVoteAssignmentsForVoteId + '/'+ id);
 }
@@ -782,16 +818,16 @@ public deleteMixinOrder(id: any, cashierid:number): Observable<any> {
   return this.webApiService.post(httpLink.deleteMixinOrder + '/' + id + '/' + cashierid, "");
 }
 public cancelMixinOrder(cancelOrder:MixinCancelOrder): Observable<any> {
-  return this.webApiService.post(httpLink.cancelMixinOrder + '/' + cancelOrder, "");
+  return this.webApiService.post(httpLink.cancelMixinOrder, cancelOrder);
 }
 public paidMixinOrder(id: any, cashierid:number): Observable<any> {
   return this.webApiService.post(httpLink.paidMixinOrder + '/' + id + '/' + cashierid, "");
 }
-public approveCancelMixinOrder(id: any, officerid:number): Observable<any> {
-  return this.webApiService.post(httpLink.approveCancelMixinOrder + '/' + id + '/' + officerid, "");
+public approveCancelMixinOrder(cancelOrder:MixinCancelOrder): Observable<any> {
+  return this.webApiService.post(httpLink.approveCancelMixinOrder, cancelOrder);
 }
-public disapproveCancelMixinOrder(id: any, officerid:number): Observable<any> {
-  return this.webApiService.post(httpLink.disapproveCancelMixinOrder + '/' + id + '/' + officerid, "");
+public disapproveCancelMixinOrder(cancelOrder:MixinCancelOrder): Observable<any> {
+  return this.webApiService.post(httpLink.disapproveCancelMixinOrder, cancelOrder);
 }
 public getAllMixinOrdersForOffice(id: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrdersForOffice + '/' + id);
@@ -799,8 +835,11 @@ public getAllMixinOrdersForOffice(id: any): Observable<any> {
 public getAllMixinOrdersForOfficeAndState(office: any, status: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrdersForOfficeAndState + '/' + office + '/' + status);
 }
-public getAllMixinOrdersForSesionAndState(session: any, status: any): Observable<any> {
-  return this.webApiService.get(httpLink.getAllMixinOrdersForSesionAndState + '/' + session + '/' + status);
+public getAllMixinOrdersForOfficeAndStateAndDate(office: any, status: any, date: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllMixinOrdersForOfficeAndStateAndDate + '/' + office + '/' + status + '/' + date);
+}
+public getAllMixinOrdersForSessionAndState(session: any, status: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllMixinOrdersForSessionAndState + '/' + session + '/' + status);
 }
 public getAllMixinOrdersForUserAndState(user: any, status: any): Observable<any> {
   return this.webApiService.get(httpLink.getAllMixinOrdersForUserAndState + '/' + user + '/' + status);
@@ -808,7 +847,15 @@ public getAllMixinOrdersForUserAndState(user: any, status: any): Observable<any>
 public getMixinOrderByBarcode(id : any,officeid : any): Observable<any> {
   return this.webApiService.get(httpLink.getMixinOrderByBarcode  + '/'+id+ '/'+officeid);
 }
-
+public getAllCashBookForOfficeId(officeid: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllCashBookForOfficeId + '/' + officeid );
+}
+public getAllCashBookForOfficeIdBankAccountId(officeid: any, bankaccid: any): Observable<any> {
+  return this.webApiService.get(httpLink.getAllCashBookForOfficeIdBankAccountId + '/' + officeid + '/' + bankaccid);
+}
+public saveBanking(model: any): Observable<any> {
+  return this.webApiService.post(httpLink.banking, model);
+}
 //End of Mix Income Management Functions
 
 

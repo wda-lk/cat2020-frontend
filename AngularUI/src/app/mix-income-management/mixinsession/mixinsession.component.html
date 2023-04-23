@@ -6,11 +6,13 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-3">
-          <button class="btn btn-info"  (click)="advancedSettings()"> 
-            <!-- <a href="#/mixinorderaddedit" style="color:white;"> -->
-              <i class="fa fa-cog"></i> Advanced Settings 
-            <!-- </a> -->
-          </button>
+          <div class="text-left">
+            <span (click)="mixinsessionadvancedsettings(currentSession)" matTooltip="Advanced Settings" [matTooltipPosition]="'right'" style="cursor: hand;cursor: pointer;">
+              <a [routerLink]="['/mixinsessionadvancedsettings',currentSession.id]">
+                <i class="fas fa-cog text-info"></i>
+              </a>
+            </span>
+          </div>
           <!-- <h4 class="m-0">Mix Income Payment</h4> -->
         </div><!-- /.col -->
         <div class="col-sm-5">

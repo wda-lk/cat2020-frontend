@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { Pagination } from '../../common/models/pagination.model';
 import { PageEvent } from '@angular/material/paginator';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 // import { ConfirmationService } from 'primeng/api';
 // import { MessageService } from 'primeng/api';
@@ -234,7 +235,13 @@ export class VoteAssignmentDetailsComponent implements OnInit {
   removeCustomVoteName(i:number) {  
     this.customVoteNames().removeAt(i);  
   }  
-     
+
+  clearFormArray = (formArray: FormArray) => {
+    while (formArray.length !== 0) {
+      formArray.removeAt(0)
+    }
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -395,7 +402,7 @@ async getAllOffices() {
       this.isValid=true;
     }
     if (this.isValid==true) {
-      if (this.formdata.customVoteNames.length>0){ 
+      if (this.formdata.customVoteNames.length>0  && this.formdata.customVoteNames[0].customvotename!=""){ 
       this.formdata.customVoteNames.forEach((voteAssignDetail:any) => {
         if(voteAssignDetail.customvotename!="")
         {
@@ -444,16 +451,20 @@ if(this.submitButtonClickCount==1)
     next: (result) => {
          var resultData = result.body;
          Notify.success('Vote Assignment Details added successfully..!');
+         this.submitButtonClickCount=1;
     },
     error: error => {
       Notify.failure('Error Occured..!');
+      this.submitButtonClickCount=1;
     }
 });
     }
     else{
       Notify.success('Please Wait, Allready Sent the Save Request..!');
     }
+
 setTimeout(() => {
+this.clearFormArray(this.customVoteNames());
 this.clearRecord() ;
 // this.getAllVoteAssignmentsForOfficeId(this.selectedofficeId);
 }, 5000);
@@ -526,5 +537,6 @@ editVoteAssignment(voteAssignment: VoteAssignmentFullDataClass) {
       { id: voteAssignment.bankAccountId, nameEnglish: voteAssignment.accountDetail.nameEnglish }
       ];
 }
+
 
 }

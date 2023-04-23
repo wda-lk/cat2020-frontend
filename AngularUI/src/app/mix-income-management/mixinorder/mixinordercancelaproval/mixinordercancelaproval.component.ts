@@ -197,7 +197,7 @@ export class MixinOrderCancelAprovalComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  haspermission :Boolean;
+  haspermission :Boolean = true;
 
   async checkPermission(ruleCode:any,userId:Number) {
     this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({

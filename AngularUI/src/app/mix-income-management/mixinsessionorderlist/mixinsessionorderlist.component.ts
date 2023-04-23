@@ -151,15 +151,16 @@ sessionid:any=0;
   ngOnInit() {
     
     this.spinner.show();
-    this.getCurrentSession();
+    // this.getCurrentSession();
 
     this.sub = this._Activatedroute.paramMap.subscribe((params) => {
       this.sessionid = params.get('sessionid');
       this.getSessionByid(this.sessionid);
+      
     });
-
+    
     this.checkPermission("MIXINSESSION", Number(localStorage.getItem('Currentuserid')));
-    this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
+    // this.getSessionByOfficeAndModule(Number(localStorage.getItem('CurrentOfficeId')), "MIX");
 
     // if(Number(localStorage.getItem('IsAdmin'))==1)
     // {this.isadmin=true;}
@@ -177,7 +178,9 @@ sessionid:any=0;
 
     // this.getAllOffices();
     //this.getAllAccountdetails();
-     this.getAllForSesionAndState(this.selectedOrderStatus);
+    setTimeout(() => {
+      this.getAllForSesionAndState(this.selectedOrderStatus);
+      }, 2000);
 
     // this.subscription = this.source.subscribe(val =>  this.getAllMixinOrdersForOfficeAndState(this.selectedOrderStatus));
 
@@ -414,7 +417,7 @@ async getAllForSesionAndState(orderstate:any) {
   this.selectedOrderStatus=orderstate;
   this.dataSource = new MatTableDataSource<VoteAssignment>([]);
   this.APIMixinOrders=[];
-  this.httpProvider.getAllMixinOrdersForSesionAndState(this.currentSession.id,orderstate).subscribe({
+  this.httpProvider.getAllMixinOrdersForSessionAndState(this.currentSession.id,orderstate).subscribe({
     next: (data) => {
     if (data != null && data.body != null) {
       var resultData = data.body;

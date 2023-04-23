@@ -90,6 +90,19 @@
                                 </select>
                             </div> -->
                             <label>Select Vote  </label>
+                            
+                            <!-- <mat-form-field>
+                              <mat-select [formControl]="VoteAssignmentCtrl" placeholder="Vote" #singleSelect>
+                                <mat-option>
+                                  <ngx-mat-select-search [formControl]="VoteAssignmentFilterCtrl"></ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let vote of APIVoteAssignmentsForOfficeList | async" [value]="vote">
+                                  {{vote.code}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field> -->
+
+
                             <ng-multiselect-dropdown
                             [placeholder]="'Select a Vote'"
                             [settings]="VoteDetailsDropdownSettings"

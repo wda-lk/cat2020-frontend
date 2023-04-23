@@ -42,12 +42,12 @@ export interface Post {
   userId: number;
 }
 @Component({
-  selector: 'app-reportviewer',
-  templateUrl: './reportviewer.component.html',
-  styleUrls: ['./reportviewer.component.scss']
+  selector: 'app-incomecashbookreport',
+  templateUrl: './incomecashbookreport.component.html',
+  styleUrls: ['./incomecashbookreport.component.scss']
 })
 
-export class ReportViewerComponent implements OnInit {
+export class IncomeCashBookReportComponent implements OnInit {
   @ViewChild('pdfViewer') public pdfViewer:any;
   dateTo = dayjs();
   dateFrom : any;
@@ -56,12 +56,19 @@ export class ReportViewerComponent implements OnInit {
   officename:any;
   selectedofficeId:any;
   selectedOrderStatus :any=1;
+  selectedyear:Number=0;
+  selectedmonth:Number=0;
+  APIBankAccountsList :any;
+  bankAccountID:Number=0;
 
   selectedsession : Session = new Session();
-
+  APIYearsList :any;
+  APIMonthsList :any;
+  filterby : any;
   @Input()
   doc: any;
   reportpreview: SafeResourceUrl;
+  filteroptions:string[] = ['Year', 'Month', 'Date'];
 
   // doc:any="https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&office=%E0%B6%85%E0%B6%B8%E0%B7%8A%E0%B6%B8%E0%B7%8F&date=2022-2-22";
   viewer = 'google';
@@ -86,7 +93,7 @@ export class ReportViewerComponent implements OnInit {
   canceledmixinorders : MixinOrder[];
   
   pdfSrc:any;
-  selectedDate:any;
+  selectedDate:any=0;
 
   APIPDF:any;
   constructor(@Inject(DOCUMENT) private document: any, private datepipe: DatePipe,private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private sanitizer: DomSanitizer,  private http: HttpClient) {
@@ -94,7 +101,7 @@ export class ReportViewerComponent implements OnInit {
   }
   isadmin:boolean=false;
   ngOnInit() {
-    this.checkPermission("RPTSARAPDAILY", Number(localStorage.getItem('Currentuserid')));
+    this.checkPermission("RPTSARAPVOTEWISEMONTHLY", Number(localStorage.getItem('Currentuserid')));
     if(Number(localStorage.getItem('IsAdmin'))==1)
     {this.isadmin=true;}
     this.SelectedLanguage = localStorage.getItem('CurrentSabhaLang');
@@ -105,7 +112,10 @@ export class ReportViewerComponent implements OnInit {
     if (this.SelectedLanguage=="English")
     {this.isEnglish=true;}
     
-    
+    this.getAllYears();
+    this.getAllMonths();
+    this.getAllAccountDetail();
+
     this.officename=localStorage.getItem('CurrentSabhaName');
   }
 
@@ -131,32 +141,78 @@ export class ReportViewerComponent implements OnInit {
   }
 
 
+  async getAllAccountDetail() {
+    this.httpProvider.getAllAccountDetail(localStorage.getItem('sabhaId')).subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.APIBankAccountsList = resultData;
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.APIBankAccountsList = [];
+            }
+        }}
+      });
+  }
+
+
+  onbankaccountchange(id:Number){
+    this.bankAccountID=id;
+    console.log(this.bankAccountID);
+  }
+
 reportdate:String;
- LoadReport(date:any)
+ LoadReport()
  {
-  if(date!=null)
-    {
-  let selecteddateformatted = this.datepipe.transform(date, 'yyyy-MM-dd');
+  let selecteddateformatted = this.datepipe.transform(this.selectedDate, 'yyyy-MM-dd');
   this.reportdate=String(selecteddateformatted);
+
+  if(this.filterby=='Year')
+{
+  this.selectedmonth=0;
+  this.selectedDate=0;
+  this.reportdate='0';
+}
+else if (this.filterby=='Month')
+{
+  this.selectedDate=0;
+  this.reportdate='0';
+}
+else if (this.filterby=='Date')
+{
+  this.selectedyear=0;
+  this.selectedmonth=0;
+}
+
+  if(this.filterby!='')
+  {
+    // if(this.bankAccountID==0)
+    // {
+
+  // let selecteddateformatted = this.datepipe.transform(date, 'yyyy-MM-dd');
+  // this.reportdate=String(selecteddateformatted);
   let officeid=Number(localStorage.getItem('CurrentOfficeId'));
   let officename=localStorage.getItem('CurrentSabhaName') + " - " + localStorage.getItem('CurrentOfficeName');
-  this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
+  // this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
   setTimeout(() => {
   //console.log(this.selectedsession);
-  if(this.isSinhala)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+  this.doc='https://cat2020.lk/birt/output?__report=incomecashbook.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&filterby='+this.filterby+'&officeid='+officeid+'&year='+this.selectedyear+'&month='+this.selectedmonth+'&bankaccountid='+this.bankAccountID+'&date='+this.reportdate+'';
   
-  if(this.isTamil)
-  this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=html&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-    // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
+
+  // this.doc='https://cat2020.lk/birt/frameset?__report=sarapdailyreportforoffice.rptdesign&__format=pdf&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'';
   //console.log(this.doc);
   // this.mypreview= this.sanitizer.bypassSecurityTrustResourceUrl(this.doc);
 
-  // this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
-  //   '<iframe width="100%" height="800" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
-  // );
-
-  window.open(this.doc, "_blank"); 
+  // window.open(this.doc, "_blank"); 
+  this.reportpreview= this.sanitizer.bypassSecurityTrustHtml(
+    '<iframe width="100%" height="1000" allowTransparency="true" frameborder="0" src='+this.doc+'></iframe>',
+  );
 
   // let winUrl:any = URL.createObjectURL(new Blob([this.doc], { type: 'text/html' }));
   // window.open(this.doc);
@@ -164,9 +220,13 @@ reportdate:String;
 
   // this.getAllCancelledMixinOrders(selecteddateformatted);
   // this.getAllPostedMixinOrders(selecteddateformatted);
+// }
+// else{
+//   Notify.failure("Please select a a bank account.");
+// }
 }
 else{
-  Notify.failure("Please select a date first.");
+  Notify.failure("Please select a report option.");
 }
  }
 
@@ -218,25 +278,41 @@ else{
   // }
   }
 
-  ExportToExcel(date:any) {
-    if(date!=null)
+  ExportToExcel() {
+
+    if(this.filterby=='Year')
     {
-      let selecteddateformatted = this.datepipe.transform(date, 'yyyy-MM-dd');
-  this.reportdate=String(selecteddateformatted);
+      this.selectedmonth=0;
+      this.selectedDate=0;
+      this.reportdate='0';
+    }
+    else if (this.filterby=='Month')
+    {
+      this.selectedDate=0;
+      this.reportdate='0';
+    }
+    else if (this.filterby=='Date')
+    {
+      this.selectedyear=0;
+      this.selectedmonth=0;
+    }
+    
+    if(this.filterby!='')
+    {
+      // let selecteddateformatted = this.datepipe.transform(date, 'yyyy-MM-dd');
+  // this.reportdate=String(selecteddateformatted);
   let officeid=Number(localStorage.getItem('CurrentOfficeId'));
   let officename=localStorage.getItem('CurrentSabhaName') + " - " + localStorage.getItem('CurrentOfficeName');
-  this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
+  // this.getSessionByOfficeModuleAndDate(officeid,'MIX',selecteddateformatted);
 
       setTimeout(() => {
-        if(this.isSinhala)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_S.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
-        
-        if(this.isTamil)
-        this.doc='https://cat2020.lk/birt/output?__report=LG02_T.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
+        this.doc='https://cat2020.lk/birt/output?__report=incomecashbook.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&filterby='+this.filterby+'&officeid='+officeid+'&year='+this.selectedyear+'&month='+this.selectedmonth+'&bankaccountid='+this.bankAccountID+'&date='+this.reportdate+'';
+ 
+        // this.doc='https://cat2020.lk/birt/output?__report=sarapdailyreportforoffice_tml.rptdesign&__format=xls&__svg=true&__locale=en_US&__timezone=IST&__masterpage=true&__rtl=false&__cubememsize=10&&__pageoverflow=0&__overwrite=false&officeid='+officeid+'&sessionid='+this.selectedsession.id+'&date='+selecteddateformatted+'&officename='+officename+'';
         
           const downloadLink = document.createElement('a');
           downloadLink.target = '_self';
-          const fileName = "Sarap_Receipts_"+date+".xlsx";
+          const fileName = "Sarap_Receipts_"+this.selectedyear+this.selectedmonth+".xlsx";
           downloadLink.href = this.doc;
           downloadLink.download = fileName;
           downloadLink.click();
@@ -259,7 +335,7 @@ else{
       // );
     }
     else{
-      Notify.failure("Please select a date first.");
+      Notify.failure("Please select a report option.");
     }
   }
 
@@ -360,6 +436,48 @@ setTimeout(() => {
         }
     );
   }
+  }
+
+
+  async getAllYears() {
+    this.httpProvider.getAllYears().subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.APIYearsList = resultData;
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.APIYearsList = [];
+            }
+        }}
+      });
+  }
+
+
+  async getAllMonths() {
+    this.httpProvider.getAllMonths().subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.APIMonthsList = resultData;
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.APIMonthsList = [];
+            }
+        }}
+      });
   }
 
   // Print() {

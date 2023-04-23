@@ -30,12 +30,177 @@
   </div>
   <!-- /.content-header -->
 
+
+
+  <!-- ngxPrintItem printName="First one"-->
+<!-- <div style="">
+  <div id="printDiv" style="width: 14.8cm; height: 10.5cm;position: relative; border: 1px solid red;">
+    <div class="title">Document title</div>
+    <div class="description">Document description</div>
+    <div class="conclusion">Document conclusion</div>
+  </div>
+</div> -->
+<br />
+<!-- ngxPrintItemButton divID="printDiv" -->
+<!-- <button (click)="printPage()">
+  print
+</button> -->
+
+
+    <!-- <li>
+      <button mat-raised-button (click)="openDialog()">Pick one</button>
+    </li>
+    <li *ngIf="usercomment">
+      You chose: <i>{{usercomment}}</i>
+    </li> -->
+
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+
+       <!-- this row will not appear when printing -->
+       <div class="row no-print">
+        <div class="col-9">
+        <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+          <div class="row">
+        <ngx-barcode6 [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor"
+[bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font"
+[bc-text-align]="textAlign" [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
+[bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom" [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode6>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div>
+  <b><span style="color:green"> <h3><b>Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}} </b> <br><p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==1"> Cash</p>
+    <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==2"> Cheque </p>    
+    <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==3"> Cross</p>
+    <p *ngIf="mixinOrderCustomOBJ?.paymentMethodId==4"> Direct</p></h3></span> </b>
+</div>
+</div>
+</div>
+      <div *ngIf="mixinOrderCustomOBJ?.state==2" >
+        <b><span style="color:green"> <h1>PAID    - Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</h1> </span> </b>
+      </div>
+      <div *ngIf="mixinOrderCustomOBJ?.state==3" >
+        <b><span style="color:green"> <h1>POSTED    - Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</h1></span> </b>
+      </div>
+      <div *ngIf="mixinOrderCustomOBJ?.state==4" >
+        <b><span style="color:orangered"> <h1>CANCEL APPROVAL PENDING    - Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</h1></span> </b>
+        <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder.reason}}</h5></span>
+      </div>
+      <div *ngIf="mixinOrderCustomOBJ?.state==5" >
+        <b><span style="color:red"> <h1>CANCELED    - Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</h1></span> </b>
+        <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder?.reason}}</h5></span>
+        <span style="color:blue"><h5>Approval Comment : {{mixinOrderCustomOBJ?.mixinCancelOrder?.approvalComment}}</h5></span>
+      </div>
+      <div *ngIf="mixinOrderCustomOBJ?.state==6" >
+        <b><span style="color:purple"> <h1>CANCEL DISAPPROVED    - Rs. {{mixinOrderCustomOBJ?.totalAmount| number:'1.2-2'}}</h1></span> </b>
+        <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder?.reason}}</h5></span>
+        <span style="color:blue"><h5>Approval Comment : {{mixinOrderCustomOBJ?.mixinCancelOrder?.approvalComment}}</h5></span>
+      </div>
+      </div>
+      <div class="col-3">
+        <div *ngIf="hascashierpermission"> 
+          <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+        <button class="btn btn-info form-control" (click)="print(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Print</button>
+       
+        </div>
+        <div *ngIf="mixinOrderCustomOBJ?.state==2 || mixinOrderCustomOBJ?.state==3 || mixinOrderCustomOBJ?.state==6"> 
+          <button class="btn btn-info form-control" (click)="duplicateprint(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Reprint</button>
+          </div>
+        
+      </div>
+      <div *ngIf="hasaddeditpermission"> 
+      <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+      <br>
+        <button class="btn btn-danger form-control" (click)="deleteOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> &nbsp; Delete Order</button>
+
+      </div>
+      <br>
+      <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
+        <button class="btn btn-warning form-control" (click)="cancelOrderDialog(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> Cancel Order</button>
+        </div>
+      </div>
+       
+        <div *ngIf="hascancelapprovepermission" >  
+         
+          <div *ngIf="mixinOrderCustomOBJ?.state==4" > 
+        <button  class="btn btn-success form-control" (click)="cancelOrderApproveDialog(mixinOrderCustomOBJ)"> Approve Request </button>
+        <br>
+        <br>
+        <button class="btn btn-danger form-control" (click)="cancelOrderDisapproveDialog(mixinOrderCustomOBJ)"> Disapprove Request</button>
+        </div></div>
+      </div>
+    </div>
+    <br>
           <div class="row">
             <div class="col-lg-12 col-md-12">
-              <div class="card card-primary">
+              <div *ngIf="doc!=null" class="card card-info">
+                <div class="card-body">
+            <div id="printDiv"  style="width: 11in; height: 11in;position: relative; border: 1px solid white;"  [innerHTML]="reportpreview"></div>
+            <!-- <div class="row no-print">
+              <div class="col-9">
+              <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+              <ngx-barcode6 [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor"
+   [bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font"
+   [bc-text-align]="textAlign" [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
+   [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom" [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode6>
+            </div>
+            <div *ngIf="mixinOrderCustomOBJ?.state==2" >
+              <b><span style="color:green"> <h1>PAID</h1></span> </b>
+            </div>
+            <div *ngIf="mixinOrderCustomOBJ?.state==3" >
+              <b><span style="color:green"> <h1>POSTED</h1></span> </b>
+            </div>
+            <div *ngIf="mixinOrderCustomOBJ?.state==4" >
+              <b><span style="color:orangered"> <h1>CANCEL APPROVAL PENDING</h1></span> </b>
+              <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder.reason}}</h5></span>
+            </div>
+            <div *ngIf="mixinOrderCustomOBJ?.state==5" >
+              <b><span style="color:red"> <h1>CANCELED</h1></span> </b>
+              <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder?.reason}}</h5></span>
+              <span style="color:blue"><h5>Approval Comment : {{mixinOrderCustomOBJ?.mixinCancelOrder?.approvalComment}}</h5></span>
+            </div>
+            <div *ngIf="mixinOrderCustomOBJ?.state==6" >
+              <b><span style="color:purple"> <h1>CANCEL DISAPPROVED</h1></span> </b>
+              <span style="color:blue"><h5>Cancelled Reason : {{mixinOrderCustomOBJ?.mixinCancelOrder?.reason}}</h5></span>
+              <span style="color:blue"><h5>Approval Comment : {{mixinOrderCustomOBJ?.mixinCancelOrder?.approvalComment}}</h5></span>
+            </div>
+            </div>
+            <div class="col-3">
+              <div *ngIf="hascashierpermission"> 
+                <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+              <button class="btn btn-info form-control" (click)="print(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Print</button>
+             
+              </div>
+              <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
+                <button class="btn btn-info form-control" (click)="duplicateprint(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Reprint</button>
+                </div>
+              
+            </div>
+            <div *ngIf="hasaddeditpermission"> 
+            <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
+            <br>
+              <button class="btn btn-danger form-control" (click)="deleteOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> &nbsp; Delete Order</button>
+ 
+            </div>
+            <br>
+            <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
+              <button class="btn btn-warning form-control" (click)="cancelOrderDialog(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> Cancel Order</button>
+              </div>
+            </div>
+             
+              <div *ngIf="hascancelapprovepermission" >  
+               
+                <div *ngIf="mixinOrderCustomOBJ?.state==4" > 
+              <button  class="btn btn-success form-control" (click)="cancelOrderApproveDialog(mixinOrderCustomOBJ)"> Approve Request </button>
+              <br>
+              <br>
+              <button class="btn btn-danger form-control" (click)="cancelOrderDisapproveDialog(mixinOrderCustomOBJ)"> Disapprove Request</button>
+              </div></div>
+            </div>
+          </div> -->
+          </div>
+          </div>
+              <div *ngIf="showReciept" class="card card-primary">
                   <!-- <div class="card-header card-header-primary">
                       <h4 class="card-title ">Receipt No : {{mixinOrderCustomOBJ?.code}}</h4>
                       <div class="card-tools">
@@ -45,7 +210,6 @@
                       </div>
                     </div> -->
                   <div class="card-body">
-                    
                     <!-- Main content -->
             <div class="invoice p-3 mb-3">
               <!-- title row -->
@@ -205,64 +369,15 @@
                   
                 </div>
               </div>
-              <!-- this row will not appear when printing -->
-              <div class="row no-print">
-                <div class="col-9">
-                <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
-                <ngx-barcode6 [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor"
-		 [bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font"
-		 [bc-text-align]="textAlign" [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
-		 [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom" [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode6>
-              </div>
-              <div *ngIf="mixinOrderCustomOBJ?.state==2" >
-                <b><span style="color:green"> <h1>PAID</h1></span> </b>
-              </div>
-              <div *ngIf="mixinOrderCustomOBJ?.state==3" >
-                <b><span style="color:green"> <h1>POSTED</h1></span> </b>
-              </div>
-              <div *ngIf="mixinOrderCustomOBJ?.state==4" >
-                <b><span style="color:orangered"> <h1>CANCEL APPROVAL PENDING</h1></span> </b>
-              </div>
-              <div *ngIf="mixinOrderCustomOBJ?.state==5" >
-                <b><span style="color:red"> <h1>CANCELED</h1></span> </b>
-              </div>
-              <div *ngIf="mixinOrderCustomOBJ?.state==6" >
-                <b><span style="color:purple"> <h1>CANCEL DISAPPROVED</h1></span> </b>
-              </div>
-              </div>
-              <div class="col-3">
-                <div *ngIf="hascashierpermission"> 
-                  <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
-                <button class="btn btn-info form-control" (click)="print(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Print</button>
-               
-                </div>
-                <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
-                  <button class="btn btn-info form-control" (click)="duplicateprint(mixinOrderCustomOBJ)"><i class="fas fa-print"></i> &nbsp; Reprint</button>
-                  </div>
-                
-              </div>
-              <div *ngIf="hasaddeditpermission"> 
-              <div *ngIf="mixinOrderCustomOBJ?.state==1" > 
-              <br>
-                <button class="btn btn-danger form-control" (click)="deleteOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> &nbsp; Delete Order</button>
-   
-              </div>
-              <br>
-              <div *ngIf="mixinOrderCustomOBJ?.state==2" > 
-                <button class="btn btn-warning form-control" (click)="cancelMixinOrder(mixinOrderCustomOBJ)"><i class="fas fa-trash"></i> Cancel Order</button>
-                </div>
-              </div>
-               
-                <div *ngIf="hascancelapprovepermission" >  
-                 
-                  <div *ngIf="mixinOrderCustomOBJ?.state==4" > 
-                <button  class="btn btn-success form-control" (click)="approveCancelMixinOrder(mixinOrderCustomOBJ)"> Approve Request </button>
-                <br>
-                <br>
-                <button class="btn btn-danger form-control" (click)="disapproveCancelMixinOrder(mixinOrderCustomOBJ)"> Disapprove Request</button>
-                </div></div>
-              </div>
-            </div>
+
+
+
+
+
+
+             
+
+
             </div>
             <!-- /.invoice -->
                   </div>

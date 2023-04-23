@@ -252,7 +252,7 @@ source = interval(60000);
     this.httpProvider.getCheckAccessByRuleCode(ruleCode,userId).subscribe({
       next: (data) => {
           this.haspermission = Boolean(data.body);
-          console.log('haspermission : '+this.haspermission);
+          // console.log('haspermission : '+this.haspermission);
     },
     error: error => {
           if (error.status == 404) {
@@ -284,7 +284,7 @@ source = interval(60000);
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
+console.log(this.dataSource.filter)
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }

@@ -6,7 +6,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h4 class="m-0">Mix Income Sarap Receipts Daily Report (LG.02)</h4>
+          <h4 class="m-0">Mix Income Receipts - Vote Wise Monthly Report (LG.04)</h4>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -36,8 +36,23 @@
                   </div>
                   <div class="card-body">
                     <div class="row form-group">
-                    <div class="col-md-6">
-
+                    <div class="col-md-3">
+                      <div >
+                        <!-- <label>Year</label> -->
+                        <select class="form-control" [(ngModel)]="selectedyear">
+                         <option value="0"> --Select Year--</option>
+                            <option *ngFor=" let yeardetail of APIYearsList" [value]="yeardetail.description">  {{(yeardetail.description)}}  </option>
+                        </select>
+                    </div>
+                  </div>
+                    <div class="col-md-3">
+                    <div >
+                      <!-- <label>Month</label> -->
+                      <select class="form-control" [(ngModel)]="selectedmonth">
+                       <option value="0"> --Select Month--</option>
+                          <option *ngFor=" let monthdetail of APIMonthsList" [value]="monthdetail.id">  {{(monthdetail.description)}}  </option>
+                      </select>
+                  </div>
                       <!-- <div class="container"> -->
 <!-- 
                         <div>
@@ -57,7 +72,7 @@
                           <dp-date-picker [(ngModel)]="dateFrom" name="dateFrom" [config]="datePickerConfig"> </dp-date-picker>
                         </div> -->
                       <!-- </div> -->
-                      <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
+                      <!-- <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
   <mat-form-field>
     <mat-label>Pick a date</mat-label>
     <input matInput
@@ -67,17 +82,17 @@
            >
     <mat-datepicker #resultPicker>
     </mat-datepicker>
-  </mat-form-field>
+  </mat-form-field> -->
                       <!-- <input type="text" [(ngModel)]="selectedDate" placeholder="Select Date" class="form-control col-md-3" required/> -->
                     </div>
                     <div class="col-md-6">
-                      <a class="btn btn-success" (click)="LoadReport(selectedDate)">View Report </a> &nbsp;&nbsp;
+                      <a class="btn btn-success" (click)="LoadReport()">View Report </a> &nbsp;&nbsp;
                       <!-- <a class="btn btn-success" (click)="Print()">Print </a> &nbsp;&nbsp; -->
                       <!-- <a class="btn btn-info" (click)="Print(selectedDate)"><i class="fas fa-print"></i> &nbsp; Print</a>  -->
                        &nbsp; &nbsp; &nbsp; &nbsp;
                       Export :
                       <!-- <a class="btn btn-success" (click)="ExportToPdf()">To PDF</a> &nbsp;&nbsp; -->
-                      <a class="btn btn-success" (click)="ExportToExcel(selectedDate)"> <i class="fas fa-file-excel"></i> &nbsp; Excel</a>  &nbsp;&nbsp;
+                      <a class="btn btn-success" (click)="ExportToExcel()"> <i class="fas fa-file-excel"></i> &nbsp; Excel</a>  &nbsp;&nbsp;
                       <!-- <a class="btn btn-success" (click)="ExportToWord()"> To Word</a>   -->
                   </div>
                     </div>

@@ -1,0 +1,107 @@
+<ngx-spinner  bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+  <!-- Content Wrapper. Contains page content -->
+<div *ngIf="haspermission"  class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-3">
+            <button class="btn btn-warning"> <a href="#/mixinsession" style="color:white;"><i class="fa fa-arrow-left"></i> Back </a></button>
+        </div><!-- /.col -->
+        <div class="col-sm-3">
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">Mix Income Management</li>
+            <li class="breadcrumb-item active">Advanced Session Settings </li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+          <div class="row">
+          <div class="col-lg-12 col-md-12">
+              <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title"> Create Custom Session
+                    </h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row form-group">
+                    <div *ngIf="currentSession.id==0" class="col-md-6">
+                      <mat-datepicker-toggle [for]="resultPicker"></mat-datepicker-toggle>
+                    <mat-form-field>
+                      <mat-label>Pick a date</mat-label>
+                      <input matInput
+                            #resultPickerModel="ngModel"
+                            [matDatepicker]="resultPicker"
+                            [(ngModel)]="selectedDate"
+                            >
+                      <mat-datepicker #resultPicker>
+                      </mat-datepicker>
+                    </mat-form-field>
+                    </div>
+                    <div  *ngIf="currentSession.id==0" class="col-md-6">
+                      <a class="btn btn-success" (click)="startCustomSession(selectedDate)">Start Custom Session </a> &nbsp;&nbsp;
+                  </div>
+
+                <div  *ngIf="currentSession.id!=0" >
+                  <span style="color: red"> <b>Please end the current session before starting a custom session. </b>  </span>
+                </div>
+                    </div>
+                  </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12">
+          <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title"> Allow Receipts for Current Expired Session
+                </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row form-group">
+                <div class="col-md-6">
+                  <div  *ngIf="currentExpiredSession.id==0"  class="row">
+                    <span style="color: red"> <b>No Active Expired Session .! </b>  </span>
+                  </div>
+                  <div  *ngIf="currentExpiredSession.id!=0"  class="row">
+                    <span> <b>Current Expired Session : {{currentExpiredSession.name}} </b>  </span> &nbsp;&nbsp;&nbsp;
+                  
+                 </div>
+                </div>
+                <div class="col-md-6">
+                  <div  *ngIf="currentExpiredSession.id!=0 && currentExpiredSession.rescue!=1"  class="row">
+                  <button class="btn btn-success" (click)="allowReciepts()"><i class="fa fa-clock"></i> Allow Receipts </button>
+                </div>
+                <div  *ngIf="currentExpiredSession.rescue==1"  class="row">
+                  <button class="btn btn-warning" >  Receipts Allowed ..! </button>
+                </div>
+              </div>
+                </div>
+              </div>
+      </div>
+    </div>
+      </div>
+
+  </div><!-- /.container-fluid -->
+</section>
+</div>
+<!-- Content Wrapper. if not page allowed for user -->
+<div *ngIf="!haspermission && !isadmin" class="content-wrapper">
+ </div>
+ <!-- End of if not page allowed for user wrapper -->

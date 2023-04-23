@@ -39,7 +39,7 @@
     <section class="content">
       <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-5 col-md-12">
+              <div class="col-lg-4 col-md-12">
                   <div class="card card-primary">
                       <div class="card-header card-header-primary">
                           <h4 class="card-title ">Create Balancesheet Sub Title</h4>
@@ -86,6 +86,28 @@
                               <br>
                               <input type="text" [(ngModel)]="selectedBalancesheetsubtitle.code" placeholder="Type Vote Income Titile Code" class="form-control" required/>
                               <br>
+                              <div *ngIf="isSinhala;">
+                                <label>Select Bank Account</label>
+                                <select class="form-control" [(ngModel)]="selectedBalancesheetsubtitle.bankAccountID">
+                                    <option value="0" > --Select Bank Account-- </option>
+                                    <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameSinhala)}} </option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="isEnglish;">
+                              <label>Select Bank Account</label>
+                              <select class="form-control" [(ngModel)]="selectedBalancesheetsubtitle.bankAccountID">
+                                <option value="0" > --Select Bank Account-- </option>
+                                  <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameEnglish)}} </option>
+                              </select>
+                            </div>
+                            <div *ngIf="isTamil;">
+                              <label>Select Bank Account</label>
+                              <select class="form-control" [(ngModel)]="selectedBalancesheetsubtitle.bankAccountID">
+                                <option value="0" > --Select Bank Account-- </option>
+                                  <option *ngFor=" let bankaccount of APIBankAccountsList" [value]="bankaccount.id"> {{(bankaccount.accountNo +" :: " + bankaccount.nameTamil)}} </option>
+                              </select>
+                            </div>
                               <br>
                               <div class="form-group">
                                 <button class="btn btn-success" (click)="updateRecord()">{{(selectedBalancesheetsubtitle.id!==undefined)?'Update':'Create'}}</button>
@@ -98,7 +120,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-7 col-md-12">
+            <div class="col-lg-8 col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
                       <h3 class="card-title">Balancesheet Sub Titles List</h3>
@@ -120,6 +142,7 @@
                                               <!-- <th>Balancesheet Title</th> -->
                                               <th>Balancesheet Subtitle</th>
                                               <th>Code</th>
+                                              <th class="text-center">Account</th>
                                               <th class="text-center">Options</th>
                                           </tr>
                                           <tr *ngFor="let balancesheetsubtitle of APIBalancesheetsubtitlesList; index as i">
@@ -127,7 +150,8 @@
                                               <!-- <td>Balancesheettitle</td> -->
                                               <td ><span *ngIf="isSinhala">{{balancesheetsubtitle.nameSinhala}}</span> <span *ngIf="isEnglish">{{balancesheetsubtitle.nameEnglish}}</span> <span *ngIf="isTamil">{{balancesheetsubtitle.nameTamil}}</span> </td> 
                                               <td>{{ balancesheetsubtitle.code }}</td>
-                                            <td class="td-actions text-center">
+                                              <td  class="text-center">{{ balancesheetsubtitle?.accountDetail?.accountNo }} <span *ngIf="balancesheetsubtitle.bankAccountID==0">-</span></td>
+                                            <td class="text-center">
                                                 <button mat-flat-button (click)="editBalancesheetsubtitle(balancesheetsubtitle)" type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn">
                                                     <i class="fas fa-edit text-primary"></i>
                                                 </button>

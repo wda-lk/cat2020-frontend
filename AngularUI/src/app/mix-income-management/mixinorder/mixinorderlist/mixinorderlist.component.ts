@@ -17,6 +17,7 @@ import { NgxBarcode6Component } from 'ngx-barcode6';
 import { interval, Subscription } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Session } from '../../../common/models/Session';
+import { DatePipe } from '@angular/common';
 // import { ConfirmationService } from 'primeng/api';
 // import { MessageService } from 'primeng/api';
 
@@ -95,7 +96,7 @@ export class MixinOrderListComponent implements OnInit {
 
   isEditing:boolean = false;
 
-  constructor(private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private spinner: NgxSpinnerService) {
+  constructor(private datepipe: DatePipe, private httpProvider: HttpProviderService, private fb: FormBuilder,private _router: Router,private spinner: NgxSpinnerService) {
     
     this.customVoteNameForm = this.fb.group({  
       offices: '',  
@@ -260,7 +261,14 @@ source = interval(60000);
   newOrder()  { 
     if(this.currentSession.id!=0)
     {
+      var today= this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+      var lastsessiondate= this.datepipe.transform(this.currentSession.startAt, 'yyyy-MM-dd');
+      if((today==lastsessiondate) || this.currentSession.rescue==1){
     this._router.navigateByUrl('/mixinorderaddedit');
+    }
+    else{
+      Notify.failure('You are in a expired session. Please contact admin to start a new session or allow bills in this session');
+    }
     }
     else{
       Notify.failure('Please Start a Session First..!');

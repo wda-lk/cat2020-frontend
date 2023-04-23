@@ -7,5 +7,5 @@ export class BalancesheetSubtitle {
     balsheetTitleID: number;
     status: number;
     sabhaID: number;
-    
+    bankAccountID:number;
 }

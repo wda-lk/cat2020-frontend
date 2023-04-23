@@ -32,6 +32,14 @@ import { MixinOrderCancelAprovalComponent } from '../../mix-income-management/mi
 import { CashierComponent } from '../../cashier/cashier.component'; 
 import { MixinSessionComponent } from '../../mix-income-management/mixinsession/mixinsession.component'; 
 import { MixinSessionOrderListComponent } from '../../mix-income-management/mixinsessionorderlist/mixinsessionorderlist.component'; 
+import { MixinSessionAdvancedSettingsComponent } from '../../mix-income-management/mixinsessionadvancedsettings/mixinsessionadvancedsettings.component';
+import { BankingComponent } from '../../banking/banking.component'; 
+
+import { SarapDailyReceiptsVoteWiseReportComponent } from '../../reports/sarapdailyreceiptsvotewisereport.component'; 
+import { MonthlyReceiptsVoteWiseReportComponent } from '../../reports/monthlyreceiptsvotewisereport.component'; 
+import { BankDepositReceiptsReportComponent } from '../../reports/bankdepositreceiptsreport.component'; 
+import { BankDepositAccountWiseReportComponent } from '../../reports/bankdepositaccountwisereport.component'; 
+import { IncomeCashBookReportComponent } from '../../reports/incomecashbookreport.component'; 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]  },
@@ -64,8 +72,14 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'mixinordercancelaproval', component: MixinOrderCancelAprovalComponent, canActivate: [AuthGuard], data: {} },
     { path: 'cashier', component: CashierComponent, canActivate: [AuthGuard], data: {} },
     { path: 'mixinsession', component: MixinSessionComponent, canActivate: [AuthGuard], data: {} },
-    { path: 'mixinsessionorderlist/:sessionid', component: MixinSessionOrderListComponent, canActivate: [AuthGuard], data: {} }
-    
+    { path: 'mixinsessionorderlist/:sessionid', component: MixinSessionOrderListComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'mixinsessionadvancedsettings/:sessionid', component: MixinSessionAdvancedSettingsComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'sarapdailyreceiptsvotewisereport', component: SarapDailyReceiptsVoteWiseReportComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'banking', component: BankingComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'bankdepositreceiptsreport', component: BankDepositReceiptsReportComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'monthlyreceiptsvotewisereport', component: MonthlyReceiptsVoteWiseReportComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'bankdepositaccountwisereport', component: BankDepositAccountWiseReportComponent, canActivate: [AuthGuard], data: {} },
+    { path: 'incomecashbookreport', component: IncomeCashBookReportComponent, canActivate: [AuthGuard], data: {} },
     
     // { path: 'programmes',   component: ProgrammesComponent, canActivate: [AuthGuard], data: {rules: ['VTPRGMADDEDIT']} },
     // { path: 'voteincometitle',   component: VoteincometitleComponent, canActivate: [AuthGuard] , data: {rules: ['VTTITLEADDEDIT']} }, 

@@ -13,6 +13,7 @@ export class BalancesheetsubtitleComponent implements OnInit {
   loading = false;
   APIBalancesheetsubtitlesList:any;
   APIBalancesheettitlesList :any;
+  APIBankAccountsList :any;
   isSubmitted: boolean = false;
   isValid : boolean;
   balsheetTitleID : any;
@@ -61,6 +62,7 @@ export class BalancesheetsubtitleComponent implements OnInit {
     this.isValid = false;
     // this.getAllBalancesheetsubtitles();
     this.getAllBalancesheettitles();
+    this.getAllAccountDetail();
     this.loading = false;
   }
 
@@ -79,6 +81,26 @@ export class BalancesheetsubtitleComponent implements OnInit {
             if(error.error && error.error.message){
               Notify.failure(error.error.message);
               this.APIBalancesheettitlesList = [];
+            }
+        }}
+      });
+  }
+
+  async getAllAccountDetail() {
+    this.httpProvider.getAllAccountDetail(localStorage.getItem('sabhaId')).subscribe({
+      next: (data) => {
+      if (data != null && data.body != null) {
+        var resultData = data.body;
+        if (resultData) {
+          this.APIBankAccountsList = resultData;
+        }
+      }
+    },
+    error: error => {
+          if (error.status == 404) {
+            if(error.error && error.error.message){
+              Notify.failure(error.error.message);
+              this.APIBankAccountsList = [];
             }
         }}
       });

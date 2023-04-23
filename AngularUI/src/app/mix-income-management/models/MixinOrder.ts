@@ -1,6 +1,7 @@
 import { Office } from '../../common/models/Office';
 import { MixinOrderLine } from '../../mix-income-management/models/MixinOrderLine';
 import { MixinCancelOrder } from './MixinCancelOrder';
+import { AccountDetail } from '../../vote-management/models/AccountDetail';
 
 export class MixinOrder {
     id?: string;
@@ -26,6 +27,7 @@ export class MixinOrder {
     partnerId: number;
     office: Office;
     officeId: number;
+    accountDetailId: number;
     mixinCancelOrder: MixinCancelOrder;
     mixinOrderLine: MixinOrderLine[];
 }

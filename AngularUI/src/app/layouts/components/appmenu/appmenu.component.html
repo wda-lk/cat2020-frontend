@@ -254,15 +254,32 @@
           </li>
         </ul>
       </li>
-     <li *ngIf="hasPermission('CASHIER')"  class="nav-item">
-      <!-- <a href="/dashboard" class="nav-link active"> -->
-        <a href="#/cashier" class="nav-link">
+
+    <li *ngIf="hasModulePermission('Cashier')" class="nav-item">
+      <a href="#/dashboard" class="nav-link">
         <i class="nav-icon fas fa-money-check-alt"></i>
         <p>
-          CASHIER
+         CASHIER
+          <i class="right fas fa-angle-left"></i>
         </p>
       </a>
-    </li>
+      <ul *ngIf="isAllowed" class="nav nav-treeview">
+        <li *ngIf="hasPermission('CASHIER')" class="nav-item">
+          <a href="#/cashier" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Cashier</p>
+          </a>
+        </li>
+      </ul>
+      <ul *ngIf="isAllowed" class="nav nav-treeview">
+        <li *ngIf="hasPermission('BANKING')" class="nav-item">
+          <a href="#/banking" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Banking</p>
+          </a>
+        </li>
+      </ul>
+  </li>
 
     <li *ngIf="hasModulePermission('Session')" class="nav-item">
       <a href="#/dashboard" class="nav-link">
@@ -304,7 +321,37 @@
                 <li *ngIf="hasPermission('RPTSARAPDAILY')" class="nav-item">
                   <a href="#/reportviewer" class="nav-link">
                     <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Sarap Receipts Daily</p>
+                    <p>LG.2-Sarap Receipts Daily</p>
+                  </a>
+                </li>
+                <li *ngIf="hasPermission('RPTSARAPVOTEWISEDAILY')" class="nav-item">
+                  <a href="#/sarapdailyreceiptsvotewisereport" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>LG.3-Sarap Receipts Vote Wise Daily</p>
+                  </a>
+                </li>
+                <li *ngIf="hasPermission('RPTSARAPVOTEWISEMONTHLY')" class="nav-item">
+                  <a href="#/monthlyreceiptsvotewisereport" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>LG.4-Sarap Receipts Vote Wise Monthly</p>
+                  </a>
+                </li>
+                <li *ngIf="hasPermission('RPTRECPTBNKACCT')" class="nav-item">
+                  <a href="#/bankdepositreceiptsreport" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Daily Banked Receipts Report</p>
+                  </a>
+                </li>
+                <li *ngIf="hasPermission('RPTBNKDEPSITACCTWISE')" class="nav-item">
+                  <a href="#/bankdepositaccountwisereport" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Bank Deposits By Account Report</p>
+                  </a>
+                </li>
+                <li *ngIf="hasPermission('RPTINCMCHBK')" class="nav-item">
+                  <a href="#/incomecashbookreport" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Income Cashbook Report</p>
                   </a>
                 </li>
                 <!-- <li class="nav-item">

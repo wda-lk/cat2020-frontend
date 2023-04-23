@@ -62,7 +62,7 @@ else{
   let modules :any = localStorage.getItem('ruleList');
   this.moduleList = JSON.parse(modules);
 
-  if(this.ruleList!=undefined){
+  if(this.moduleList!=undefined){
   return this.searchIModuleArray(module,this.moduleList);}
   else{
     return false;
